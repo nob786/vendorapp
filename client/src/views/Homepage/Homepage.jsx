@@ -1,0 +1,36 @@
+// import React from 'react'
+
+import { Button, Col, Container, Form, FormControl, InputGroup, Row } from "react-bootstrap"
+import Header from "../../components/Navbar/Navbar"
+// import CarouselSlider from "../../components/Carousel/Carousel"
+import EmblaCarousel from "../../components/Carousel/Carousel"
+// import useWindowDimensions from "../../utilities/hooks/useWindowDimension";
+// import { useEffect } from "react";
+import PlanYourEvents from "./PlanYourEvents";
+// import { default as HeroImg } from '../logo.svg';
+import "./Homepage.css"
+import HeroSection from "./HeroSection";
+import PremiumVenues from "./PremiumVenues";
+import PremiumVendors from "./PremiumVendors";
+import VendorsByCountry from "./VendorsByCOuntry";
+import StartPlanning from "./StartPlanning";
+import Footer from "../../components/Footer/Footer";
+
+const Homepage = () => {
+
+  return (
+    <>
+      <Header />
+      <HeroSection />
+      <PremiumVenues />
+      <PlanYourEvents />
+      <PremiumVendors />
+      <VendorsByCountry />
+      <StartPlanning />
+      <Footer />
+    </>
+
+  )
+}
+
+export default Homepage

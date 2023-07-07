@@ -1,0 +1,22 @@
+.col-heading {
+    /* font-size: 2rem;
+    text-transform: uppercase;
+    font-weight: 500; */
+    color: #ffffff;
+    display: block;
+    /* margin: 1rem 0; */
+    /* padding: .4rem 0px; */
+    border-bottom: 1px solid #c7c7c7;
+    /* letter-spacing: 3px; */
+    margin-bottom: 1.7rem;
+}
+
+.links-container li {
+    margin-top: 1rem;
+}
+
+.links-container li a {
+    text-decoration: none;
+    transition: all 0.3s;
+
+}
