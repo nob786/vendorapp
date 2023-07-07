@@ -7,10 +7,9 @@ const HeroSection = () => {
 
     const { width } = useWindowDimensions()
     return (
-        // <div>HeroSection</div>
         <Container fluid style={{ height: 'auto', padding: "0" }}>
             <Row className="h-100 col-12 g-0 flex-column-reverse flex-md-row">
-                <Col md={7} className="d-flex align-items-center justify-content-center" style={{ padding: "50px 0" }}>
+                <Col md={7} className="d-flex align-items-center justify-content-center" style={{ padding: "50px 20px" }}>
                     <div>
                         <div className='hero-text' style={{ maxWidth: "461px" }}>
                             <h1 className="text-left heading">Lectus auctor faucibus</h1>
@@ -19,7 +18,7 @@ const HeroSection = () => {
                         <div className="s003">
                             <Form>
                                 {width > 992 ?
-                                    <InputGroup>
+                                    <InputGroup className='flex-nowrap'>
                                         <div className='d-flex' style={{ border: "1px solid" }}>
                                             <FormControl className='shadow-none form-control' placeholder="Wedding Venues" style={{ outline: 0, border: "none", margin: "10px 0", borderRadius: "0", borderRight: "1px solid grey" }} />
                                             <FormControl className='shadow-none form-control' placeholder="in Where" style={{ border: "none", margin: "10px 0" }} />
@@ -38,24 +37,13 @@ const HeroSection = () => {
                                             Search
                                         </Button>
                                     </>
-                                    // <InputGroup>
-                                    //     {/* <div className='d-flex' style={{ border: "1px solid" }}> */}
-                                    //     <FormControl placeholder="Wedding Venues" style={{ margin: "10px 0", borderRadius: "0" }} />
-                                    //     <br />
-                                    //     <FormControl placeholder="in Where" style={{ margin: "10px 0" }} />
-                                    //     {/* </div> */}
-                                    //     <Button variant="success" size='lg'>
-                                    //         Search
-                                    //     </Button>
-                                    // </InputGroup>
-
                                 }
                             </Form>
                         </div>
                     </div>
                 </Col>
                 <Col md={5} className="d-flex" style={{ justifyContent: "right", paddingRight: "0" }}>
-                    <img src={heroImg} alt="Hero Image" style={{ maxWidth: "100%" }} />
+                    <img src={heroImg} alt="Hero Image" style={{ maxWidth: "100%", objectFit: "cover" }} />
                 </Col>
             </Row>
         </Container>

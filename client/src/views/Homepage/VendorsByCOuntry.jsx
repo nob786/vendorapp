@@ -10,7 +10,7 @@ const VendorsByCountry = () => {
 
     const componentToRender = (index) => {
         return (
-            <div className="embla__slide" key={index}>
+            <div className="embla__slide__vendors__by__country" key={index}>
                 <img
                     className="embla__slide__img"
                     src={imageByIndex(index)}

@@ -57,10 +57,15 @@ const PlanYourEvents = () => {
                                             <Card.Body>
                                                 <Card.Title>{title}</Card.Title>
                                                 <Card.Text>{description}</Card.Text>
-                                                <Button variant="primary">{button}</Button>
+                                                {/* <Button variant="" style={{ color: "#A0C49D" }}>{button}</Button> */}
+                                                <div variant="" style={{ color: "#A0C49D" }}>
+                                                    <strong>
+                                                        {button}
+                                                    </strong>
+                                                </div>
                                             </Card.Body>
                                         </Col>
-                                        <Col sm={5}>
+                                        <Col sm={5} style={{ padding: "10px 0" }}>
                                             <Card.Img src={image} alt="Event" style={{ height: "200px", objectFit: "cover" }} />
                                         </Col>
                                     </Row>
