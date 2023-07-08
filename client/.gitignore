@@ -4,4 +4,4 @@
 /coverage
 /build
 npm-debug.log*
-/noted.md
+src/noted.md
