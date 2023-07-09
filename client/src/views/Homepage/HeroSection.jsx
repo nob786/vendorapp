@@ -19,13 +19,14 @@ const HeroSection = () => {
                             <Form>
                                 {width > 992 ?
                                     <InputGroup className='flex-nowrap'>
-                                        <div className='d-flex' style={{ border: "1px solid" }}>
-                                            <FormControl className='shadow-none form-control' placeholder="Wedding Venues" style={{ outline: 0, border: "none", margin: "10px 0", borderRadius: "0", borderRight: "1px solid grey" }} />
+                                        <div className='d-flex' style={{ border: "1px solid #D9D9D9", borderRadius: "5px" }}>
+                                            <FormControl className='shadow-none form-control' placeholder="Wedding Venues"
+                                                style={{ outline: 0, border: "none", margin: "10px 0", borderRadius: "0", borderRight: "1px solid #D9D9D9" }} />
                                             <FormControl className='shadow-none form-control' placeholder="in Where" style={{ border: "none", margin: "10px 0" }} />
+                                            <Button variant="success" size='lg' className='rounded-end-1 rounded-start-0'>
+                                                Search
+                                            </Button>
                                         </div>
-                                        <Button variant="success" size='lg'>
-                                            Search
-                                        </Button>
                                     </InputGroup>
                                     :
                                     <>

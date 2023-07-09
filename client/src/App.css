@@ -1,6 +1,42 @@
-/* #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-} */
+.btn-success:hover,
+.btn-success:active,
+.btn-success:visited,
+.btn-success:focus {
+  background-color: #76af71 !important;
+  color: white !important;
+}
+
+.btn-success {
+  color: white !important;
+  background-color: #A0C49D !important;
+  border: none !important;
+  /* border-radius: 0 5px 5px 0 !important; */
+  height: 56px !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+  /* width: 100%; */
+}
+
+
+.btn-outline-success:hover,
+.btn-outline-success:active,
+.btn-outline-success:visited,
+.btn-outline-success:focus {
+  background-color: #A0C49D !important;
+  color: white !important;
+}
+
+.btn-outline-success {
+  color: #A0C49D !important;
+  background-color: #FFF !important;
+  border: 2px solid #A0C49D !important;
+  /* border-radius: 0 5px 5px 0 !important; */
+  height: 46px !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  padding-left: 30px !important;
+  padding-right: 30px !important;
+  /* width: 100%; */
+}

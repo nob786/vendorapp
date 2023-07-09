@@ -56,7 +56,7 @@ function Header() {
           <Form className="d-flex" role="search" style={{ maxHeight: "40px" }}>
             {/* <FormControl type="search" placeholder="Search" className="me-2" aria-label="Search" /> */}
             {/* style={{whiteSpace:"nowrap"}} */}
-            <Button variant="" type="submit" className="login-button">Login</Button>
+            <Button variant="" type="submit" className="login-button" style={{ fontSize: "16px", fontWeight: "700", color: "#A0C49D" }}>Login</Button>
 
             <Button variant="outline-success" type="submit" className="create-account-btn">Create Account</Button>
           </Form>
