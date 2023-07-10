@@ -1,25 +1,28 @@
 // import React from 'react'
 
-import { Button, Col, Container, Form, FormControl, InputGroup, Row } from "react-bootstrap"
-import Header from "../../components/Navbar/Navbar"
+import {
+  Button, Col, Container, Form, FormControl, InputGroup, Row,
+} from "react-bootstrap";
+import React from "react";
+import Header from "../../components/Navbar/Navbar";
 // import CarouselSlider from "../../components/Carousel/Carousel"
-import EmblaCarousel from "../../components/Carousel/Carousel"
+import EmblaCarousel from "../../components/Carousel/Carousel";
 // import useWindowDimensions from "../../utilities/hooks/useWindowDimension";
-// import { useEffect } from "react";
 import PlanYourEvents from "./PlanYourEvents";
 // import { default as HeroImg } from '../logo.svg';
-import "./Homepage.css"
+import "./Homepage.css";
 import HeroSection from "./HeroSection";
 import PremiumVenues from "./PremiumVenues";
 import PremiumVendors from "./PremiumVendors";
 import VendorsByCountry from "./VendorsByCOuntry";
 import StartPlanning from "./StartPlanning";
 import Footer from "../../components/Footer/Footer";
+import Login from "../Login/Login";
 
-const Homepage = () => {
-
+function Homepage() {
   return (
     <>
+      <Login />
       <Header />
       <HeroSection />
       <PremiumVenues />
@@ -30,7 +33,7 @@ const Homepage = () => {
       <Footer />
     </>
 
-  )
+  );
 }
 
-export default Homepage
+export default Homepage;

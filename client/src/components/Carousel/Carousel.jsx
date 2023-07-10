@@ -1,23 +1,23 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import useEmblaCarousel from 'embla-carousel-react'
-import imageByIndex from './ImagesByIndex'
-import "./Carousel.css"
-import useWindowDimensions from '../../utilities/hooks/useWindowDimension'
+import React, { useState, useEffect, useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import imageByIndex from "./ImagesByIndex";
+import "./Carousel.css";
+import useWindowDimensions from "../../utilities/hooks/useWindowDimension";
 // import useWindowDimensions from '../../utilities/hooks/useWindowDimension'
-export const DotButton = (props) => {
-  const { selected, onClick } = props
+export function DotButton(props) {
+  const { selected, onClick } = props;
 
   return (
     <button
-      className={'embla__dot'.concat(selected ? ' embla__dot--selected' : '')}
+      className={"embla__dot".concat(selected ? " embla__dot--selected" : "")}
       type="button"
       onClick={onClick}
     />
-  )
+  );
 }
 
-export const PrevButton = (props) => {
-  const { enabled, onClick } = props
+export function PrevButton(props) {
+  const { enabled, onClick } = props;
 
   return (
     <button
@@ -32,11 +32,11 @@ export const PrevButton = (props) => {
         />
       </svg>
     </button>
-  )
+  );
 }
 
-export const NextButton = (props) => {
-  const { enabled, onClick } = props
+export function NextButton(props) {
+  const { enabled, onClick } = props;
 
   return (
     <button
@@ -51,68 +51,65 @@ export const NextButton = (props) => {
         />
       </svg>
     </button>
-  )
+  );
 }
 
+function EmblaCarousel(props) {
+  const { slides, options, componentToRender } = props;
 
-const EmblaCarousel = (props) => {
-  const { slides, options, componentToRender } = props
+  const { width } = useWindowDimensions();
 
-  const { width } = useWindowDimensions()
-
-  const [emblaRef, emblaApi] = useEmblaCarousel(options)
-  const [prevBtnEnabled, setPrevBtnEnabled] = useState(false)
-  const [nextBtnEnabled, setNextBtnEnabled] = useState(false)
-  const [selectedIndex, setSelectedIndex] = useState(0)
-  const [scrollSnaps, setScrollSnaps] = useState([])
+  const [emblaRef, emblaApi] = useEmblaCarousel(options);
+  const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
+  const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState([]);
   // const [emblaApi] = useEmblaCarousel(options)
-
 
   const scrollPrev = useCallback(
     () => emblaApi && emblaApi.scrollPrev(),
     [emblaApi],
-  )
+  );
   const scrollNext = useCallback(
     () => emblaApi && emblaApi.scrollNext(),
     [emblaApi],
-  )
+  );
   const scrollTo = useCallback(
     (index) => emblaApi && emblaApi.scrollTo(index),
     [emblaApi],
-  )
+  );
 
   const onInit = useCallback((emblaApi) => {
-    setScrollSnaps(emblaApi.scrollSnapList())
-  }, [])
+    setScrollSnaps(emblaApi.scrollSnapList());
+  }, []);
 
   const onSelect = useCallback((emblaApi) => {
-    setSelectedIndex(emblaApi.selectedScrollSnap())
-    setPrevBtnEnabled(emblaApi.canScrollPrev())
-    setNextBtnEnabled(emblaApi.canScrollNext())
-  }, [])
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+    setPrevBtnEnabled(emblaApi.canScrollPrev());
+    setNextBtnEnabled(emblaApi.canScrollNext());
+  }, []);
 
   useEffect(() => {
-    if (!emblaApi) return
+    if (!emblaApi) return;
 
-    onInit(emblaApi)
-    onSelect(emblaApi)
-    emblaApi.on('reInit', onInit)
-    emblaApi.on('reInit', onSelect)
-    emblaApi.on('select', onSelect)
-  }, [emblaApi, onInit, onSelect])
+    onInit(emblaApi);
+    onSelect(emblaApi);
+    emblaApi.on("reInit", onInit);
+    emblaApi.on("reInit", onSelect);
+    emblaApi.on("select", onSelect);
+  }, [emblaApi, onInit, onSelect]);
 
-
-  const visibleDots = width < 1000 ? scrollSnaps.slice(0, 4) : scrollSnaps
+  const visibleDots = width < 1000 ? scrollSnaps.slice(0, 4) : scrollSnaps;
 
   return (
-    <div className='carousel__container'>
+    <div className="carousel__container">
       <div className="embla">
         <div className="embla__viewport" ref={emblaRef}>
           <div className="embla__container">
 
-            {componentToRender === undefined ?
+            {componentToRender === undefined
               // <h3>Pass a custom component to render</h3>
-              slides.map((index) => (
+              ? slides.map((index) => (
                 <div className="embla__slide" key={index}>
                   <img
                     className="embla__slide__img"
@@ -121,8 +118,7 @@ const EmblaCarousel = (props) => {
                   />
                 </div>
               ))
-              :
-              slides.map((index) => (
+              : slides.map((index) => (
                 componentToRender(index)
               ))}
           </div>
@@ -141,7 +137,7 @@ const EmblaCarousel = (props) => {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
-export default EmblaCarousel
+export default EmblaCarousel;
