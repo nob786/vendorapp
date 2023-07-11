@@ -2,20 +2,47 @@ import React from "react";
 // import './Navbar';
 import { Button, Form } from "react-bootstrap"; // Import Bootstrap components
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Allevents from "../../assets/images/Allevents.svg";
 import "./Navbar.css";
-import { toggleLoginModal } from "../../views/redux/Login/loginSlice";
+import { toggleLoginModal, toggleLoginView } from "../../views/redux/Login/loginSlice";
+import { toggleRegisterModal, toggleRegisterView } from "../../views/redux/Register/RegisterSlice";
 
 function Header() {
   const dispatch = useDispatch();
 
+  const isRegisterView = useSelector((state) => state.register.isRegisterView);
+  const isLoginView = useSelector((state) => state.login.isLoginView);
+
+  console.log("isLoginView INSIDE NAVBAR COMP", isLoginView);
+
   const handleLoginClick = (e) => {
     e.preventDefault();
+    if (isRegisterView) {
+      dispatch(toggleRegisterView());
+      console.log("if (isRegisterView)");
+    }
+    if (!isLoginView) {
+      dispatch(toggleLoginView());
+      console.log("if (!isLoginView)");
+    }
+    console.log("OUTSIDE BOTH IFS");
     dispatch(toggleLoginModal());
+  };
+
+  const handleRegisterClick = (e) => {
+    if (isLoginView) {
+      dispatch(toggleLoginView());
+    }
+    e.preventDefault();
+    if (!isRegisterView) {
+      dispatch(toggleRegisterView());
+    }
+    dispatch(toggleLoginModal());
+    // dispatch(toggleRegisterModal());
   };
 
   return (
@@ -70,7 +97,15 @@ function Header() {
             Login
           </Button>
 
-          <Button variant="outline-success" type="submit" className="create-account-btn">Create Account</Button>
+          <Button
+            variant="outline-success"
+            type="submit"
+            className="create-account-btn"
+            onClick={(e) => handleRegisterClick(e)}
+          >
+            Create Account
+
+          </Button>
         </Form>
       </Navbar.Collapse>
 
