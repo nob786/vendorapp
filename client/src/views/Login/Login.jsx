@@ -8,15 +8,20 @@ import {
   Button, Col, Container, Form, FormControl, InputGroup, Modal, Row,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/bootstrap.css";
 import Featured from "../../assets/images/Featured.svg";
 import loginImg1 from "../../assets/images/login-img-1.svg";
 import X from "../../assets/images/X.svg";
 import heroImg from "../../assets/images/harold.jpg";
+import arrowBack from "../../assets/images/arrow-back.svg";
 import "./Login.css";
 import { toggleLoginModal, toggleLoginView } from "../redux/Login/loginSlice";
 import Stepper from "../../components/Stepper/Stepper";
 import { toggleRegisterModal, toggleRegisterView } from "../redux/Register/RegisterSlice";
 import StepperForm from "../../components/Stepper/Stepper";
+import { handlePrevStep } from "../redux/Stepper/StepperSlice";
+
 // import { faClose } from "@fortawesome/free-solid-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -29,12 +34,15 @@ function Confirmation() {
 }
 
 function Login() {
-  const [activeStep, setActiveStep] = useState(0);
+  // const [activeStep, setActiveStep] = useState(0);
   const dispatch = useDispatch();
 
   const isLoginModal = useSelector((state) => state.login.isLoginModal);
   const isLoginView = useSelector((state) => state.login.isLoginView);
   const isRegisterView = useSelector((state) => state.register.isRegisterView);
+  const activeStep = useSelector((state) => state.stepper.activeStep);
+
+  const [phone, setPhone] = useState("");
 
   console.log({ isLoginView });
   console.log({ isRegisterView });
@@ -55,18 +63,106 @@ function Login() {
     dispatch(toggleRegisterView());
   };
 
-  const steps = [
-    "Your details",
-    "Company Details",
-  ];
-
-  function getSectionComponent() {
-    switch (activeStep) {
-      case 0: return <UserDetails />;
-      case 1: return <Confirmation />;
-      default: return null;
+  const handleClickArrowBack = () => {
+    if (activeStep > 0) {
+      dispatch(handlePrevStep());
+    } else {
+      handleClose();
     }
-  }
+  };
+
+  const dynamicRegisterationView = (handleNextStep) => (
+    activeStep === 0
+      ? (
+        <>
+          <div style={{ maxHeight: "296px", overflowY: "scroll" }} className="Container Flipped">
+            <Form.Group className="form-group mb-4" controlId="form3Example3">
+              <Form.Control style={{ height: "56px" }} className="lg-input-small-text" type="email" size="lg" placeholder="Enter Email" />
+            </Form.Group>
+
+            <Form.Group className="form-group mb-3" controlId="form3Example4">
+              <Form.Control style={{ height: "56px" }} className="lg-input-small-text" type="password" size="lg" placeholder="Enter Password" />
+            </Form.Group>
+
+            <Form.Group className="form-group mb-3" controlId="form3Example5">
+              <Form.Control style={{ height: "56px" }} className="lg-input-small-text" type="password" size="lg" placeholder="Re-enter Password" />
+            </Form.Group>
+
+            <Form.Group className="form-group mb-3" controlId="form3Example5">
+              {/* <Form.Control style={{ height: "56px" }} className="lg-input-small-text" type="number" size="lg" placeholder="Re-enter Password" /> */}
+              {/* <Form.Control style={{ height: "56px" }} className="lg-input-small-text" type="number" size="lg"> */}
+              <PhoneInput
+                country="eg"
+                enableSearch
+                value={phone}
+                // eslint-disable-next-line no-shadow
+                onChange={(phone) => setPhone(phone)}
+              />
+              {/* </Form.Control> */}
+            </Form.Group>
+
+            <Form.Group className="form-group mb-3" controlId="form3Example5">
+              <Form.Control style={{ height: "56px" }} className="lg-input-small-text" type="password" size="lg" placeholder="Re-enter Password" />
+            </Form.Group>
+          </div>
+          {/* <a href="#!" className="text-body">Forgot password?</a> */}
+
+          <div className="text-center text-lg-start mt-4 pt-2">
+            <Button
+              type="button"
+              className="btn btn-success btn-lg w-100"
+              style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
+              onClick={handleNextStep}
+            >
+              Next
+            </Button>
+
+            <div className="row" style={{ textAlign: "center" }}>
+              <p className="small fw-bold mt-3 pt-1 mb-0 ">
+                Already have an account?
+                {" "}
+                <a href="#!" className="link-danger" onClick={handleLoginClick}>Login</a>
+              </p>
+            </div>
+          </div>
+        </>
+      )
+      : (
+        <>
+          <Form.Group className="mb-4" controlId="form3Example3">
+            <Form.Control style={{ height: "56px" }} className="lg-input-small-text" type="email" size="lg" placeholder="Enter Email" />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="form3Example4">
+            <Form.Control style={{ height: "56px" }} className="lg-input-small-text" type="password" size="lg" placeholder="Enter Password" />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="form3Example5">
+            <Form.Control style={{ height: "56px" }} className="lg-input-small-text" type="password" size="lg" placeholder="Re-enter Password" />
+          </Form.Group>
+
+          <div className="d-flex justify-content-between align-items-center">
+            <Form.Check type="checkbox" className="mb-0">
+              <Form.Check.Input className="me-2" />
+              <Form.Check.Label>Keep me updated with the latest news</Form.Check.Label>
+            </Form.Check>
+          </div>
+          <div className="d-flex justify-content-between align-items-center">
+            <Form.Check type="checkbox" className="mb-0">
+              <Form.Check.Input className="me-2" />
+              <Form.Check.Label>I agree to the Terms & Conditions</Form.Check.Label>
+            </Form.Check>
+          </div>
+
+          <div className="text-center text-lg-start mt-4 pt-2">
+            <Button type="button" className="btn btn-success btn-lg w-100" style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>
+              Register
+            </Button>
+          </div>
+        </>
+      )
+  );
+
   return (
     // <Modal show={isLoginModal} onHide={handleClose} size="xl" centered="true">
     <Modal
@@ -79,11 +175,34 @@ function Login() {
 
       <div className="box" style={{ position: "absolute", right: "0" }} />
       <div style={{ position: "absolute", right: "0" }}>
-
         <div role="presentation" onClick={handleClose}>
           <img src={X} alt="X" className="close-icon" style={{ cursor: "pointer" }} />
         </div>
       </div>
+
+      <div style={{
+        position: "absolute", left: "0", paddingTop: "18px", paddingLeft: "24px",
+      }}
+      >
+        <div role="presentation" onClick={handleClickArrowBack}>
+          <img src={arrowBack} alt="arrowBack" className="arrowBack-icon" style={{ cursor: "pointer" }} />
+        </div>
+      </div>
+
+      {
+        isLoginView
+        && (
+          <div style={{
+            position: "absolute", left: "0", paddingTop: "19px", paddingLeft: "24px",
+          }}
+          >
+            <div role="presentation" onClick={handleClose}>
+              <img src={arrowBack} alt="arrowBack" className="arrowBack-icon" style={{ cursor: "pointer" }} />
+            </div>
+          </div>
+        )
+      }
+
       <Container fluid style={{ height: "auto", padding: "0" }}>
         <Row className="h-100 col-12 g-0 flex-column-reverse flex-md-row">
 
@@ -147,60 +266,10 @@ function Login() {
                 <Form>
                   <div className="d-flex justify-content-center align-items-center h4" style={{ marginBottom: "36px" }}>Register</div>
 
-                  <div>
-                    {/* <Stepper
-                      steps={steps}
-                      activeStep={activeStep}
-                    />
-                    <div>
-                      {getSectionComponent()}
-                      {(activeStep !== 0 && activeStep !== steps.length - 1)
-                        && <button type="button" onClick={() => setActiveStep(activeStep - 1)}>Previous</button>}
-                      {activeStep !== steps.length - 1
-                        && <button type="button" onClick={() => setActiveStep(activeStep + 1)}>Next</button>}
-                    </div> */}
-                    <StepperForm />
-                  </div>
+                  {/* <div> */}
+                  <StepperForm componentToRender={dynamicRegisterationView} />
+                  {/* </div> */}
 
-                  <Form.Group className="mb-4" controlId="form3Example3">
-                    <Form.Control style={{ height: "56px" }} className="lg-input-small-text" type="email" size="lg" placeholder="Enter Email" />
-                  </Form.Group>
-
-                  <Form.Group className="mb-3" controlId="form3Example4">
-                    <Form.Control style={{ height: "56px" }} className="lg-input-small-text" type="password" size="lg" placeholder="Enter Password" />
-                  </Form.Group>
-
-                  <Form.Group className="mb-3" controlId="form3Example5">
-                    <Form.Control style={{ height: "56px" }} className="lg-input-small-text" type="password" size="lg" placeholder="Re-enter Password" />
-                  </Form.Group>
-
-                  <div className="d-flex justify-content-between align-items-center">
-                    <Form.Check type="checkbox" className="mb-0">
-                      <Form.Check.Input className="me-2" />
-                      <Form.Check.Label>Keep me updated with the latest news</Form.Check.Label>
-                    </Form.Check>
-                  </div>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <Form.Check type="checkbox" className="mb-0">
-                      <Form.Check.Input className="me-2" />
-                      <Form.Check.Label>I agree to the Terms & Conditions</Form.Check.Label>
-                    </Form.Check>
-                  </div>
-                  {/* <a href="#!" className="text-body">Forgot password?</a> */}
-
-                  <div className="text-center text-lg-start mt-4 pt-2">
-                    <Button type="button" className="btn btn-success btn-lg w-100" style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>
-                      Register
-                    </Button>
-
-                    <div className="row" style={{ textAlign: "center" }}>
-                      <p className="small fw-bold mt-3 pt-1 mb-0 ">
-                        Already have an account?
-                        {" "}
-                        <a href="#!" className="link-danger" onClick={handleLoginClick}>Login</a>
-                      </p>
-                    </div>
-                  </div>
                 </Form>
               </Col>
             )}

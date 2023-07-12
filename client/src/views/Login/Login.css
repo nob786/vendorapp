@@ -57,6 +57,29 @@
     /* margin: 0 5rem !important; */
 }
 
+.react-tel-input .form-control {
+    width: 100%;
+    border: 1px solid #dee2e6;
+    height: 56px;
+}
+
+.Container {
+    /* height: 200px; */
+    padding: 0 20px;
+    overflow-x: auto;
+}
+
+/* .form-group {
+    height: 300px;
+} */
+
+.Flipped {
+    direction: rtl;
+}
+
+.form-group {
+    direction: ltr;
+}
 
 /* .col-md-6 {
     max-width: 100%;
