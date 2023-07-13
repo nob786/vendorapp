@@ -44,14 +44,24 @@ function StepperForm({ componentToRender }) {
                     aria-controls="step1"
                     role="tab"
                     aria-expanded={activeStep === 0 ? "true" : "false"}
-                    onClick={() => handleStepClick(0)}
+                    // onClick={() => handleStepClick(0)}
+                    style={{ textDecoration: "none" }}
                   >
                     <span className="round-tab">
                       {activeStep === 0 ? <FontAwesomeIcon icon={faCheck} /> : ""}
 
                     </span>
-                    {" "}
-                    {/* <i>Step 1</i> */}
+                    <span style={{
+                      lineHeight: "100px",
+                      listStyle: "none",
+                      position: "absolute",
+                      left: "-20px",
+                      whiteSpace: "nowrap",
+                    }}
+                    >
+                      Your details
+
+                    </span>
                   </a>
                 </li>
                 <li
@@ -64,13 +74,23 @@ function StepperForm({ componentToRender }) {
                     aria-controls="step2"
                     role="tab"
                     aria-expanded={activeStep === 1 ? "true" : "false"}
-                    onClick={() => handleStepClick(1)}
+                    // onClick={() => handleStepClick(1)}
+                    style={{ textDecoration: "none" }}
                   >
                     <span className="round-tab">
                       {activeStep === 1 ? <FontAwesomeIcon icon={faCheck} /> : ""}
                     </span>
-                    {" "}
-                    {/* <i>Step 2</i> */}
+                    <span style={{
+                      lineHeight: "100px",
+                      listStyle: "none",
+                      position: "absolute",
+                      right: "-70px",
+                      whiteSpace: "nowrap",
+                    }}
+                    >
+                      Company Details
+                    </span>
+
                   </a>
                 </li>
               </ul>

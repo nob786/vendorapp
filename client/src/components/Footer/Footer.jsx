@@ -9,6 +9,10 @@ import { faEnvelope, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import Allevents from "../../assets/images/Allevents.svg";
 
 function Footer() {
+  const handleScrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className="d-flex flex-column h-100" style={{ position: "relative" }}>
       <footer className="w-100 pt-4 flex-shrink-0" style={{ background: "#212529", paddingBottom: "0" }}>
@@ -85,12 +89,12 @@ function Footer() {
         </div>
       </footer>
 
-      <div style={{ position: "absolute", right: "150px", top: "-70px" }}>
-        <button id="goTop" className="btn-footer-top btn-up" type="button">
+      <div style={{ position: "absolute", right: "150px", top: "-40px" }}>
+        <button id="goTop" className="btn-footer-top btn-up" type="button" onClick={handleScrollToTop}>
           <svg
             fill="#ffffff"
-            height="131px"
-            width="131px"
+            height="60px"
+            width="60px"
             version="1.1"
             id="Layer_1"
             xmlns="http://www.w3.org/2000/svg"

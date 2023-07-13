@@ -65,7 +65,7 @@
 
 .Container {
     /* height: 200px; */
-    padding: 0 20px;
+    padding: 20px;
     overflow-x: auto;
 }
 
@@ -79,6 +79,30 @@
 
 .form-group {
     direction: ltr;
+}
+
+.hide-validation-icon.form-control.is-invalid {
+    background-image: none;
+}
+
+.hide-validation-icon.form-control.is-valid {
+    background-image: none;
+}
+
+.border-danger {
+    border: 1px solid red;
+}
+
+.close-icon:hover svg {
+    /* stroke-width: 15; */
+    fill: black;
+    stroke: black;
+}
+
+.close-icon svg {
+    /* stroke-width: 15; */
+    fill: white;
+    stroke: white;
 }
 
 /* .col-md-6 {

@@ -1,34 +1,3 @@
-/*------------------------*/
-/* input:focus,
-button:focus,
-.form-control:focus {
-  outline: none;
-  box-shadow: none;
-} */
-
-/* .form-control:disabled,
-.form-control[readonly] {
-  background-color: #fff;
-} */
-
-/*----------step-wizard, use bootstrap classes instead------------*/
-/* .d-flex {
-  display: flex;
-}
-
-.justify-content-center {
-  justify-content: center;
-}
-
-.align-items-center {
-  align-items: center;
-} */
-
-/*---------signup-step-------------*/
-.bg-color {
-  background-color: #333;
-}
-
 .signup-step-container {
   padding: 8px 0px;
   padding-bottom: 24px;
@@ -43,7 +12,7 @@ button:focus,
 
 .wizard>div.wizard-inner {
   position: relative;
-  margin-bottom: 50px;
+  margin-bottom: 86px;
   text-align: center;
 }
 
@@ -243,7 +212,6 @@ span.round-tab i {
   margin-top: 30px;
 }
 
-.all-info-container {}
 
 .list-content {
   margin-bottom: 10px;
