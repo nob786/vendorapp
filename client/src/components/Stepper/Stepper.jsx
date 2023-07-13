@@ -51,13 +51,15 @@ function StepperForm({ componentToRender }) {
                       {activeStep === 0 ? <FontAwesomeIcon icon={faCheck} /> : ""}
 
                     </span>
-                    <span style={{
-                      lineHeight: "100px",
-                      listStyle: "none",
-                      position: "absolute",
-                      left: "-20px",
-                      whiteSpace: "nowrap",
-                    }}
+                    <span
+                      className="roboto-light-12px-information"
+                      style={{
+                        lineHeight: "100px",
+                        listStyle: "none",
+                        position: "absolute",
+                        left: "-20px",
+                        whiteSpace: "nowrap",
+                      }}
                     >
                       Your details
 
@@ -80,13 +82,15 @@ function StepperForm({ componentToRender }) {
                     <span className="round-tab">
                       {activeStep === 1 ? <FontAwesomeIcon icon={faCheck} /> : ""}
                     </span>
-                    <span style={{
-                      lineHeight: "100px",
-                      listStyle: "none",
-                      position: "absolute",
-                      right: "-70px",
-                      whiteSpace: "nowrap",
-                    }}
+                    <span
+                      className="roboto-light-12px-information"
+                      style={{
+                        lineHeight: "100px",
+                        listStyle: "none",
+                        position: "absolute",
+                        right: "-70px",
+                        whiteSpace: "nowrap",
+                      }}
                     >
                       Company Details
                     </span>

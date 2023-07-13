@@ -1,3 +1,4 @@
+import React from "react";
 import { Button, Card, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
@@ -45,10 +46,10 @@ function PremiumVendors() {
   return (
     <Container fluid style={{ padding: "100px 0", backgroundColor: "#F5F5F5" }}>
       <Container>
-        <h3>Find our Premium Premium Vendors</h3>
+        <div className="roboto-bold-36px-h1" style={{ marginLeft: "26px" }}>Find our Premium Premium Vendors</div>
         <EmblaCarousel slides={SLIDES} options={OPTIONS} componentToRender={componentToRender} />
         <div className="d-flex justify-content-center mt-5">
-          <Button variant="success" type="submit">See all Vendors</Button>
+          <Button variant="success" type="submit" className="roboto-semi-bold-16px-information">See all Vendors</Button>
         </div>
       </Container>
     </Container>

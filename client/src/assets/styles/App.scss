@@ -1,6 +1,10 @@
 @import './main';
 
 
+body {
+    font-family: Roboto, sans-serif;
+}
+
 // To avoid blue highlight on double click
 .noSelect {
     -webkit-tap-highlight-color: transparent;

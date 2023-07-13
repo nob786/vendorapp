@@ -50,7 +50,17 @@ function Header() {
       <Navbar.Brand href="#">
         <img src={Allevents} alt="Allevents" style={{ maxWidth: "100%" }} />
       </Navbar.Brand>
-      <Button type="button" className="login-button-mobile" onClick={(e) => handleLoginClick(e)}>Login</Button>
+      <Button
+        type="button"
+        // className="login-button"
+        variant="success"
+        // type="submit"
+        className="roboto-semi-bold-16px-information login-button-mobile me-3"
+        onClick={(e) => handleLoginClick(e)}
+      >
+        Login
+
+      </Button>
       <Navbar.Toggle aria-controls="navbarSupportedContent" />
       <Navbar.Collapse id="navbarSupportedContent" className="navbar-collapse">
         <Nav className="mx-auto">
@@ -88,9 +98,11 @@ function Header() {
         </Nav>
         <Form className="d-flex" role="search" style={{ maxHeight: "40px" }}>
           <Button
-            variant=""
             type="button"
-            className="login-button"
+            // className="login-button"
+            variant="success"
+            // type="submit"
+            className="login-button roboto-semi-bold-16px-information"
             style={{ fontSize: "16px", fontWeight: "700", color: "#A0C49D" }}
             onClick={(e) => handleLoginClick(e)}
           >

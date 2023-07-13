@@ -37,10 +37,6 @@ function Login() {
   const dispatch = useDispatch();
   const { Formik } = formik;
 
-  // password: Yup.string().required('Password is required'),
-  // passwordConfirmation: Yup.string()
-  //    .oneOf([Yup.ref('password'), null], 'Passwords must match')
-
   const step1InitialValues = {
     email: "",
     password: "",
@@ -106,18 +102,6 @@ function Login() {
     newsletter: Yup.bool(),
 
   });
-  // const companyDetailschema = Yup.object().shape({
-  //   company_name: Yup.string().required(),
-  //   country: Yup.string()
-  //     .required("Password is required")
-  //     .min(5, "Your password is too short."),
-  //   address: Yup.string().required("Passwords must match").oneOf([Yup.ref("password")], "Passwords must match"),
-  //   postal_code: Yup.string().required(),
-  //   fiscal_code: Yup.string().required(),
-  //   firm_number: Yup.string().required(),
-  //   bank_name: Yup.string().required(),
-  //   bank_iban: Yup.string().required(),
-  // });
 
   const isLoginModal = useSelector((state) => state.login.isLoginModal);
   const isLoginView = useSelector((state) => state.login.isLoginView);
@@ -209,13 +193,6 @@ function Login() {
           // onSubmit={handleNextStep}
           onSubmit={handleStep1Submit}
           initialValues={step1InitialValues}
-        // initialValues={{
-        //   email: "",
-        //   password: "",
-        //   password_check: "",
-        //   // phone: "",
-        //   contact_person: "",
-        // }}
         >
           {({
             handleSubmit, handleChange, values, touched, errors,
@@ -318,13 +295,13 @@ function Login() {
                   Next
                 </Button>
 
-                <div className="row" style={{ textAlign: "center" }}>
+                {/* <div className="row" style={{ textAlign: "center" }}>
                   <p className="small fw-bold mt-3 pt-1 mb-0 ">
                     Already have an account?
                     {" "}
                     <a href="#!" className="link-danger" onClick={handleLoginClick}>Login</a>
                   </p>
-                </div>
+                </div> */}
               </div>
             </Form>
           )}
@@ -351,7 +328,7 @@ function Login() {
                     name="company_name"
                     size="lg"
                     placeholder="Enter Company Name"
-                    value={values.company_name}
+                    value={values.company_name || ""}
                     onChange={handleChange}
                     isValid={touched.company_name && !errors.company_name}
                     isInvalid={!!errors.company_name}
@@ -367,7 +344,7 @@ function Login() {
                     aria-label="Default select example"
                     style={{ height: "56px" }}
                     name="county"
-                    value={values.county}
+                    value={values.county || ""}
                     onChange={handleChange}
                     // onBlur={handleBlur}
                     isValid={touched.county && !errors.county}
@@ -375,10 +352,6 @@ function Login() {
                     className={errors.county ? "border-danger" : ""}
                   // className="border-danger"
                   >
-                    {/* <option disabled selected value hidden="true">Select County</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option> */}
                     <option disabled selected value hidden="true">Select County</option>
                     {counties.map((county, index) => (
                       // eslint-disable-next-line react/no-array-index-key
@@ -400,7 +373,7 @@ function Login() {
                     type="text"
                     size="lg"
                     placeholder="Enter Company Address"
-                    value={values.address}
+                    value={values.address || ""}
                     onChange={handleChange}
                     isValid={touched.address && !errors.address}
                     isInvalid={!!errors.address}
@@ -418,7 +391,7 @@ function Login() {
                     type="text"
                     size="lg"
                     placeholder="Enter Postal Code"
-                    value={values.postal_code}
+                    value={values.postal_code || ""}
                     onChange={handleChange}
                     isValid={touched.postal_code && !errors.postal_code}
                     isInvalid={!!errors.postal_code}
@@ -436,7 +409,7 @@ function Login() {
                     type="text"
                     size="lg"
                     placeholder="Enter Fiscal Code"
-                    value={values.fiscal_code}
+                    value={values.fiscal_code || ""}
                     onChange={handleChange}
                     isValid={touched.fiscal_code && !errors.fiscal_code}
                     isInvalid={!!errors.fiscal_code}
@@ -454,7 +427,7 @@ function Login() {
                     type="text"
                     size="lg"
                     placeholder="Enter Firm Number"
-                    value={values.firm_number}
+                    value={values.firm_number || ""}
                     onChange={handleChange}
                     isValid={touched.firm_number && !errors.firm_number}
                     isInvalid={!!errors.firm_number}
@@ -472,7 +445,7 @@ function Login() {
                     type="text"
                     size="lg"
                     placeholder="Enter Bank Name"
-                    value={values.bank_name}
+                    value={values.bank_name || ""}
                     onChange={handleChange}
                     isValid={touched.bank_name && !errors.bank_name}
                     isInvalid={!!errors.bank_name}
@@ -490,7 +463,7 @@ function Login() {
                     type="text"
                     size="lg"
                     placeholder="Enter Bank IBAN"
-                    value={values.bank_iban}
+                    value={values.bank_iban || ""}
                     onChange={handleChange}
                     isValid={touched.bank_iban && !errors.bank_iban}
                     isInvalid={!!errors.bank_iban}
@@ -502,48 +475,6 @@ function Login() {
               </div>
 
               <div style={{ paddingLeft: "36px" }}>
-                {/* <div className="form-group d-flex justify-content-between align-items-center">
-                  <Form.Check type="checkbox" className="mb-0">
-                    <Form.Check.Input className="me-2" />
-                    <Form.Check.Label>Keep me updated with the latest news</Form.Check.Label>
-                  </Form.Check>
-                </div>
-                <div className="form-group d-flex justify-content-between align-items-center mt-2">
-                  <Form.Check type="checkbox" className="mb-0">
-                    <Form.Check.Input className="me-2" />
-                    <Form.Check.Label>I agree to the Terms & Conditions</Form.Check.Label>
-                  </Form.Check>
-                </div> */}
-
-                <Form.Group className="position-relative mb-3">
-                  {/* <Form.Check
-                    type="checkbox"
-                    name="newsletter"
-                    label="Keep me updated with the latest news"
-                    // onChange={handleChange}
-                    isInvalid={!!errors.newsletter}
-                    feedback={errors.newsletter}
-                    feedbackType="invalid"
-                    id="validationFormik106"
-                  // feedbackTooltip
-                  /> */}
-                  {/* <div className="form-check mb-3">
-                    <input type="checkbox" name="terms_acceptance" className="form-check-input" id="validationFormCheck1" required />
-                    <label className="form-check-label" htmlFor="validationFormCheck1">Check this checkbox</label>
-                    <div className="invalid-feedback">Example invalid feedback text</div>
-                  </div> */}
-
-                  {/* <div class="form-check">
-      <input class="form-check-input is-invalid" type="checkbox" value="" id="invalidCheck3" aria-describedby="invalidCheck3Feedback" required>
-      <label class="form-check-label" for="invalidCheck3">
-        Agree to terms and conditions
-      </label>
-      <div id="invalidCheck3Feedback" class="invalid-feedback">
-        You must agree before submitting.
-      </div>
-    </div> */}
-
-                </Form.Group>
 
                 <Form.Group className="position-relative mb-3">
                   <Form.Check
@@ -551,7 +482,7 @@ function Login() {
                     required
                     name="terms_acceptance"
                     label="I agree to the Terms & Conditions"
-                    value={values.terms_acceptance}
+                    value={values.terms_acceptance || ""}
                     // checked={values.terms_acceptance}
                     onChange={handleChange}
                     isInvalid={!!errors.terms_acceptance}
@@ -562,15 +493,19 @@ function Login() {
                 </Form.Group>
 
                 <div className="text-center text-lg-start mt-4 pt-2">
-                  <Button type="submit" className="btn btn-success btn-lg w-100" style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>
+                  <Button
+                    type="submit"
+                    className="btn btn-success roboto-semi-bold-16px-information btn-lg w-100"
+                    style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
+                  >
                     Register
                   </Button>
                 </div>
                 <div className="row" style={{ textAlign: "center" }}>
-                  <p className="small fw-bold mt-3 pt-1 mb-0 ">
+                  <p className="roboto-regular-16px-information mt-3 pt-1 mb-0 ">
                     Already have an account?
                     {" "}
-                    <a href="#!" className="link-danger" onClick={handleLoginClick}>Login</a>
+                    <a href="#!" style={{ color: "#0558FF", textDecoration: "none" }} onClick={handleLoginClick}>Login</a>
                   </p>
                 </div>
               </div>
@@ -632,7 +567,7 @@ function Login() {
                 <div className="d-flex justify-content-center align-items-center">
                   <img src={Featured} alt="Featured" className="mb-3" />
                 </div>
-                <div className="d-flex justify-content-center align-items-center h4" style={{ marginBottom: "36px" }}>Login</div>
+                <div className="d-flex justify-content-center align-items-center roboto-semi-bold-18px-body2" style={{ marginBottom: "36px" }}>Login</div>
 
                 <Formik
                   validationSchema={loginSchema}
@@ -687,13 +622,25 @@ function Login() {
                       <div className="d-flex justify-content-between align-items-center">
                         <Form.Check type="checkbox" className="mb-0">
                           <Form.Check.Input className="me-2" />
-                          <Form.Check.Label>Keep me Logged In</Form.Check.Label>
+                          <Form.Check.Label className="roboto-regular-14px-information">Keep me Logged In</Form.Check.Label>
                         </Form.Check>
-                        <a href="#!" className="text-body" onClick={handleClickForgotPassword}>Forgot password?</a>
+                        <a
+                          href="#!"
+                          className="roboto-regular-14px-information"
+                          style={{ color: "#0558FF", textDecoration: "none" }}
+                          onClick={handleClickForgotPassword}
+                        >
+                          Forgot password?
+
+                        </a>
                       </div>
 
                       <div className="text-center text-lg-start mt-4 pt-2">
-                        <Button type="submit" className="btn btn-success btn-lg w-100" style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>
+                        <Button
+                          type="submit"
+                          className="btn btn-success w-100 roboto-semi-bold-16px-information"
+                          style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem", height: "44px" }}
+                        >
                           Login
                         </Button>
 
@@ -701,18 +648,35 @@ function Login() {
 
                         <div className="row">
                           <div className="col">
-                            <a className="btn btn-outline-dark w-100" href="/users/googleauth" role="button" style={{ textTransform: "none", padding: "10px 16px" }}>
-                              <img width="20px" style={{ marginBottom: "3px", marginRight: "5px" }} alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+                            <a
+                              className="btn w-100 roboto-semi-bold-16px-information"
+                              href="/users/googleauth"
+                              role="button"
+                              style={{ textTransform: "none", padding: "10px 16px", border: "1px solid #cecece" }}
+                            >
+                              <img
+                                width="20px"
+                                style={{ marginBottom: "3px", marginRight: "5px" }}
+                                alt="Google sign-in"
+                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+                              />
                               Login with Google
                             </a>
                           </div>
                         </div>
 
                         <div className="row" style={{ textAlign: "center" }}>
-                          <p className="small fw-bold mt-3 pt-1 mb-0 ">
+                          <p className="roboto-regular-16px-information mt-3 pt-1 mb-0 ">
                             {" Don't have an account?"}
                             {" "}
-                            <a href="#!" className="link-danger" onClick={handleRegisterClick}>Register</a>
+                            <a
+                              href="#!"
+                              style={{ color: "#0558FF", textDecoration: "none" }}
+                              onClick={handleRegisterClick}
+                            >
+                              Register
+
+                            </a>
                           </p>
                         </div>
                       </div>
@@ -725,7 +689,13 @@ function Login() {
               // register view
               <Col md={12} lg={6} className="login-modal-form-col">
                 {/* <Form> */}
-                <div className="d-flex justify-content-center align-items-center h4" style={{ marginBottom: "36px" }}>Register</div>
+                <div
+                  className="d-flex justify-content-center align-items-center roboto-semi-bold-18px-body2"
+                  style={{ marginBottom: "36px" }}
+                >
+                  Register
+
+                </div>
 
                 <StepperForm componentToRender={dynamicRegisterationView} />
 

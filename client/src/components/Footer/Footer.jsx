@@ -24,7 +24,7 @@ function Footer() {
                 <img src={Allevents} alt="Allevents" className="mt-4" />
 
                 {/* <i className="fas fa-brands fa-instagram" style={{ color: "#ffffff" }}></i> */}
-                <p className="small text-white mt-5">
+                <p className="roboto-regular-14px-information text-white mt-5">
                   Maecenas consectetur in a a imperdiet nunc cras ipsum. Consequat sed eu sed pharetra velit.
                 </p>
               </div>
@@ -33,10 +33,10 @@ function Footer() {
                   <li className="col-heading">
                     <h3> Resources </h3>
                   </li>
-                  <li><a href="/">For him</a></li>
-                  <li><a href="/">For her</a></li>
-                  <li><a href="/">Event types</a></li>
-                  <li><a href="/">Contact</a></li>
+                  <li><a href="/" className="roboto-regular-14px-information text-white">For him</a></li>
+                  <li><a href="/" className="roboto-regular-14px-information text-white">For her</a></li>
+                  <li><a href="/" className="roboto-regular-14px-information text-white">Event types</a></li>
+                  <li><a href="/" className="roboto-regular-14px-information text-white">Contact</a></li>
                 </ul>
               </div>
               <div className="col-lg-4 col-md-6 links-container">
@@ -47,7 +47,7 @@ function Footer() {
                   <div className="d-flex align-items-center">
                     <FontAwesomeIcon icon={faEnvelope} style={{ color: "#A0C49D", marginRight: "14px" }} />
                     <li className="p-0 m-0" style={{ textDecoration: "none", listStyle: "none" }}>
-                      <a href="/">support@allevents.com</a>
+                      <a href="/" className="roboto-regular-14px-information text-white">support@allevents.com</a>
                     </li>
                   </div>
                   <div className="d-flex">
@@ -59,7 +59,7 @@ function Footer() {
                     </div>
                     <div className="d-flex align-items-center">
                       <li className="p-0 m-0 mt-3" style={{ textDecoration: "none", listStyle: "none" }}>
-                        <a href="/" className="text-right">
+                        <a href="/" className="roboto-regular-14px-information text-white text-right">
                           A cursus turpis eu a pellentesque. Nulla neque donec mauris at.
                         </a>
                       </li>
@@ -81,9 +81,11 @@ function Footer() {
             </div>
             <div
               className="d-flex align-items-center justify-content-center p-4 mt-3"
-              style={{ borderTop: "1px solid #000F0D" }}
+              style={{ borderTop: "1px solid #ffffff1a" }}
             >
-              <span className="copyright text-white">Allevents © 2023 - All Right Are Reserved</span>
+              <span className="copyright roboto-regular-14px-information text-white" style={{ opacity: "0.6" }}>
+                Allevents © 2023 - All Right Are Reserved
+              </span>
             </div>
           </Container>
         </div>
