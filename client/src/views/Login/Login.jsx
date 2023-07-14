@@ -22,6 +22,7 @@ import { toggleRegisterView } from "../redux/Register/RegisterSlice";
 import StepperForm from "../../components/Stepper/Stepper";
 import { handleNextStep, handlePrevStep } from "../redux/Stepper/StepperSlice";
 import ForgotPassword from "./ForgotPassword";
+import CarouselFadeExample from "../../components/Carousel/SingleImgCarousel";
 
 const counties = [
   "Alba", "Arad", "Arges", "Bacau", "Bihor", "Bistrita-Nasaud",
@@ -525,7 +526,10 @@ function Login() {
     >
 
       <div className="box" style={{ position: "absolute", right: "0" }} />
-      <div style={{ position: "absolute", right: "10px", top: "8px" }}>
+      <div style={{
+        position: "absolute", right: "10px", top: "8px", zIndex: "20",
+      }}
+      >
         <div role="presentation" onClick={handleClose} className="close-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ cursor: "pointer" }}>
             <path d="M17 1L1 17M1 1L17 17" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -644,7 +648,11 @@ function Login() {
                           Login
                         </Button>
 
-                        <h4 className="login-page-text-divider"><span>OR</span></h4>
+                        <h4 className="login-page-text-divider">
+                          <span style={{ fontSize: "16px", fontWeight: "500", color: "#475467" }}>
+                            OR
+                          </span>
+                        </h4>
 
                         <div className="row">
                           <div className="col">
@@ -705,8 +713,9 @@ function Login() {
               : forgotPassword
                 ? <ForgotPassword setForgotPassword={setForgotPassword} />
                 : ""}
-          <Col md={0} lg={6} className="d-flex login-image-mobile" style={{ justifyContent: "right", paddingRight: "0" }}>
-            <img src={heroImg} alt="heroImg" style={{ maxWidth: "100%", objectFit: "cover" }} />
+          <Col md={0} lg={6} className="login-image-mobile" style={{ maxWidth: "500px" }}>
+            {/* <img src={heroImg} alt="heroImg" style={{ maxWidth: "100%", objectFit: "cover" }} /> */}
+            <CarouselFadeExample />
           </Col>
         </Row>
       </Container>

@@ -10,6 +10,19 @@
   padding: 1.6rem;
 }
 
+.carousel-inner>.carousel-item>img,
+.carousel-inner>.carousel-item>a>img {
+  display: block;
+  height: auto;
+  max-width: 100%;
+  line-height: 1;
+  width: 100%;
+}
+
+.carousel-indicators {
+  display: none;
+}
+
 /* .embla__mobile {
     position: relative;
     --slide-spacing: 1rem;
@@ -99,7 +112,7 @@
 
 .embla__dots {
   z-index: 1;
-  bottom: -6px;
+  bottom: -10px;
   /* top: 50%; */
   position: absolute;
   left: 0;
@@ -115,8 +128,8 @@
   display: flex;
   align-items: center;
 
-  margin-right: 0.75rem;
-  margin-left: 0.75rem;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 .embla__dot:after {

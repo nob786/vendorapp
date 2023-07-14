@@ -18,6 +18,8 @@ import VendorsByCountry from "./VendorsByCOuntry";
 import StartPlanning from "./StartPlanning";
 import Footer from "../../components/Footer/Footer";
 import Login from "../Login/Login";
+import bag from "../../assets/images/bag.svg";
+
 // import Register from "../Register/Register";
 
 function Homepage() {
@@ -25,6 +27,15 @@ function Homepage() {
     <>
       <Login />
       {/* <Register /> */}
+      <div
+        className="d-flex justify-content-end align-items-center"
+        style={{ backgroundColor: "black", height: "38px" }}
+      >
+        <div className="roboto-regular-16px-information text-white" style={{ marginRight: "5rem" }}>
+          <img src={bag} alt="Featured" className="me-3 mb-1" />
+          Are you a vendor?
+        </div>
+      </div>
       <Header />
       <HeroSection />
       <PremiumVenues />

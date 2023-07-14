@@ -1,7 +1,10 @@
 import React from "react";
 import { Button, Container } from "react-bootstrap";
 import EmblaCarousel from "../../components/Carousel/Carousel";
-import imageByIndex from "../../components/Carousel/ImagesByIndex";
+import imageByIndex from "../../components/Carousel/ImagesByCountry";
+// import imageByIndex from "../../components/Carousel/ImagesByIndex";
+
+const country = ["Greece", "Jamaica", "Mexico", "Italy", "France"];
 
 function VendorsByCountry() {
   const OPTIONS = { slidesToScroll: "auto", containScroll: "trimSnaps" };
@@ -16,7 +19,7 @@ function VendorsByCountry() {
         src={imageByIndex(index)}
         alt="Your alt text"
       />
-      <h4>Country</h4>
+      <div className="roboto-medium-20px-body1 mt-2">{country[index]}</div>
     </div>
   );
 

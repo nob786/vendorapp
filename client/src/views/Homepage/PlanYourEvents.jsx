@@ -2,11 +2,12 @@ import React from "react";
 import {
   Button, Card, Col, Container, Row,
 } from "react-bootstrap";
-import image1 from "../../assets/images/slide-1.jpg";
-import image2 from "../../assets/images/slide-2.jpg";
-import image3 from "../../assets/images/slide-3.jpg";
-import image4 from "../../assets/images/slide-4.jpg";
+// import image1 from "../../assets/images/slide-1.jpg";
+// import image2 from "../../assets/images/slide-2.jpg";
+// import image3 from "../../assets/images/slide-3.jpg";
+// import image4 from "../../assets/images/slide-4.jpg";
 import "./Homepage.css";
+import imageByIndex from "../../components/Carousel/ImagesByIndex";
 
 const eventsList = [
   {
@@ -14,28 +15,28 @@ const eventsList = [
     title: "Manage your events",
     description: "A vivamus blandit in mollis. Consectetur ornare diam risus integer dui vitae aenean lacus. Aliquam.",
     button: "Start your first event",
-    image: image1,
+    // image: image1,
   },
   {
     id: 2,
     title: "Guest List",
     description: "A vivamus blandit in mollis. Consectetur ornare diam risus integer dui vitae aenean lacus. Aliquam.",
     button: "Button 2",
-    image: image2,
+    // // image: image2,
   },
   {
     id: 3,
     title: "Event Vendors",
     description: "A vivamus blandit in mollis. Consectetur ornare diam risus integer dui vitae aenean lacus. Aliquam.",
     button: "Button 3",
-    image: image3,
+    // // image: image3,
   },
   {
     id: 4,
     title: "Budget Plan",
     description: "A vivamus blandit in mollis. Consectetur ornare diam risus integer dui vitae aenean lacus. Aliquam.",
     button: "Button 4",
-    image: image4,
+    // // image: image4,
   },
 ];
 
@@ -73,7 +74,7 @@ function PlanYourEvents() {
                       </Card.Body>
                     </Col>
                     <Col sm={5} style={{ padding: "10px 0" }}>
-                      <Card.Img src={image} alt="Event" style={{ height: "200px", objectFit: "cover" }} />
+                      <Card.Img src={imageByIndex(id)} alt="Event" style={{ height: "200px", objectFit: "cover" }} />
                     </Col>
                   </Row>
                 </Card>
