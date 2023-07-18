@@ -8,6 +8,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/fontawesome-free-solid";
+import { useNavigate } from "react-router-dom";
 import Allevents from "../../assets/images/Allevents.svg";
 import "./Navbar.css";
 import { toggleLoginModal, toggleLoginView } from "../../views/redux/Login/loginSlice";
@@ -18,6 +19,7 @@ function Header() {
   const [navbarToggler, setNavbarToggler] = useState(false);
   const isRegisterView = useSelector((state) => state.register.isRegisterView);
   const isLoginView = useSelector((state) => state.login.isLoginView);
+  const navigate = useNavigate();
 
   console.log("isLoginView INSIDE NAVBAR COMP", isLoginView);
 
@@ -45,6 +47,11 @@ function Header() {
     }
     dispatch(toggleLoginModal());
     // dispatch(toggleRegisterModal());
+  };
+
+  const handlePostAd = (e) => {
+    e.preventDefault();
+    navigate("/post-ad");
   };
 
   const handleNavbarToggler = () => {
@@ -145,6 +152,15 @@ function Header() {
             onClick={(e) => handleRegisterClick(e)}
           >
             Create Account
+
+          </Button>
+          <Button
+            variant="outline-success"
+            type="submit"
+            className="create-account-btn"
+            onClick={(e) => handlePostAd(e)}
+          >
+            Post Ad
 
           </Button>
         </Form>

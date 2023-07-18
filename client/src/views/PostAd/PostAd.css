@@ -1,0 +1,10 @@
+.ad-banner {
+  /* width: 100%; */
+  position: relative;
+  background-image: url("../../assets//images//banner-bg.svg");
+  height: 165px;
+  margin: 0 52px;
+  margin-top: 36px;
+  object-fit: cover;
+  background-repeat: no-repeat;
+}

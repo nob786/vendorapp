@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Homepage from "./views/Homepage/Homepage";
 import Login from "./views/Login/Login";
+import PostAd from "./views/PostAd/PostAd";
 // import "../src/assets/scss/_buttons.scss"
 function App() {
   // const [count, setCount] = useState(0)
@@ -12,6 +13,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Homepage />} />
+      <Route path="/post-ad" element={<PostAd />} />
       {/* <Route path="login" element={<Login />} /> */}
       {/* <Route index element={<Homepage />} /> */}
       {/* <Route path="dashboard" element={<Dashboard />} /> */}
