@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Button, Container } from "react-bootstrap";
 
-function VideoUploader() {
+function VideoUploader({ setparentVideoUploaded }) {
   const [video, setVideo] = useState(null);
 
   const handleVideoUpload = (event) => {
@@ -18,7 +18,8 @@ function VideoUploader() {
           previewURL: reader.result,
         });
       };
-
+      setparentVideoUploaded(uploadedVideo);
+      console.log("uploadedVideo", uploadedVideo);
       reader.readAsDataURL(uploadedVideo);
     } else {
       // Handle video size error

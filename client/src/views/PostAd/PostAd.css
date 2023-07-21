@@ -13,3 +13,7 @@
 .form-select option {
   border: 3px solid red !important;
 }
+
+.country-field .select__control {
+  height: 56px;
+}

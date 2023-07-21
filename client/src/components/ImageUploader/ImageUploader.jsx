@@ -9,8 +9,10 @@ import {
 import InfoIcon from "../../assets/images/gg_info.svg";
 import "./ImageUploader.css";
 
-function ImageUploader() {
+function ImageUploader({ setparentImagesUploadedImages, imagesError, setImagesError }) {
   const [images, setImages] = useState(Array(5).fill(null));
+
+  console.log("imagesError imagesError imagesError", imagesError);
 
   const handleImagesUpload = (event, image) => {
     console.log({ images });
@@ -29,7 +31,9 @@ function ImageUploader() {
       };
       setImages(updatedImages);
     };
-
+    console.log("updatedImages inside image component", updatedImages);
+    setImagesError(false);
+    setparentImagesUploadedImages(updatedImages);
     reader.readAsDataURL(uploadedImage);
   };
 
@@ -37,11 +41,15 @@ function ImageUploader() {
     const updatedImages = [...images];
     updatedImages[index] = null;
     setImages(updatedImages);
+    setparentImagesUploadedImages(updatedImages);
   };
 
   return (
     <Container fluid style={{ marginTop: "30px" }}>
       <div className="roboto-medium-20px-body1" style={{ marginBottom: "25px" }}>Upload Images</div>
+
+      {imagesError
+        && <span className="text-danger">Atleast 1 photo is Required</span>}
       <div style={{ maxWidth: "900px", border: "2px dashed #A0C49D", padding: "16px" }}>
 
         <ul style={{ paddingLeft: "20px" }}>
@@ -59,14 +67,14 @@ function ImageUploader() {
           </li>
         </ul>
 
-        <Button
+        {/* <Button
           type="button"
           className="btn btn-success roboto-semi-bold-16px-information"
           style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem", height: "44px" }}
           onClick={handleImagesUpload}
         >
           Upload Images
-        </Button>
+        </Button> */}
 
         <div className="d-flex align-items-center">
           <img
@@ -83,7 +91,7 @@ function ImageUploader() {
               <div className="mb-5">
                 {image !== null ? (
                   <div style={{
-                    position: "relative", border: "2px solid red", width: "145px", height: "126px",
+                    position: "relative", border: "2px dotted #386C34", width: "145px", height: "126px",
                   }}
                   >
                     <img

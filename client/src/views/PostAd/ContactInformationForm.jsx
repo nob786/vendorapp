@@ -2,10 +2,40 @@ import React from "react";
 import {
   Button, Col, Container, Form, Modal, Row,
 } from "react-bootstrap";
+import Select from "react-select";
+
+const countries = [
+  "Alba", "Arad", "Arges", "Bacau", "Bihor", "Bistrita-Nasaud",
+  "Botosani", "Braila", "Brasov", "Buzau", "Calarasi",
+  "Caras-Severin", "Cluj", "Constanta", "Covasna", "Dambovita",
+  "Dolj", "Galati", "Giurgiu", "Gorj", "Harghita",
+  "Hunedoara", "Ialomita", "Iasi", "Ilfov", "Maramures", "Mehedinti",
+  "Mures", "Neamt", "Olt", "Prahova", "Salaj", "Satu-Mare", "Sibiu",
+  "Suceava", "Teleorman", "Timis", "Tulcea", "Valcea", "Vaslui", "Vrancea",
+];
 
 function ContactInformationForm({
-  values, errors, touched, handleChange,
+  values,
+  errors,
+  touched,
+  selectedCountries,
+  setSelectedCountries,
+  handleChange,
+  handleBlur,
 }) {
+  const countryOptions = countries.map((country) => ({ value: country, label: country }));
+
+  const handleCountryChange = (selectedOptions) => {
+    const countryNames = selectedOptions.map((option) => option.value);
+    setSelectedCountries(countryNames);
+    // handleChange("companyInformation.country")(countryNames);
+    handleChange({
+      target: {
+        name: "contactInformation.country",
+        value: countryNames,
+      },
+    });
+  };
   // const handleSubmit = (values) => {
   //   console.log(values);
   // };
@@ -24,7 +54,7 @@ function ContactInformationForm({
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"
-              name="contact_number"
+              name="contactInformation.contact_number"
               type="text"
               size="lg"
               placeholder="Enter Number"
@@ -44,7 +74,7 @@ function ContactInformationForm({
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"
-              name="websiteUrl"
+              name="contactInformation.websiteUrl"
               type="text"
               size="lg"
               placeholder="Enter websiteUrl"
@@ -61,7 +91,7 @@ function ContactInformationForm({
       </Row>
       <Row className="mb-3">
         <Col lg={4}>
-          <Form.Group className="mb-4" controlId="form3Example3">
+          {/* <Form.Group className="mb-4" controlId="form3Example3">
             <Form.Label className="roboto-medium-20px-body1">Country</Form.Label>
             <Form.Select
               aria-label="Default select example"
@@ -69,17 +99,32 @@ function ContactInformationForm({
               name="county"
               value={values.country || ""}
               onChange={handleChange}
-              // onBlur={handleBlur}
               isValid={touched.country && !errors.country}
               isInvalid={touched.country && !!errors.country}
               className={errors.country ? "border-danger" : ""}
             >
               <option disabled selected value hidden="true">Select country</option>
             </Form.Select>
-            {/* <Form.Control.Feedback type="invalid"> */}
             <div className="text-danger" style={{ fontSize: "14px" }}>
               {errors.country}
             </div>
+          </Form.Group> */}
+
+          <Form.Group className="form-group mb-3" controlId="form3Example6">
+            <Form.Label className="roboto-medium-20px-body1">Country</Form.Label>
+            <Select
+              options={countryOptions}
+              isMulti
+              name="contactInformation.country"
+              value={countryOptions.filter((option) => selectedCountries.includes(option.value))}
+              onChange={handleCountryChange}
+              onBlur={handleBlur("contactInformation.country")}
+              className={errors?.country ? "border-danger country-field" : "country-field"}
+              classNamePrefix="select"
+            />
+            {errors?.country && (
+              <div className="text-danger">{errors.country}</div>
+            )}
           </Form.Group>
         </Col>
         <Col lg={4}>
@@ -88,7 +133,7 @@ function ContactInformationForm({
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"
-              name="city"
+              name="contactInformation.city"
               type="text"
               size="lg"
               placeholder="Enter City"
@@ -110,7 +155,7 @@ function ContactInformationForm({
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"
-              name="street"
+              name="contactInformation.street"
               type="text"
               size="lg"
               placeholder="Enter websiteUrl"
@@ -132,7 +177,7 @@ function ContactInformationForm({
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"
-              name="fullAddress"
+              name="contactInformation.fullAddress"
               type="text"
               size="lg"
               placeholder="Enter websiteUrl"

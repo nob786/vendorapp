@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import {
   Button, Col, Container, Form, Modal, Row,
 } from "react-bootstrap";
+import Select from "react-select";
 import commercialName from "../../assets/images/post-ad/commercial_name.svg";
 // import category from "../../assets/images/post-ad/category.svg";
 // import sub_category from "../../assets/images/post-ad/sub-category.svg";
 // import description from "../../assets/images/post-ad/description.svg";
 // import map from "../../assets/images/post-ad/map.svg";
 import "./PostAd.css";
-import Select from "react-select";
 
 const countries = [
   "Alba", "Arad", "Arges", "Bacau", "Bihor", "Bistrita-Nasaud",
@@ -22,6 +22,9 @@ const countries = [
 
 const categories = [
   "venues", "vendors", "for_him", "for_her",
+];
+const subCategories = [
+  "Testing",
 ];
 
 function CompanyInformation({
@@ -139,7 +142,12 @@ function CompanyInformation({
                 isInvalid={touched.sub_category && !!errors.sub_category}
                 className={errors.sub_category ? "border-danger" : ""}
               >
-                <option disabled selected value hidden="true">Select sub_category</option>
+                {/* <option selected value hidden="true">Select sub_category</option> */}
+                <option selected value hidden="true">Select sub category</option>
+                {subCategories.map((subCategory, index) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <option key={index} value={subCategory}>{subCategory}</option>
+                ))}
               </Form.Select>
               {/* <Form.Control.Feedback type="invalid"> */}
               <div className="text-danger" style={{ fontSize: "14px" }}>
@@ -215,24 +223,21 @@ function CompanyInformation({
               />
             </Form.Group> */}
 
-            {/* {console.log("errors.companyInformation", errors.country)} */}
             <Form.Group className="form-group mb-3" controlId="form3Example6">
               <Form.Label className="roboto-medium-20px-body1">Country</Form.Label>
               <Select
-                // options={countries.map((country) => ({ value: country, label: country }))}
                 options={countryOptions}
                 isMulti
                 name="companyInformation.country"
-                // value={selectedCountries.map((country) => ({ value: country, label: country }))}
+                // styles={{ height: "56px" }}
                 value={countryOptions.filter((option) => selectedCountries.includes(option.value))}
-                onChange={handleCountryChange} // Use selectedCountries for the value prop
+                onChange={handleCountryChange}
                 onBlur={handleBlur("companyInformation.country")}
-                className={errors?.country ? "border-danger" : ""}
+                className={errors?.country ? "border-danger country-field" : "country-field"}
                 classNamePrefix="select"
-              // required
               />
               {errors?.country && (
-                <div className="error">{errors.country}</div>
+                <div className="text-danger">{errors.country}</div>
               )}
             </Form.Group>
           </Col>
