@@ -65,12 +65,15 @@ function PlanYourEvents() {
                         <Card.Text className="roboto-regular-16px-information" style={{ marginBottom: "20px" }}>
                           {description}
                         </Card.Text>
-                        {/* <Button variant="" style={{ color: "#A0C49D" }}>{button}</Button> */}
-                        <div style={{ color: "#A0C49D" }}>
-                          <strong>
-                            {button}
-                          </strong>
-                        </div>
+                        <Button
+                          type="button"
+                          className="btn-no-border roboto-semi-bold-16px-information"
+                          style={{
+                            fontSize: "16px", fontWeight: "700", color: "#A0C49D", padding: "0",
+                          }}
+                        >
+                          {button}
+                        </Button>
                       </Card.Body>
                     </Col>
                     <Col sm={5} style={{ padding: "10px 0" }}>

@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 // import './Navbar';
-import { Button, Form } from "react-bootstrap"; // Import Bootstrap components
+import {
+  Button, Col, Form, Row,
+} from "react-bootstrap"; // Import Bootstrap components
 
 import { useDispatch, useSelector } from "react-redux";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/fontawesome-free-solid";
+import { faAngleDown, faArrowDown, faBars } from "@fortawesome/fontawesome-free-solid";
 import { useNavigate } from "react-router-dom";
+import { faArrowDownShortWide } from "@fortawesome/free-solid-svg-icons";
 import Allevents from "../../assets/images/Allevents.svg";
 import "./Navbar.css";
 import { toggleLoginModal, toggleLoginView } from "../../views/redux/Login/loginSlice";
@@ -61,7 +64,7 @@ function Header() {
   return (
     <Navbar bg="body-tertiary" expand="lg" className="navbar">
       <Navbar.Brand href="/">
-        <img src={Allevents} alt="Allevents" style={{ maxWidth: "100%" }} />
+        <img src={Allevents} alt="Allevents" style={{ minWidth: "100%" }} />
       </Navbar.Brand>
       <Button
         type="button"
@@ -76,7 +79,7 @@ function Header() {
       </Button>
       {/* <i className="fas fa-bars" style="color:#fff; font-size:28px;" /> */}
       {/* <FontAwesomeIcon icon={faBars} style={{ color: "#FFF" }} size="2xl" /> */}
-      <Navbar.Toggle
+      {/* <Navbar.Toggle
         aria-controls="navbarSupportedContent"
         className="custom-toggler"
         style={{ border: "none", outline: "0", boxShadow: "none" }}
@@ -97,72 +100,120 @@ function Header() {
               </svg>
             )}
         </span>
-      </Navbar.Toggle>
+      </Navbar.Toggle> */}
       <Navbar.Collapse id="navbarSupportedContent" className="navbar-collapse">
         <Nav className="mx-auto">
 
-          <NavDropdown title="For him" id="navbarDropdown">
+          <NavDropdown
+            // title="For him"
+            id="navbarDropdown"
+            title={(
+              <div className="d-flex align-items-center">
+                For him
+                {" "}
+                <FontAwesomeIcon icon={faAngleDown} style={{ marginLeft: "10px" }} />
+              </div>
+            )}
+          >
             <NavDropdown.Item href="#">Action</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="#">Something else here</NavDropdown.Item>
           </NavDropdown>
 
-          <NavDropdown title="For her" id="navbarDropdown">
+          <NavDropdown
+            title={(
+              <div className="d-flex align-items-center">
+                For her
+                {" "}
+                <FontAwesomeIcon icon={faAngleDown} style={{ marginLeft: "10px" }} />
+              </div>
+            )}
+            id="navbarDropdown"
+          >
             <NavDropdown.Item href="#">Action</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="#">Something else here</NavDropdown.Item>
           </NavDropdown>
 
-          <NavDropdown title="Vendors" id="navbarDropdown">
+          <NavDropdown
+            title={(
+              <div className="d-flex align-items-center">
+                Vendors
+                {" "}
+                <FontAwesomeIcon icon={faAngleDown} style={{ marginLeft: "10px" }} />
+              </div>
+            )}
+            id="navbarDropdown"
+          >
             <NavDropdown.Item href="#">Action</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="#">Something else here</NavDropdown.Item>
           </NavDropdown>
 
-          <NavDropdown title="Venues" id="navbarDropdown">
+          <NavDropdown
+            title={(
+              <div className="d-flex align-items-center">
+                Venues
+                {" "}
+                <FontAwesomeIcon icon={faAngleDown} style={{ marginLeft: "10px" }} />
+              </div>
+            )}
+            id="navbarDropdown"
+          >
             <NavDropdown.Item href="#">Action</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="#">Something else here</NavDropdown.Item>
           </NavDropdown>
 
-          <NavDropdown title="Planning tools" id="navbarDropdown">
+          <NavDropdown
+            title={(
+              <div className="d-flex align-items-center">
+                Planning tools
+                {" "}
+                <FontAwesomeIcon icon={faAngleDown} style={{ marginLeft: "10px" }} />
+              </div>
+            )}
+            id="navbarDropdown"
+          >
             <NavDropdown.Item href="#">Action</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="#">Something else here</NavDropdown.Item>
           </NavDropdown>
 
         </Nav>
-        <Form className="d-flex" role="search" style={{ maxHeight: "40px" }}>
-          <Button
-            type="button"
-            // className="login-button"
-            variant="success"
-            // type="submit"
-            className="login-button roboto-semi-bold-16px-information"
-            style={{ fontSize: "16px", fontWeight: "700", color: "#A0C49D" }}
-            onClick={(e) => handleLoginClick(e)}
-          >
-            Login
-          </Button>
+        <Form role="search" style={{ maxHeight: "40px" }}>
+          <Row>
+            <Col lg={3}>
+              <Button
+                type="button"
+                // className="login-button"
+                // variant="success"
+                // type="submit"
+                className="btn-no-border roboto-semi-bold-16px-information"
+                style={{
+                  fontSize: "16px", fontWeight: "700", color: "#A0C49D", padding: "0",
+                }}
+                onClick={(e) => handleLoginClick(e)}
+              >
+                Login
+              </Button>
+            </Col>
 
-          <Button
-            variant="outline-success"
-            type="submit"
-            className="create-account-btn"
-            onClick={(e) => handleRegisterClick(e)}
-          >
-            Create Account
+            <Col lg={2}>
+              <Button
+                variant="outline-success"
+                type="button"
+                className="create-account-btn align-items-center justify-content-center"
+                onClick={(e) => handleRegisterClick(e)}
+                style={{ padding: "0 2vw" }}
+              >
+                <span style={{ whiteSpace: "nowrap" }}>
+                  Create Account
+                </span>
 
-          </Button>
-          <Button
-            variant="outline-success"
-            type="submit"
-            className="create-account-btn"
-            onClick={(e) => handlePostAd(e)}
-          >
-            Post Ad
-
-          </Button>
+              </Button>
+            </Col>
+          </Row>
         </Form>
       </Navbar.Collapse>
 

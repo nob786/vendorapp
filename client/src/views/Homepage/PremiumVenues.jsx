@@ -13,7 +13,7 @@ function PremiumVenues() {
 
   const componentToRender = (index) => (
     <div className="embla__slide" key={index}>
-      <Card style={{ padding: "10px" }}>
+      <Card style={{ padding: "10px", border: "none" }}>
         <Card.Img variant="top" src={imageByIndex(index)} />
         <Card.Body>
           <div className="position-absolute" style={{ top: "20px", right: "20px" }}>
@@ -27,15 +27,21 @@ function PremiumVenues() {
             </div>
           </div>
 
-          <Card.Title style={{ margin: "0" }}>Name of card</Card.Title>
+          <Card.Title style={{ margin: "0" }} className="roboto-medium-20px-body1">Name of card</Card.Title>
           <Card.Text style={{ margin: "10px 0 7px 0" }}>
             <div className="d-flex align-items-center">
               <FontAwesomeIcon icon="fa-solid fa-star" style={{ color: "#f0be41" }} />
-              <span className="d-flex align-items-center" style={{ margin: "0 6px" }}><strong> 4.9 </strong></span>
-              <span className="d-flex align-items-center text-muted">(142)</span>
+              <span
+                className="d-flex align-items-center roboto-regular-14px-information"
+                style={{ margin: "0 6px" }}
+              >
+                <strong> 4.9 </strong>
+
+              </span>
+              <span className="d-flex align-items-center text-muted roboto-regular-14px-information">(142)</span>
             </div>
           </Card.Text>
-          <Card.Text className="text-muted">
+          <Card.Text className="text-muted roboto-regular-14px-information">
             New York, NY
           </Card.Text>
         </Card.Body>

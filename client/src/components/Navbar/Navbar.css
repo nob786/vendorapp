@@ -23,11 +23,17 @@
 }
 
 .create-account-btn {
-  width: 11rem;
+  min-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .custom-toggler .navbar-toggler-icon {
   background-image: url("../../assets/images/X.svg");
+}
+
+.dropdown-toggle::after {
+  display: none;
 }
 
 

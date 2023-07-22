@@ -2,11 +2,14 @@ import React from "react";
 import {
   Button, Col, Container, Form, FormControl, InputGroup, Row,
 } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import heroImg from "../../assets/images/harold.jpg";
 import useWindowDimensions from "../../utilities/hooks/useWindowDimension";
 
 function HeroSection() {
   const { width } = useWindowDimensions();
+  const navigate = useNavigate();
+
   return (
     <Container fluid style={{ height: "auto", padding: "0" }}>
       <Row className="h-100 col-12 g-0 flex-column-reverse flex-md-row">
@@ -15,6 +18,15 @@ function HeroSection() {
             <div className="hero-text" style={{ maxWidth: "461px" }}>
               <h1 className="text-left heading">Lectus auctor faucibus</h1>
               <p className="text-left">Sit pharetra consectetur odio sit. Molestie ipsum aliquam est quis morbi.</p>
+              <Button
+                variant="outline-success"
+                type="submit"
+                className="mb-2"
+                onClick={(e) => navigate("/post-ad")}
+              >
+                Post Ad
+
+              </Button>
             </div>
             <div className="s003">
               <Form>

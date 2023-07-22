@@ -36,11 +36,37 @@
   height: 46px !important;
   font-size: 16px !important;
   font-weight: 700 !important;
-  padding-left: 30px !important;
-  padding-right: 30px !important;
+  padding-left: 30px;
+  padding-right: 30px;
   /* width: 100%; */
 }
 
+.btn-no-border {
+  color: #A0C49D !important;
+  background-color: transparent !important;
+  border: none !important;
+  /* border-radius: 0 5px 5px 0 !important; */
+  height: 46px !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.btn-no-border:hover,
+.btn-no-border:active,
+.btn-no-border:visited,
+.btn-no-border:focus {
+  /* background-color: #A0C49D !important; */
+  color: #76af71 !important;
+}
+
+
 .form-control {
   border: 1px solid #797979;
+}
+
+.card {
+  border: none;
+  box-shadow: 0px 4px 50px 0px rgba(0, 0, 0, 0.1);
 }

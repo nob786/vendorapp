@@ -15,7 +15,7 @@ function Footer() {
 
   return (
     <div className="d-flex flex-column h-100" style={{ position: "relative" }}>
-      <footer className="w-100 pt-4 flex-shrink-0" style={{ background: "#212529", paddingBottom: "0" }}>
+      <footer className="w-100 pt-4 flex-shrink-0" style={{ background: "#000F0D", paddingBottom: "0" }}>
         <div className="container pt-4" style={{ paddingBottom: "0" }}>
           <Container>
             <div className="row gy-4 gx-5">
