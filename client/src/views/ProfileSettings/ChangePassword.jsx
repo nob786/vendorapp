@@ -6,6 +6,10 @@ import * as formik from "formik";
 import * as Yup from "yup";
 import Header from "../../components/Navbar/Navbar";
 import user from "../../assets/images/profile-settings/user.svg";
+import oldPasswordIcon from "../../assets/images/profile-settings/old-password.svg";
+import newPasswordIcon from "../../assets/images/profile-settings/new-password.svg";
+import confirmPasswordIcon from "../../assets/images/profile-settings/confirm-password.svg";
+// import contactIcon from "../../assets/images/post-ad/contact.svg";
 
 // import profile_bg from "../../assets/images/profile-settings/profile-bg.svg";
 import "./ProfileSettings.css";
@@ -64,8 +68,16 @@ function ChangePassword() {
               }) => (
                 <Form noValidate onSubmit={handleSubmit}>
                   <Col lg={4}>
-                    <Form.Group className="form-group mb-3" controlId="form3Example4" style={{ position: "relative" }}>
-                      <Form.Label className="roboto-medium-20px-body1">Old Password</Form.Label>
+                    <Form.Group className="form-group mb-4" controlId="form3Example4" style={{ position: "relative" }}>
+                      <Form.Label
+                        className="roboto-medium-20px-body1 d-flex align-items-center"
+                        style={{ marginBottom: "20px" }}
+                      >
+                        <img src={oldPasswordIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+
+                        Old Password
+
+                      </Form.Label>
                       <Form.Control
                         style={{ height: "56px" }}
                         className="hide-validation-icon lg-input-small-text"
@@ -87,8 +99,16 @@ function ChangePassword() {
 
                   <Col lg={4}>
 
-                    <Form.Group className="form-group mb-3" controlId="form3Example4" style={{ position: "relative" }}>
-                      <Form.Label className="roboto-medium-20px-body1">New Password</Form.Label>
+                    <Form.Group className="form-group mb-4" controlId="form3Example4" style={{ position: "relative" }}>
+                      <Form.Label
+                        className="roboto-medium-20px-body1 d-flex align-items-center"
+                        style={{ marginBottom: "20px" }}
+                      >
+                        <img src={newPasswordIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+
+                        New Password
+
+                      </Form.Label>
                       <Form.Control
                         style={{ height: "56px" }}
                         className="hide-validation-icon lg-input-small-text"
@@ -110,8 +130,16 @@ function ChangePassword() {
 
                   <Col lg={4}>
 
-                    <Form.Group className="form-group mb-3" controlId="form3Example4" style={{ position: "relative" }}>
-                      <Form.Label className="roboto-medium-20px-body1">Confirm New Password</Form.Label>
+                    <Form.Group className="form-group mb-4" controlId="form3Example4" style={{ position: "relative" }}>
+                      <Form.Label
+                        className="roboto-medium-20px-body1 d-flex align-items-center"
+                        style={{ marginBottom: "20px" }}
+                      >
+                        <img src={confirmPasswordIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+
+                        Confirm New Password
+
+                      </Form.Label>
                       <Form.Control
                         style={{ height: "56px" }}
                         className="hide-validation-icon lg-input-small-text"

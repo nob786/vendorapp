@@ -6,6 +6,9 @@ import * as formik from "formik";
 import * as Yup from "yup";
 import Header from "../../components/Navbar/Navbar";
 import user from "../../assets/images/profile-settings/user.svg";
+import oldPasswordIcon from "../../assets/images/profile-settings/old-password.svg";
+import confirmPasswordIcon from "../../assets/images/profile-settings/confirm-password.svg";
+import questionIcon from "../../assets/images/profile-settings/question.svg";
 
 // import profile_bg from "../../assets/images/profile-settings/profile-bg.svg";
 import "./ProfileSettings.css";
@@ -67,8 +70,15 @@ function DeleteAccount() {
               }) => (
                 <Form noValidate onSubmit={handleSubmit}>
                   <Col lg={4}>
-                    <Form.Group className="form-group mb-3" controlId="form3Example4" style={{ position: "relative" }}>
-                      <Form.Label className="roboto-medium-20px-body1">Enter Password</Form.Label>
+                    <Form.Group className="form-group mb-4" controlId="form3Example4" style={{ position: "relative" }}>
+                      <Form.Label
+                        className="roboto-medium-20px-body1 d-flex align-items-center"
+                        style={{ marginBottom: "20px" }}
+                      >
+                        <img src={oldPasswordIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                        Enter Password
+
+                      </Form.Label>
                       <Form.Control
                         style={{ height: "56px" }}
                         className="hide-validation-icon lg-input-small-text"
@@ -90,8 +100,15 @@ function DeleteAccount() {
 
                   <Col lg={4}>
 
-                    <Form.Group className="form-group mb-3" controlId="form3Example4" style={{ position: "relative" }}>
-                      <Form.Label className="roboto-medium-20px-body1">Confirm Password</Form.Label>
+                    <Form.Group className="form-group mb-4" controlId="form3Example4" style={{ position: "relative" }}>
+                      <Form.Label
+                        className="roboto-medium-20px-body1 d-flex align-items-center"
+                        style={{ marginBottom: "20px" }}
+                      >
+                        <img src={oldPasswordIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                        Confirm Password
+
+                      </Form.Label>
 
                       <Form.Control
                         style={{ height: "56px" }}
@@ -114,8 +131,15 @@ function DeleteAccount() {
 
                   <Col lg={4}>
 
-                    <Form.Group className="form-group mb-3" controlId="form3Example4" style={{ position: "relative" }}>
-                      <Form.Label className="roboto-medium-20px-body1">Why are you leaving?</Form.Label>
+                    <Form.Group className="form-group mb-4" controlId="form3Example4" style={{ position: "relative" }}>
+                      <Form.Label
+                        className="roboto-medium-20px-body1 d-flex align-items-center"
+                        style={{ marginBottom: "20px" }}
+                      >
+                        <img src={oldPasswordIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                        Why are you leaving?
+
+                      </Form.Label>
                       <Form.Select
                         aria-label="Default select example"
                         style={{ height: "56px" }}

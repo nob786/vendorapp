@@ -6,6 +6,12 @@ import * as formik from "formik";
 import * as Yup from "yup";
 import Header from "../../components/Navbar/Navbar";
 import user from "../../assets/images/profile-settings/user.svg";
+import personIcon from "../../assets/images/profile-settings/person.svg";
+import mapIcon from "../../assets/images/post-ad/map.svg";
+import postalIcon from "../../assets/images/profile-settings/postal.svg";
+import fiscalIcon from "../../assets/images/profile-settings/fiscal.svg";
+import firmIcon from "../../assets/images/profile-settings/firm.svg";
+import bankIcon from "../../assets/images/profile-settings/bank.svg";
 
 // import profile_bg from "../../assets/images/profile-settings/profile-bg.svg";
 import "./ProfileSettings.css";
@@ -80,7 +86,13 @@ function CompanyInformationSettings() {
                   <Row className="mb-5">
                     <Col lg={4}>
                       <Form.Group className="mb-4" controlId="form3Example3">
-                        <Form.Label className="roboto-medium-20px-body1">Name</Form.Label>
+                        <Form.Label
+                          className="roboto-medium-20px-body1 d-flex align-items-center"
+                          style={{ marginBottom: "20px" }}
+                        >
+                          <img src={personIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+
+                        </Form.Label>
                         <Form.Control
                           style={{ height: "56px" }}
                           className="lg-input-small-text"
@@ -102,10 +114,17 @@ function CompanyInformationSettings() {
                     <Col lg={4}>
 
                       <Form.Group className="form-group mb-3" controlId="form3Example4">
-                        <Form.Label className="roboto-medium-20px-body1">Country</Form.Label>
+                        <Form.Label
+                          className="roboto-medium-20px-body1 d-flex align-items-center"
+                          style={{ marginBottom: "20px" }}
+                        >
+                          <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                          Country
+
+                        </Form.Label>
                         <Form.Select
                           aria-label="Default select example"
-                          style={{ height: "56px" }}
+                          style={{ height: "56px", borderColor: "#797979" }}
                           name="reasonToLeave"
                           value={values.reasonToLeave || ""}
                           onChange={handleChange}
@@ -125,10 +144,17 @@ function CompanyInformationSettings() {
                   <Row className="mb-5">
                     <Col lg={4}>
                       <Form.Group className="form-group mb-3" controlId="form3Example4">
-                        <Form.Label className="roboto-medium-20px-body1">County</Form.Label>
+                        <Form.Label
+                          className="roboto-medium-20px-body1 d-flex align-items-center"
+                          style={{ marginBottom: "20px" }}
+                        >
+                          <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                          County
+
+                        </Form.Label>
                         <Form.Select
                           aria-label="Default select example"
-                          style={{ height: "56px" }}
+                          style={{ height: "56px", borderColor: "#797979" }}
                           name="reasonToLeave"
                           value={values.reasonToLeave || ""}
                           onChange={handleChange}
@@ -145,50 +171,14 @@ function CompanyInformationSettings() {
 
                     <Col lg={4}>
                       <Form.Group className="form-group mb-3" controlId="form3Example4">
-                        <Form.Label className="roboto-medium-20px-body1">Municipality</Form.Label>
-                        <Form.Control
-                          style={{ height: "56px" }}
-                          className="lg-input-small-text"
-                          name="municipality"
-                          type="text"
-                          size="lg"
-                          placeholder="Enter"
-                          value={values.municipality}
-                          onChange={handleChange}
-                          // isValid={touched.municipality && !errors.municipality}
-                          isInvalid={!!errors.municipality}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.municipality}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row className="mb-5">
-                    <Col lg={4}>
-                      <Form.Group className="form-group mb-3" controlId="form3Example4">
-                        <Form.Label className="roboto-medium-20px-body1">Commune</Form.Label>
-                        <Form.Control
-                          style={{ height: "56px" }}
-                          className="lg-input-small-text"
-                          name="commune"
-                          type="text"
-                          size="lg"
-                          placeholder="Enter"
-                          value={values.commune}
-                          onChange={handleChange}
-                          // isValid={touched.commune && !errors.commune}
-                          isInvalid={!!errors.commune}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.commune}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                    </Col>
+                        <Form.Label
+                          className="roboto-medium-20px-body1 d-flex align-items-center"
+                          style={{ marginBottom: "20px" }}
+                        >
+                          <img src={postalIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                          Postal Code
 
-                    <Col lg={4}>
-                      <Form.Group className="form-group mb-3" controlId="form3Example4">
-                        <Form.Label className="roboto-medium-20px-body1">Postal Code</Form.Label>
+                        </Form.Label>
                         <Form.Control
                           style={{ height: "56px" }}
                           className="lg-input-small-text"
@@ -206,11 +196,43 @@ function CompanyInformationSettings() {
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Col>
+
+                    {/* <Col lg={4}>
+                      <Form.Group className="form-group mb-3" controlId="form3Example4">
+                        <Form.Label    className="roboto-medium-20px-body1 d-flex align-items-center"
+                        style={{ marginBottom: "20px" }}
+                      >
+                        <img src={oldPasswordIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                        Municipality</Form.Label>
+                        <Form.Control
+                          style={{ height: "56px" }}
+                          className="lg-input-small-text"
+                          name="municipality"
+                          type="text"
+                          size="lg"
+                          placeholder="Enter"
+                          value={values.municipality}
+                          onChange={handleChange}
+                          // isValid={touched.municipality && !errors.municipality}
+                          isInvalid={!!errors.municipality}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.municipality}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Col> */}
                   </Row>
                   <Row className="mb-5">
                     <Col lg={4}>
                       <Form.Group className="form-group mb-3" controlId="form3Example4">
-                        <Form.Label className="roboto-medium-20px-body1">Fiscal Code</Form.Label>
+                        <Form.Label
+                          className="roboto-medium-20px-body1 d-flex align-items-center"
+                          style={{ marginBottom: "20px" }}
+                        >
+                          <img src={fiscalIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                          Fiscal Code
+
+                        </Form.Label>
                         <Form.Control
                           style={{ height: "56px" }}
                           className="lg-input-small-text"
@@ -231,7 +253,14 @@ function CompanyInformationSettings() {
 
                     <Col lg={4}>
                       <Form.Group className="form-group mb-3" controlId="form3Example4">
-                        <Form.Label className="roboto-medium-20px-body1">Firm Number</Form.Label>
+                        <Form.Label
+                          className="roboto-medium-20px-body1 d-flex align-items-center"
+                          style={{ marginBottom: "20px" }}
+                        >
+                          <img src={firmIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                          Firm Number
+
+                        </Form.Label>
                         <Form.Control
                           style={{ height: "56px" }}
                           className="lg-input-small-text"
@@ -253,7 +282,14 @@ function CompanyInformationSettings() {
                   <Row className="mb-5">
                     <Col lg={4}>
                       <Form.Group className="form-group mb-3" controlId="form3Example4">
-                        <Form.Label className="roboto-medium-20px-body1">Bank Name</Form.Label>
+                        <Form.Label
+                          className="roboto-medium-20px-body1 d-flex align-items-center"
+                          style={{ marginBottom: "20px" }}
+                        >
+                          <img src={bankIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                          Bank Name
+
+                        </Form.Label>
                         <Form.Control
                           style={{ height: "56px" }}
                           className="lg-input-small-text"
@@ -274,7 +310,14 @@ function CompanyInformationSettings() {
 
                     <Col lg={4}>
                       <Form.Group className="form-group mb-3" controlId="form3Example4">
-                        <Form.Label className="roboto-medium-20px-body1">Bank IBAN</Form.Label>
+                        <Form.Label
+                          className="roboto-medium-20px-body1 d-flex align-items-center"
+                          style={{ marginBottom: "20px" }}
+                        >
+                          <img src={firmIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                          Bank IBAN
+
+                        </Form.Label>
                         <Form.Control
                           style={{ height: "56px" }}
                           className="lg-input-small-text"

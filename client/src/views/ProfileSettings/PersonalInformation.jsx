@@ -6,6 +6,8 @@ import * as formik from "formik";
 import * as Yup from "yup";
 import Header from "../../components/Navbar/Navbar";
 import user from "../../assets/images/profile-settings/user.svg";
+import personIcon from "../../assets/images/profile-settings/person.svg";
+import contactIcon from "../../assets/images/post-ad/contact.svg";
 
 // import profile_bg from "../../assets/images/profile-settings/profile-bg.svg";
 import "./ProfileSettings.css";
@@ -58,7 +60,15 @@ function PersonalInformation() {
                 <Form noValidate onSubmit={handleSubmit}>
                   <Col lg={4}>
                     <Form.Group className="mb-4" controlId="form3Example3">
-                      <Form.Label className="roboto-medium-20px-body1">Contact Person Name</Form.Label>
+                      <Form.Label
+                        className="roboto-medium-20px-body1 d-flex align-items-center"
+                        style={{ marginBottom: "20px" }}
+                      >
+                        <img src={personIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+
+                        Contact Person Name
+
+                      </Form.Label>
                       <Form.Control
                         style={{ height: "56px" }}
                         className="lg-input-small-text"
@@ -80,7 +90,15 @@ function PersonalInformation() {
                   <Col lg={4}>
 
                     <Form.Group className="mb-3" controlId="form3Example4">
-                      <Form.Label className="roboto-medium-20px-body1">Contact Person Number</Form.Label>
+                      <Form.Label
+                        className="roboto-medium-20px-body1 d-flex align-items-center"
+                        style={{ marginBottom: "20px" }}
+                      >
+                        <img src={contactIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+
+                        Contact Person Number
+
+                      </Form.Label>
                       <Form.Control
                         style={{ height: "56px" }}
                         className="lg-input-small-text"

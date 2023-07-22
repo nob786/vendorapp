@@ -69,9 +69,10 @@ function Header() {
       <Button
         type="button"
         // className="login-button"
-        variant="success"
+        // variant="success"
         // type="submit"
-        className="roboto-semi-bold-16px-information login-button-mobile me-3"
+        className="btn-no-border roboto-semi-bold-16px-information login-button-mobile me-2"
+        style={{ padding: "0" }}
         onClick={(e) => handleLoginClick(e)}
       >
         Login
@@ -79,7 +80,7 @@ function Header() {
       </Button>
       {/* <i className="fas fa-bars" style="color:#fff; font-size:28px;" /> */}
       {/* <FontAwesomeIcon icon={faBars} style={{ color: "#FFF" }} size="2xl" /> */}
-      {/* <Navbar.Toggle
+      <Navbar.Toggle
         aria-controls="navbarSupportedContent"
         className="custom-toggler"
         style={{ border: "none", outline: "0", boxShadow: "none" }}
@@ -100,7 +101,7 @@ function Header() {
               </svg>
             )}
         </span>
-      </Navbar.Toggle> */}
+      </Navbar.Toggle>
       <Navbar.Collapse id="navbarSupportedContent" className="navbar-collapse">
         <Nav className="mx-auto">
 
@@ -189,7 +190,7 @@ function Header() {
                 // className="login-button"
                 // variant="success"
                 // type="submit"
-                className="btn-no-border roboto-semi-bold-16px-information"
+                className="btn-no-border login-button roboto-semi-bold-16px-information"
                 style={{
                   fontSize: "16px", fontWeight: "700", color: "#A0C49D", padding: "0",
                 }}
