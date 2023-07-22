@@ -17,3 +17,23 @@
 .country-field .select__control {
   height: 56px;
 }
+
+.postAdBanner1:hover {
+  transition: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  opacity: 0.9;
+  margin-top: 40px !important;
+}
+
+.postAdBanner3:hover {
+  transition: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  opacity: 0.9;
+  margin-top: 1px !important;
+}
+
+.postAdBanner2:hover {
+  transition: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  opacity: 0.9;
+  transform: translateX(12px);
+  /* margin-right: -10px; */
+  /* margin-top: 40px !important; */
+}

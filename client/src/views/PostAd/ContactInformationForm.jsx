@@ -3,6 +3,10 @@ import {
   Button, Col, Container, Form, Modal, Row,
 } from "react-bootstrap";
 import Select from "react-select";
+import contactIcon from "../../assets/images/post-ad/contact.svg";
+// import videosIcon from "../../assets/images/post-ad/videos.svg";
+import mapIcon from "../../assets/images/post-ad/map.svg";
+// import descriptionIcon from "../../assets/images/post-ad/images.svg";
 
 const countries = [
   "Alba", "Arad", "Arges", "Bacau", "Bihor", "Bistrita-Nasaud",
@@ -50,7 +54,14 @@ function ContactInformationForm({
       <Row className="mb-3">
         <Col lg={4}>
           <Form.Group className="mb-4" controlId="form3Example3">
-            <Form.Label className="roboto-medium-20px-body1">Contact Person Number</Form.Label>
+            <Form.Label
+              className="roboto-medium-20px-body1"
+              style={{ marginBottom: "20px" }}
+            >
+              <img src={contactIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+              Contact Person Number
+
+            </Form.Label>
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"
@@ -70,7 +81,15 @@ function ContactInformationForm({
         </Col>
         <Col lg={4}>
           <Form.Group className="mb-4" controlId="form3Example3">
-            <Form.Label className="roboto-medium-20px-body1">Website URL</Form.Label>
+            <Form.Label
+              className="roboto-medium-20px-body1"
+              style={{ marginBottom: "20px" }}
+            >
+              <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+
+              Website URL
+
+            </Form.Label>
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"
@@ -92,8 +111,11 @@ function ContactInformationForm({
       <Row className="mb-3">
         <Col lg={4}>
           {/* <Form.Group className="mb-4" controlId="form3Example3">
-            <Form.Label className="roboto-medium-20px-body1">Country</Form.Label>
+            <Form.Label className="roboto-medium-20px-body1"
+             style={{ marginBottom: "20px" }}>Country</Form.Label>
             <Form.Select
+                          <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+
               aria-label="Default select example"
               style={{ height: "56px" }}
               name="county"
@@ -111,7 +133,15 @@ function ContactInformationForm({
           </Form.Group> */}
 
           <Form.Group className="form-group mb-3" controlId="form3Example6">
-            <Form.Label className="roboto-medium-20px-body1">Country</Form.Label>
+            <Form.Label
+              className="roboto-medium-20px-body1"
+              style={{ marginBottom: "20px" }}
+            >
+              <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+
+              Country
+
+            </Form.Label>
             <Select
               options={countryOptions}
               isMulti
@@ -129,7 +159,15 @@ function ContactInformationForm({
         </Col>
         <Col lg={4}>
           <Form.Group className="mb-4" controlId="form3Example3">
-            <Form.Label className="roboto-medium-20px-body1">City</Form.Label>
+            <Form.Label
+              className="roboto-medium-20px-body1"
+              style={{ marginBottom: "20px" }}
+            >
+              <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+
+              City
+
+            </Form.Label>
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"
@@ -151,7 +189,15 @@ function ContactInformationForm({
       <Row className="mb-3">
         <Col lg={4}>
           <Form.Group className="mb-4" controlId="form3Example3">
-            <Form.Label className="roboto-medium-20px-body1">Street</Form.Label>
+            <Form.Label
+              className="roboto-medium-20px-body1"
+              style={{ marginBottom: "20px" }}
+            >
+              <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+
+              Street
+
+            </Form.Label>
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"
@@ -173,7 +219,15 @@ function ContactInformationForm({
       <Row className="mb-3">
         <Col lg={8}>
           <Form.Group className="mb-4" controlId="form3Example3">
-            <Form.Label className="roboto-medium-20px-body1">Full Address</Form.Label>
+            <Form.Label
+              className="roboto-medium-20px-body1"
+              style={{ marginBottom: "20px" }}
+            >
+              <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+
+              Full Address
+
+            </Form.Label>
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"

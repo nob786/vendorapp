@@ -211,14 +211,14 @@ function PostAd() {
           position: "absolute", right: "-50px", top: "-32px", display: "flex",
         }}
         >
-          <div style={{ marginTop: "30px" }}>
+          <div style={{ marginTop: "30px" }} className="postAdBanner1">
             <img src={postAdBanner1} alt="postAdBanner1" />
           </div>
           <div style={{ margin: "0 -65px" }}>
-            <img src={postAdBanner3} alt="postAdBanner3" />
+            <img src={postAdBanner3} alt="postAdBanner3" className="postAdBanner3" />
           </div>
           <div style={{ marginTop: "30px" }}>
-            <img src={postAdBanner2} alt="postAdBanner2" />
+            <img src={postAdBanner2} alt="postAdBanner2" className="postAdBanner2" />
           </div>
         </div>
       </div>

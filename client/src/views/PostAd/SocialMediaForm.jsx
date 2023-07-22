@@ -8,6 +8,11 @@ import * as formik from "formik";
 import {
   Button, Col, Container, Form, Modal, Row,
 } from "react-bootstrap";
+import facebookIcon from "../../assets/images/post-ad/facebook.svg";
+import instagramIcon from "../../assets/images/post-ad/insta.svg";
+import youtubeIcon from "../../assets/images/post-ad/youtube.svg";
+import tiktokIcon from "../../assets/images/post-ad/tiktok.svg";
+import twitterIcon from "../../assets/images/post-ad/twitter.svg";
 
 function SocialMediaForm({
   values,
@@ -21,7 +26,13 @@ function SocialMediaForm({
       <Row className="mb-3">
         <Col lg={4}>
           <Form.Group className="mb-4" controlId="facebookURL">
-            <Form.Label className="roboto-medium-20px-body1">Facebook URL</Form.Label>
+            <Form.Label
+              className="roboto-medium-20px-body1 d-flex align-items-center"
+              style={{ marginBottom: "20px" }}
+            >
+              <img src={facebookIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+              Facebook URL
+            </Form.Label>
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"
@@ -41,7 +52,14 @@ function SocialMediaForm({
         </Col>
         <Col lg={4}>
           <Form.Group className="mb-4" controlId="instagramURL">
-            <Form.Label className="roboto-medium-20px-body1">Instagram URL</Form.Label>
+            <Form.Label
+              className="roboto-medium-20px-body1 d-flex align-items-center"
+              style={{ marginBottom: "20px" }}
+            >
+              <img src={instagramIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+              Instagram URL
+
+            </Form.Label>
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"
@@ -63,7 +81,14 @@ function SocialMediaForm({
       <Row className="mb-3">
         <Col lg={4}>
           <Form.Group className="mb-4" controlId="youtubeURL">
-            <Form.Label className="roboto-medium-20px-body1">YouTube URL</Form.Label>
+            <Form.Label
+              className="roboto-medium-20px-body1 d-flex align-items-center"
+              style={{ marginBottom: "20px" }}
+            >
+              <img src={youtubeIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+              YouTube URL
+
+            </Form.Label>
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"
@@ -83,7 +108,14 @@ function SocialMediaForm({
         </Col>
         <Col lg={4}>
           <Form.Group className="mb-4" controlId="tiktokURL">
-            <Form.Label className="roboto-medium-20px-body1">TikTok URL</Form.Label>
+            <Form.Label
+              className="roboto-medium-20px-body1 d-flex align-items-center"
+              style={{ marginBottom: "20px" }}
+            >
+              <img src={tiktokIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+              TikTok URL
+
+            </Form.Label>
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"
@@ -105,7 +137,14 @@ function SocialMediaForm({
       <Row className="mb-3">
         <Col lg={4}>
           <Form.Group className="mb-4" controlId="twitterURL">
-            <Form.Label className="roboto-medium-20px-body1">Twitter URL</Form.Label>
+            <Form.Label
+              className="roboto-medium-20px-body1 d-flex align-items-center"
+              style={{ marginBottom: "20px" }}
+            >
+              <img src={twitterIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+              Twitter URL
+
+            </Form.Label>
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"

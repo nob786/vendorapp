@@ -3,11 +3,11 @@ import {
   Button, Col, Container, Form, Modal, Row,
 } from "react-bootstrap";
 import Select from "react-select";
-import commercialName from "../../assets/images/post-ad/commercial_name.svg";
-// import category from "../../assets/images/post-ad/category.svg";
-// import sub_category from "../../assets/images/post-ad/sub-category.svg";
-// import description from "../../assets/images/post-ad/description.svg";
-// import map from "../../assets/images/post-ad/map.svg";
+import commercialNameIcon from "../../assets/images/post-ad/commercial_name.svg";
+import categoryIcon from "../../assets/images/post-ad/category.svg";
+import subCategoryIcon from "../../assets/images/post-ad/sub-category.svg";
+import descriptionIcon from "../../assets/images/post-ad/description.svg";
+import mapIcon from "../../assets/images/post-ad/map.svg";
 import "./PostAd.css";
 
 const countries = [
@@ -75,7 +75,7 @@ function CompanyInformation({
                 className="roboto-medium-20px-body1 d-flex align-items-center"
                 style={{ marginBottom: "20px" }}
               >
-                <img src={commercialName} alt="commercialName" style={{ marginRight: "16px" }} />
+                <img src={commercialNameIcon} alt="commercialName" style={{ marginRight: "16px" }} />
                 Commercial Name
               </Form.Label>
               <Form.Control
@@ -97,7 +97,15 @@ function CompanyInformation({
           </Col>
           <Col md={6} lg={3}>
             <Form.Group className="form-group mb-3" controlId="form3Example4">
-              <Form.Label className="roboto-medium-20px-body1">Select Category</Form.Label>
+              <Form.Label
+                className="roboto-medium-20px-body1 d-flex align-items-center"
+                style={{ marginBottom: "20px" }}
+              >
+                <img src={categoryIcon} alt="categoryIcon" style={{ marginRight: "16px" }} />
+
+                Select Category
+
+              </Form.Label>
               <Form.Select
                 aria-label="Default select example"
                 style={{ height: "56px" }}
@@ -130,7 +138,15 @@ function CompanyInformation({
 
           <Col md={6} lg={3}>
             <Form.Group className="form-group mb-3" controlId="form3Example5">
-              <Form.Label className="roboto-medium-20px-body1">Select sub-category</Form.Label>
+              <Form.Label
+                className="roboto-medium-20px-body1 d-flex align-items-center"
+                style={{ marginBottom: "20px" }}
+              >
+                <img src={subCategoryIcon} alt="categoryIcon" style={{ marginRight: "16px" }} />
+
+                Select sub-category
+
+              </Form.Label>
               <Form.Select
                 aria-label="Default select example"
                 style={{ height: "56px" }}
@@ -161,7 +177,15 @@ function CompanyInformation({
 
           <Col md={6} lg={8}>
             <Form.Group className="form-group mb-3" controlId="form3Example6">
-              <Form.Label className="roboto-medium-20px-body1">Description</Form.Label>
+              <Form.Label
+                className="roboto-medium-20px-body1 d-flex align-items-center"
+                style={{ marginBottom: "20px" }}
+              >
+                <img src={descriptionIcon} alt="categoryIcon" style={{ marginRight: "16px" }} />
+
+                Description
+
+              </Form.Label>
               <Form.Control
                 style={{ minHeight: "300px" }}
                 className="lg-input-small-text"
@@ -185,7 +209,10 @@ function CompanyInformation({
 
           <Col md={6} lg={3}>
             {/* <Form.Group className="form-group mb-3" controlId="form3Example7">
-              <Form.Label className="roboto-medium-20px-body1">Country</Form.Label>
+              <Form.Label className="roboto-medium-20px-body1 d-
+                              <img src={subCategoryIcon} alt="categoryIcon" style={{ marginRight: "16px" }} />
+
+                              Country</Form.Label>
               <Form.Select
                 aria-label="Default select example"
                 style={{ height: "56px" }}
@@ -207,7 +234,10 @@ function CompanyInformation({
               </div>
             </Form.Group> */}
             {/* <Form.Group className="form-group mb-3" controlId="form3Example6">
-              <Form.Label className="roboto-medium-20px-body1">Country</Form.Label>
+              <Form.Label className="roboto-medium-20px-body1 d-
+                              <img src={subCategoryIcon} alt="categoryIcon" style={{ marginRight: "16px" }} />
+
+                              Country</Form.Label>
               <Select
                 options={countries.map((country) => ({ value: country, label: country }))}
                 // defaultValue={[countries[0]].map((country) => ({ value: country, label: country }))}
@@ -224,7 +254,15 @@ function CompanyInformation({
             </Form.Group> */}
 
             <Form.Group className="form-group mb-3" controlId="form3Example6">
-              <Form.Label className="roboto-medium-20px-body1">Country</Form.Label>
+              <Form.Label
+                className="roboto-medium-20px-body1 d-flex align-items-center"
+                style={{ marginBottom: "20px" }}
+              >
+                <img src={mapIcon} alt="categoryIcon" style={{ marginRight: "16px" }} />
+
+                Country
+
+              </Form.Label>
               <Select
                 options={countryOptions}
                 isMulti
