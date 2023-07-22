@@ -11,6 +11,12 @@ function Chip({ label }) {
   const [showCloseIcon, setShowCloseIcon] = useState(false);
 
   const handleIconClick = () => {
+    if (!showCloseIcon) {
+      console.log("chip selected", label);
+    }
+    if (showCloseIcon) {
+      console.log("chip removed", label);
+    }
     setShowCloseIcon((prev) => !prev);
   };
 

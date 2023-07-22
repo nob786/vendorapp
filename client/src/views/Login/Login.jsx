@@ -42,6 +42,7 @@ function Login() {
     email: "",
     password: "",
     password_check: "",
+    // phone_number: "",
     contact_person: "",
   };
 
@@ -176,11 +177,18 @@ function Login() {
     // setPassword(values.password);
     // setPasswordCheck(values.password_check);
     // setContactPerson(values.contact_person);
-    resetForm();
+    // resetForm();
     dispatch(handleNextStep());
   };
 
   const handleRegisterationSubmit = (values, { resetForm }) => {
+    values.phone = `+${phone}`;
+    // const newObj = {
+    //   ...values,
+    //   phone: {
+    //     phone,
+    //   },
+    // };
     console.log(values);
     resetForm();
     // handleNextStep();
@@ -261,6 +269,8 @@ function Login() {
                     country="eg"
                     enableSearch
                     value={phone}
+                    // value={values.phone_number}
+                    // onChange={handleChange}
                     // eslint-disable-next-line no-shadow
                     onChange={(phone) => setPhone(phone)}
                   />
@@ -319,7 +329,7 @@ function Login() {
           }) => (
             <Form noValidate onSubmit={handleSubmit}>
 
-              <div style={{ maxHeight: "296px", overflowY: "scroll" }} className="Container Flipped">
+              <div style={{ maxHeight: "235px", overflowY: "scroll" }} className="Container Flipped">
 
                 <Form.Group className="form-group mb-3" controlId="form3Example3">
                   <Form.Control
@@ -343,7 +353,7 @@ function Login() {
                   {/* <Form.Select aria-label="Default select example" style={{ height: "56px" }}> */}
                   <Form.Select
                     aria-label="Default select example"
-                    style={{ height: "56px" }}
+                    style={{ height: "56px", border: "1px solid #797979" }}
                     name="county"
                     value={values.county || ""}
                     onChange={handleChange}
@@ -351,9 +361,8 @@ function Login() {
                     isValid={touched.county && !errors.county}
                     isInvalid={touched.county && !!errors.county}
                     className={errors.county ? "border-danger" : ""}
-                  // className="border-danger"
                   >
-                    <option disabled selected value hidden="true">Select County</option>
+                    <option selected value hidden="true">Select County</option>
                     {counties.map((county, index) => (
                       // eslint-disable-next-line react/no-array-index-key
                       <option key={index} value={county}>{county}</option>
@@ -475,9 +484,9 @@ function Login() {
                 </Form.Group>
               </div>
 
-              <div style={{ paddingLeft: "36px" }}>
+              <div style={{ paddingLeft: "26px" }}>
 
-                <Form.Group className="position-relative mb-3">
+                <Form.Group className="position-relative mb-1 mt-3">
                   <Form.Check
                     type="checkbox"
                     required
@@ -493,7 +502,23 @@ function Login() {
                   />
                 </Form.Group>
 
-                <div className="text-center text-lg-start mt-4 pt-2">
+                <Form.Group className="position-relative mt-2">
+                  <Form.Check
+                    type="checkbox"
+                    required
+                    name="newsletter"
+                    label="Keep me updated with the latest news"
+                    value={values.newsletter || ""}
+                    // checked={values.terms_acceptance}
+                    onChange={handleChange}
+                    isInvalid={!!errors.newsletter}
+                    feedback={errors.newsletter}
+                    feedbackType="invalid"
+                    id="validationFormik107"
+                  />
+                </Form.Group>
+
+                <div className="text-center text-lg-start mt-4">
                   <Button
                     type="submit"
                     className="btn btn-success roboto-semi-bold-16px-information btn-lg w-100"
@@ -699,10 +724,9 @@ function Login() {
                 {/* <Form> */}
                 <div
                   className="d-flex justify-content-center align-items-center roboto-semi-bold-18px-body2"
-                  style={{ marginBottom: "36px" }}
+                  style={{ marginBottom: "8px" }}
                 >
                   Register
-
                 </div>
 
                 <StepperForm componentToRender={dynamicRegisterationView} />

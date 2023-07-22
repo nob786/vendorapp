@@ -41,7 +41,7 @@ function PostAd() {
   const [selectedCountriesforContactInformation, setSelectedCountriesforContactInformation] = useState([]);
   const [uploadedImages, setUploadedImages] = useState(Array(5).fill(null));
   const [imagesError, setImagesError] = useState(false);
-  const [uploadedVideos, setUploadedVideos] = useState(Array(5).fill(null));
+  const [uploadedVideos, setUploadedVideos] = useState([]);
 
   const handleSubmitAllForms = (values) => {
     const newObj = {

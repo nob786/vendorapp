@@ -2,9 +2,27 @@ import React from "react";
 import {
   Button, Col, Container, Form, FormControl, InputGroup, Row,
 } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import heroImg from "../../assets/images/harold.jpg";
+import { toggleRegisterView } from "../redux/Register/RegisterSlice";
+import { toggleLoginModal, toggleLoginView } from "../redux/Login/loginSlice";
 
 function StartPlanning() {
+  const dispatch = useDispatch();
+  const isRegisterView = useSelector((state) => state.register.isRegisterView);
+  const isLoginView = useSelector((state) => state.login.isLoginView);
+
+  const handleCreateAccountModal = (e) => {
+    if (isLoginView) {
+      dispatch(toggleLoginView());
+    }
+    e.preventDefault();
+    if (!isRegisterView) {
+      dispatch(toggleRegisterView());
+    }
+    dispatch(toggleLoginModal());
+    // dispatch(toggleRegisterModal());
+  };
   return (
     // <div>StartPlanning</div>
     <Container fluid style={{ height: "auto", padding: "0" }}>
@@ -22,7 +40,12 @@ function StartPlanning() {
               </p>
             </div>
             <div className="d-flex justify-content-left mt-3">
-              <Button variant="success" type="submit" className="roboto-semi-bold-16px-information">
+              <Button
+                variant="success"
+                type="submit"
+                className="roboto-semi-bold-16px-information"
+                onClick={handleCreateAccountModal}
+              >
                 Create free account
               </Button>
             </div>
