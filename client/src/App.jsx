@@ -6,6 +6,8 @@ import "./App.css";
 import Homepage from "./views/Homepage/Homepage";
 import Login from "./views/Login/Login";
 import PostAd from "./views/PostAd/PostAd";
+import ProfileSettings from "./views/ProfileSettings/ProfileSettings";
+import ProfileView from "./views/ProfileSettings/ProfileView";
 // import "../src/assets/scss/_buttons.scss"
 function App() {
   // const [count, setCount] = useState(0)
@@ -14,6 +16,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Homepage />} />
       <Route path="/post-ad" element={<PostAd />} />
+      <Route path="/profile-settings" element={<ProfileView />} />
       {/* <Route path="login" element={<Login />} /> */}
       {/* <Route index element={<Homepage />} /> */}
       {/* <Route path="dashboard" element={<Dashboard />} /> */}

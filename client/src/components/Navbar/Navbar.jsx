@@ -60,7 +60,7 @@ function Header() {
 
   return (
     <Navbar bg="body-tertiary" expand="lg" className="navbar">
-      <Navbar.Brand href="#">
+      <Navbar.Brand href="/">
         <img src={Allevents} alt="Allevents" style={{ maxWidth: "100%" }} />
       </Navbar.Brand>
       <Button
