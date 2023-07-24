@@ -69,7 +69,7 @@ function CompanyInformation({
         <div className="roboto-semi-bold-28px-h2" style={{ marginBottom: "40px" }}>Company Information</div>
         <div className="">
 
-          <Col md={6} lg={3}>
+          <Col md={6} lg={4}>
             <Form.Group className="form-group mb-3" controlId="form3Example3">
               <Form.Label
                 className="roboto-medium-20px-body1 d-flex align-items-center"
@@ -95,7 +95,7 @@ function CompanyInformation({
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
-          <Col md={6} lg={3}>
+          <Col md={6} lg={4}>
             <Form.Group className="form-group mb-3" controlId="form3Example4">
               <Form.Label
                 className="roboto-medium-20px-body1 d-flex align-items-center"
@@ -108,7 +108,7 @@ function CompanyInformation({
               </Form.Label>
               <Form.Select
                 aria-label="Default select example"
-                style={{ height: "56px" }}
+                style={{ height: "56px", border: "1px solid #797979" }}
                 // style={{
                 //   height: "56px",
                 //   transition: "box-shadow 0.3s ease-in-out",
@@ -136,7 +136,7 @@ function CompanyInformation({
             </Form.Group>
           </Col>
 
-          <Col md={6} lg={3}>
+          <Col md={6} lg={4}>
             <Form.Group className="form-group mb-3" controlId="form3Example5">
               <Form.Label
                 className="roboto-medium-20px-body1 d-flex align-items-center"
@@ -149,7 +149,7 @@ function CompanyInformation({
               </Form.Label>
               <Form.Select
                 aria-label="Default select example"
-                style={{ height: "56px" }}
+                style={{ height: "56px", border: "1px solid #797979" }}
                 name="companyInformation.sub_category"
                 value={values.sub_category || ""}
                 onChange={handleChange}
@@ -207,7 +207,7 @@ function CompanyInformation({
             </Form.Group>
           </Col>
 
-          <Col md={6} lg={3}>
+          <Col md={6} lg={4}>
             {/* <Form.Group className="form-group mb-3" controlId="form3Example7">
               <Form.Label className="roboto-medium-20px-body1 d-
                               <img src={subCategoryIcon} alt="categoryIcon" style={{ marginRight: "16px" }} />
@@ -267,7 +267,7 @@ function CompanyInformation({
                 options={countryOptions}
                 isMulti
                 name="companyInformation.country"
-                // styles={{ height: "56px" }}
+                styles={{ height: "56px" }}
                 value={countryOptions.filter((option) => selectedCountries.includes(option.value))}
                 onChange={handleCountryChange}
                 onBlur={handleBlur("companyInformation.country")}

@@ -6,6 +6,7 @@ import {
 // import image2 from "../../assets/images/slide-2.jpg";
 // import image3 from "../../assets/images/slide-3.jpg";
 // import image4 from "../../assets/images/slide-4.jpg";
+
 import "./Homepage.css";
 import imageByIndex from "../../components/Carousel/ImagesByIndex";
 

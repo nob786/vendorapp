@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import heroImg from "../../assets/images/harold.jpg";
 import { toggleRegisterView } from "../redux/Register/RegisterSlice";
 import { toggleLoginModal, toggleLoginView } from "../redux/Login/loginSlice";
+import planEventsImg from "../../assets/images/planEventsImg.svg";
 
 function StartPlanning() {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ function StartPlanning() {
     <Container fluid style={{ height: "auto", padding: "0" }}>
       <Row className="h-100 col-12 g-0">
         <Col md={5} className="d-flex" style={{ justifyContent: "right", paddingRight: "0" }}>
-          <img src={heroImg} alt="Hero" style={{ maxWidth: "100%" }} />
+          <img src={planEventsImg} alt="planEventsImg" style={{ maxWidth: "100%" }} />
         </Col>
         <Col md={7} className="d-flex align-items-center justify-content-center">
           <div style={{ padding: "50px 0" }}>

@@ -14,8 +14,8 @@
   height: 44px;
   font-size: 16px !important;
   font-weight: 700 !important;
-  padding-left: 32px !important;
-  padding-right: 32px !important;
+  padding-left: 32px;
+  padding-right: 32px;
   /* width: 100%; */
 }
 

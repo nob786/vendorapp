@@ -4,6 +4,7 @@ import {
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import heroImg from "../../assets/images/harold.jpg";
+import heroImg1 from "../../assets/images/heroImg.svg";
 import useWindowDimensions from "../../utilities/hooks/useWindowDimension";
 
 function HeroSection() {
@@ -104,7 +105,7 @@ function HeroSection() {
           </div>
         </Col>
         <Col md={5} className="d-flex" style={{ justifyContent: "right", paddingRight: "0" }}>
-          <img src={heroImg} alt="Hero" style={{ maxWidth: "100%", objectFit: "cover" }} />
+          <img src={heroImg1} alt="Hero" style={{ maxWidth: "100%", objectFit: "cover" }} />
         </Col>
       </Row>
     </Container>

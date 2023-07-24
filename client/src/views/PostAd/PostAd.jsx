@@ -9,7 +9,6 @@ import TopBanner from "../../components/TopBanner";
 import postAdBanner1 from "../../assets/images/post-ad-banner-1.svg";
 import postAdBanner2 from "../../assets/images/post-ad-banner-2.svg";
 import postAdBanner3 from "../../assets/images/post-ad-banner-3.svg";
-import commercialName from "../../assets/images/post-ad/commercial_name.svg";
 // import category from "../../assets/images/post-ad/category.svg";
 // import sub_category from "../../assets/images/post-ad/sub-category.svg";
 // import description from "../../assets/images/post-ad/description.svg";
@@ -21,18 +20,7 @@ import ContactInformationForm from "./ContactInformationForm";
 import SocialMediaForm from "./SocialMediaForm";
 import ServicesOffered from "./ServicesOffered";
 import CompanyInformation from "./CompanyInformation";
-// import * as formik from "formik";
-// import * as Yup from "yup";
-// "Cabane Turistice",
-// "Castele",
-// "Cluburi",
-// "Complexuri",
-// "Corturi de Lux",
-// "Hoteluri",
-// "Pensiuni",
-// "Restaurante",
-// "Sali de Evenimente",
-// "Vile",
+// import FAQs from "./FAQs";
 
 function PostAd() {
   const { Formik } = formik;
@@ -58,73 +46,73 @@ function PostAd() {
     // }
   };
   const Schema = Yup.object().shape({
-    companyInformation: Yup.object().shape({
-      commercial_name: Yup.string().required("Commercial Name is required"),
-      category: Yup.string().required("Category is required"),
-      sub_category: Yup.string().required("Sub-category is required"),
-      description: Yup.string()
-        .max(2000, "Must be at most 2000 characters")
-        .matches(
-          /^[a-zA-Z0-9.,;:'"/?!@&*()^+\-|\s]+$/,
-          'Only letters, digits, ".,;:\'/?!@&*()^+-|" signs, and spaces are allowed',
-        ),
-      // .required("Required"),
-      country: Yup.array().min(1, "country is required"),
-    }),
-    contactInformation: Yup.object().shape({
-      websiteUrl: Yup.string()
-        .max(30, "Must be at most 30 characters")
-        .matches(
-          /^[a-zA-Z0-9.\-+_]+$/,
-          'Only letters, digits, ".", "-", "+", and "_" signs are allowed',
-        ),
-      county: Yup.array().min(1, "country is required"),
-      city: Yup.string()
-        .max(25, "Must be at most 25 characters")
-        .matches(
-          /^[a-zA-Z\s-]+$/,
-          'Only letters, spaces, and "-" sign are allowed',
-        )
-        .required("Required"),
-      street: Yup.string()
-        .max(35, "Must be at most 25 characters")
-        .matches(
-          /^[a-zA-Z\s-]+$/,
-          'Only letters, spaces, and "-" sign are allowed',
-        )
-        .required("Required"),
-      contact_number: Yup.string()
-        .max(10, "Must be at most 10 characters")
-        .matches(
-          /^[a-zA-Z0-9\-/]+$/,
-          'Only digits, letters, "-" and "/" signs are allowed',
-        )
-        .required("Required"),
-      fullAddress: Yup.string()
-        .max(70, "Must be at most 70 characters")
-        .matches(
-          /^[a-zA-Z0-9",\-./\s]+$/,
-          'Only letters, ",-./" signs, spaces, and digits are allowed',
-        )
-        .required("Full Address is required"),
-    }),
-    SocialMedia: Yup.object().shape({
-      facebookURL: Yup.string()
-        .max(40, "Must be 40 characters or less")
-        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
-      instagramURL: Yup.string()
-        .max(40, "Must be 40 characters or less")
-        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
-      youtubeURL: Yup.string()
-        .max(40, "Must be 40 characters or less")
-        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
-      tiktokURL: Yup.string()
-        .max(40, "Must be 40 characters or less")
-        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
-      twitterURL: Yup.string()
-        .max(40, "Must be 40 characters or less")
-        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
-    }),
+    // companyInformation: Yup.object().shape({
+    //   commercial_name: Yup.string().required("Commercial Name is required"),
+    //   category: Yup.string().required("Category is required"),
+    //   sub_category: Yup.string().required("Sub-category is required"),
+    //   description: Yup.string()
+    //     .max(2000, "Must be at most 2000 characters")
+    //     .matches(
+    //       /^[a-zA-Z0-9.,;:'"/?!@&*()^+\-|\s]+$/,
+    //       'Only letters, digits, ".,;:\'/?!@&*()^+-|" signs, and spaces are allowed',
+    //     ),
+    //   // .required("Required"),
+    //   country: Yup.array().min(1, "country is required"),
+    // }),
+    // contactInformation: Yup.object().shape({
+    //   websiteUrl: Yup.string()
+    //     .max(30, "Must be at most 30 characters")
+    //     .matches(
+    //       /^[a-zA-Z0-9.\-+_]+$/,
+    //       'Only letters, digits, ".", "-", "+", and "_" signs are allowed',
+    //     ),
+    //   county: Yup.array().min(1, "country is required"),
+    //   city: Yup.string()
+    //     .max(25, "Must be at most 25 characters")
+    //     .matches(
+    //       /^[a-zA-Z\s-]+$/,
+    //       'Only letters, spaces, and "-" sign are allowed',
+    //     )
+    //     .required("Required"),
+    //   street: Yup.string()
+    //     .max(35, "Must be at most 25 characters")
+    //     .matches(
+    //       /^[a-zA-Z\s-]+$/,
+    //       'Only letters, spaces, and "-" sign are allowed',
+    //     )
+    //     .required("Required"),
+    //   contact_number: Yup.string()
+    //     .max(10, "Must be at most 10 characters")
+    //     .matches(
+    //       /^[a-zA-Z0-9\-/]+$/,
+    //       'Only digits, letters, "-" and "/" signs are allowed',
+    //     )
+    //     .required("Required"),
+    //   fullAddress: Yup.string()
+    //     .max(70, "Must be at most 70 characters")
+    //     .matches(
+    //       /^[a-zA-Z0-9",\-./\s]+$/,
+    //       'Only letters, ",-./" signs, spaces, and digits are allowed',
+    //     )
+    //     .required("Full Address is required"),
+    // }),
+    // SocialMedia: Yup.object().shape({
+    //   facebookURL: Yup.string()
+    //     .max(40, "Must be 40 characters or less")
+    //     .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+    //   instagramURL: Yup.string()
+    //     .max(40, "Must be 40 characters or less")
+    //     .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+    //   youtubeURL: Yup.string()
+    //     .max(40, "Must be 40 characters or less")
+    //     .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+    //   tiktokURL: Yup.string()
+    //     .max(40, "Must be 40 characters or less")
+    //     .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+    //   twitterURL: Yup.string()
+    //     .max(40, "Must be 40 characters or less")
+    //     .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+    // }),
     // Images: Yup.object().shape({
     //   image1: Yup.string().required("Image 1 is required"),
     //   Image2: Yup.string().required("Image 2 is required"),
@@ -153,6 +141,12 @@ function PostAd() {
       youtubeURL: "",
       tiktokURL: "",
       twitterURL: "",
+    },
+    FAQ: {
+      faqs: [
+        { question: "predefined 1", answer: "", added: true },
+        { question: "predefined 2", answer: "", added: true },
+      ],
     },
   };
 
@@ -196,6 +190,20 @@ function PostAd() {
     console.log("submit clickedddddddddddd");
   };
 
+  const handleAddFAQ = (index, values, setValues) => {
+    const currentFAQ = values.FAQ.faqs[index];
+    currentFAQ.added = true;
+    const updatedFAQs = [...values.FAQ.faqs];
+    updatedFAQs[index] = currentFAQ;
+
+    setValues({
+      ...values,
+      FAQ: {
+        faqs: updatedFAQs,
+      },
+    });
+  };
+
   return (
     <div>
       <TopBanner />
@@ -226,38 +234,16 @@ function PostAd() {
       <Container fluid style={{ marginTop: "40px", paddingLeft: "150px" }}>
 
         <Row>
-
-          {/* <Formik
-      initialValues={InitialValues}
-      validationSchema={Schema}
-      onSubmit={handleSubmit}
-      children={NameForm}
-    /> */}
-
-          {/* <CompanyInformation
-            handleChange={handleChange}
-            values={values}
-            touched={touched}
-            errors={errors}
-            onSubmit={() => { }}
-          /> */}
-
           <Formik
             initialValues={initialValues}
             validationSchema={Schema}
             validate={validate}
             onSubmit={handleSubmitAllForms}
           >
-            {/* {({ */}
-            {/* // isValid, handleSubmit, values, errors, touched, handleChange, */}
-            {/* }) => ( */}
             {({
-              values, errors, touched, handleChange, handleBlur, handleSubmit,
+              values, errors, touched, handleChange, handleBlur, handleSubmit, setValues,
             }) => (
               <Form noValidate onSubmit={handleSubmit}>
-
-                {console.log("valuesvalues", values)}
-                {console.log("uploadedImages", uploadedImages)}
 
                 <CompanyInformation
                   values={values.companyInformation}
@@ -299,18 +285,14 @@ function PostAd() {
 
                 <ServicesOffered />
 
-                {/* <div>
-                  <div className="text-center text-lg-start mt-4 pt-2">
-                    <Button
-                      type="button"
-                      className="btn btn-success roboto-semi-bold-16px-information btn-lg"
-                      style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
-                      onClick={handleSubmitAllForms}
-                      >
-                      Submit Ad
-                      </Button>
-                      </div>
-                    </div> */}
+                {/* <FAQs
+                  values={values}
+                  errors={errors.FAQ ?? errors}
+                  touched={touched.FAQ ?? touched}
+                  handleChange={handleChange}
+                  handleAddFieldsForFAQ={() => handleAddFAQsFields(values, setValues)}
+                  handleAddFAQ={(index) => handleAddFAQ(index, values, setValues)}
+                /> */}
 
                 <div style={{ paddingBottom: "300px" }} />
                 {/* disabled={!isValid} */}
@@ -319,8 +301,9 @@ function PostAd() {
                     type="submit"
                     onClick={handleClickSubmit}
                     className="btn btn-success roboto-semi-bold-16px-information btn-lg"
+                    style={{ padding: "0 100px" }}
                   >
-                    Submit All Forms
+                    Submit Ad
                   </Button>
                 </Col>
 
