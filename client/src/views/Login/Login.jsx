@@ -9,6 +9,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/bootstrap.css";
 import * as formik from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 import Featured from "../../assets/images/Featured.svg";
 import loginImg1 from "../../assets/images/login-img-1.svg";
 import X from "../../assets/images/X.svg";
@@ -43,7 +44,8 @@ function Login() {
     password: "",
     password_check: "",
     // phone_number: "",
-    contact_person: "",
+    contact_person_first_name: "",
+    contact_person_last_name: "",
   };
 
   const step2InitialValues = {
@@ -73,7 +75,8 @@ function Login() {
       .required("Password is required")
       .min(5, "Your password is too short."),
     password_check: Yup.string().required("Passwords must match").oneOf([Yup.ref("password")], "Passwords must match"),
-    contact_person: Yup.string().required(),
+    contact_person_first_name: Yup.string().required(),
+    contact_person_last_name: Yup.string().required(),
   });
 
   const step2Schema = Yup.object().shape({
@@ -190,8 +193,48 @@ function Login() {
     //   },
     // };
     console.log(values);
-    resetForm();
+
+    axios
+      .post("http://localhost:8000/api/companies/", {
+        user: {
+          email: values.email,
+          first_name: values.contact_person_first_name,
+          last_name: values.contact_person_last_name,
+          phone: values.phone,
+          password: values.password,
+          role: "vendor_user",
+          newsletter: values.newsletter,
+          terms_acceptance: values.terms_acceptance,
+        },
+        name: values.company_name,
+        is_active: true,
+        phone: values.phone,
+        postal_code: values.postal_code,
+        fiscal_code: values.fiscal_code,
+        address: values.address,
+        firm_number: values.firm_number,
+        bank_name: values.bank_name,
+        bank_iban: values.bank_iban,
+      })
+      .then((response) => {
+        // setPost(response.data);
+        console.log("response.data----------------------", response.data);
+      });
+
+    // resetForm();
     // handleNextStep();
+  };
+
+  const handleSubmitLogin = (values, { resetForm }) => {
+    axios
+      .post("http://localhost:8000/api/token/?accept=application/json", {
+        email: values.email,
+        password: values.password,
+      })
+      .then((response) => {
+        // setPost(response.data);
+        console.log("response.data----------------------", response.data);
+      });
   };
 
   const dynamicRegisterationView = (handleNextStep) => (
@@ -269,6 +312,7 @@ function Login() {
                     country="eg"
                     enableSearch
                     value={phone}
+                    style={{ border: "1px solid #797979" }}
                     // value={values.phone_number}
                     // onChange={handleChange}
                     // eslint-disable-next-line no-shadow
@@ -280,17 +324,35 @@ function Login() {
                   <Form.Control
                     style={{ height: "56px" }}
                     className="lg-input-small-text"
-                    name="contact_person"
+                    name="contact_person_first_name"
                     type="text"
                     size="lg"
-                    placeholder="Enter Contact Person Name"
-                    value={values.contact_person}
+                    placeholder="Contact Person First Name"
+                    value={values.contact_person_first_name}
                     onChange={handleChange}
-                    isValid={touched.contact_person && !errors.contact_person}
-                    isInvalid={!!errors.contact_person}
+                    isValid={touched.contact_person_first_name && !errors.contact_person_first_name}
+                    isInvalid={!!errors.contact_person_first_name}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.contact_person}
+                    {errors.contact_person_first_name}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group className="form-group mb-3" controlId="form3Example7">
+                  <Form.Control
+                    style={{ height: "56px" }}
+                    className="lg-input-small-text"
+                    name="contact_person_last_name"
+                    type="text"
+                    size="lg"
+                    placeholder="Contact Person Last Name"
+                    value={values.contact_person_last_name}
+                    onChange={handleChange}
+                    isValid={touched.contact_person_last_name && !errors.contact_person_last_name}
+                    isInvalid={!!errors.contact_person_last_name}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.contact_person_last_name}
                   </Form.Control.Feedback>
                 </Form.Group>
               </div>
@@ -601,7 +663,7 @@ function Login() {
                 <Formik
                   validationSchema={loginSchema}
                   // onSubmit={handleNextStep}
-                  onSubmit={console.log}
+                  onSubmit={handleSubmitLogin}
                   initialValues={{
                     email: "",
                     password: "",
