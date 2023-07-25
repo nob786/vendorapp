@@ -20,7 +20,7 @@ import ContactInformationForm from "./ContactInformationForm";
 import SocialMediaForm from "./SocialMediaForm";
 import ServicesOffered from "./ServicesOffered";
 import CompanyInformation from "./CompanyInformation";
-// import FAQs from "./FAQs";
+import FAQs from "./FAQs";
 
 function PostAd() {
   const { Formik } = formik;
@@ -204,6 +204,15 @@ function PostAd() {
     });
   };
 
+  const handleAddFAQsFields = (values, setValues) => {
+    setValues({
+      ...values,
+      FAQ: {
+        faqs: [...values.FAQ.faqs, { question: "", answer: "", added: false }],
+      },
+    });
+  };
+
   return (
     <div>
       <TopBanner />
@@ -285,14 +294,14 @@ function PostAd() {
 
                 <ServicesOffered />
 
-                {/* <FAQs
+                <FAQs
                   values={values}
                   errors={errors.FAQ ?? errors}
                   touched={touched.FAQ ?? touched}
                   handleChange={handleChange}
                   handleAddFieldsForFAQ={() => handleAddFAQsFields(values, setValues)}
                   handleAddFAQ={(index) => handleAddFAQ(index, values, setValues)}
-                /> */}
+                />
 
                 <div style={{ paddingBottom: "300px" }} />
                 {/* disabled={!isValid} */}

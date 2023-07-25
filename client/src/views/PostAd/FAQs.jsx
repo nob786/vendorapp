@@ -184,96 +184,96 @@
 // export default FAQs;
 
 // FAQs.js
-// import React from "react";
-// import {
-//   Form, Row, Col, Button,
-// } from "react-bootstrap";
-// import FAQsIcon from "../../assets/images/FAQsIcon.svg";
+import React from "react";
+import {
+  Form, Row, Col, Button,
+} from "react-bootstrap";
+import FAQsIcon from "../../assets/images/FAQsIcon.svg";
 
-// function FAQs({
-//   values, errors, touched, handleChange, handleAddFieldsForFAQ, handleAddFAQ,
-// }) {
-//   return (
-//     <Row>
-//       <div className="roboto-semi-bold-28px-h2 mt-5">FAQs</div>
-//       <div className="roboto-regular-14px-information mt-2 mb-3">
-//         Add Questions and answers for your potential buyers
-//       </div>
-//       {values.FAQ.faqs.map((faq, index) => (
-//         <Row key={index}>
-//           <Col md={6} lg={7}>
-//             <Form.Group className="form-group mb-3" controlId={`form3ExampleDynamic${index}`}>
-//               <Form.Label
-//                 className="roboto-medium-20px-body1 d-flex align-items-center justify-content-between"
-//                 style={{ marginBottom: "20px" }}
-//               >
-//                 <div className="d-flex align-items-center roboto-medium-20px-body1">
-//                   <img src={FAQsIcon} alt="FAQsIcon" className="me-2" />
-//                   Question
-//                   {" "}
-//                   {index + 1}
-//                   :
-//                   {" "}
-//                   {faq.added === true && faq.question}
-//                 </div>
-//                 <div style={{ color: "#A0C49D" }}>
-//                   {(faq.added === false) && (
-//                     <span
-//                       style={{ textDecoration: "underline" }}
-//                       onClick={() => handleAddFAQ(index)}
-//                     >
-//                       Add FAQ
-//                     </span>
-//                   )}
-//                 </div>
-//               </Form.Label>
-//               {(faq.added === false) && (
-//                 <Form.Control
-//                   style={{ height: "56px" }}
-//                   className="lg-input-small-text"
-//                   type="text"
-//                   name={`FAQ.faqs[${index}].question`}
-//                   size="sm"
-//                   placeholder="Type your question"
-//                   value={faq.question}
-//                   onChange={handleChange}
-//                 />
-//               )}
-//             </Form.Group>
-//           </Col>
-//           <Col key={index} md={6} lg={7}>
-//             <Form.Group className="form-group mb-3" controlId={`form3Example${index}`}>
-//               <Form.Control
-//                 style={{ height: "56px" }}
-//                 className="lg-input-small-text"
-//                 type="text"
-//                 name={`FAQ.faqs[${index}].answer`}
-//                 size="sm"
-//                 placeholder="Type your answer"
-//                 value={faq.answer}
-//                 onChange={handleChange}
-//                 isValid={touched.FAQ && !errors.FAQ}
-//                 isInvalid={touched.FAQ && !!errors.FAQ}
-//               />
-//               <Form.Control.Feedback type="invalid">
-//                 {errors.FAQ}
-//               </Form.Control.Feedback>
-//             </Form.Group>
-//           </Col>
-//         </Row>
-//       ))}
+function FAQs({
+  values, errors, touched, handleChange, handleAddFieldsForFAQ, handleAddFAQ,
+}) {
+  return (
+    <Row>
+      <div className="roboto-semi-bold-28px-h2 mt-5">FAQs</div>
+      <div className="roboto-regular-14px-information mt-2 mb-3">
+        Add Questions and answers for your potential buyers
+      </div>
+      {values.FAQ.faqs.map((faq, index) => (
+        <Row key={index}>
+          <Col md={6} lg={7}>
+            <Form.Group className="form-group mb-3" controlId={`form3ExampleDynamic${index}`}>
+              <Form.Label
+                className="roboto-medium-20px-body1 d-flex align-items-center justify-content-between"
+                style={{ marginBottom: "20px" }}
+              >
+                <div className="d-flex align-items-center roboto-medium-20px-body1">
+                  <img src={FAQsIcon} alt="FAQsIcon" className="me-2" />
+                  Question
+                  {" "}
+                  {index + 1}
+                  :
+                  {" "}
+                  {faq.added === true && faq.question}
+                </div>
+                <div style={{ color: "#A0C49D" }}>
+                  {(faq.added === false) && (
+                    <span
+                      style={{ textDecoration: "underline" }}
+                      onClick={() => handleAddFAQ(index)}
+                    >
+                      Add FAQ
+                    </span>
+                  )}
+                </div>
+              </Form.Label>
+              {(faq.added === false) && (
+                <Form.Control
+                  style={{ height: "56px" }}
+                  className="lg-input-small-text"
+                  type="text"
+                  name={`FAQ.faqs[${index}].question`}
+                  size="sm"
+                  placeholder="Type your question"
+                  value={faq.question}
+                  onChange={handleChange}
+                />
+              )}
+            </Form.Group>
+          </Col>
+          <Col key={index} md={6} lg={7}>
+            <Form.Group className="form-group mb-3" controlId={`form3Example${index}`}>
+              <Form.Control
+                style={{ height: "56px" }}
+                className="lg-input-small-text"
+                type="text"
+                name={`FAQ.faqs[${index}].answer`}
+                size="sm"
+                placeholder="Type your answer"
+                value={faq.answer}
+                onChange={handleChange}
+                isValid={touched.FAQ && !errors.FAQ}
+                isInvalid={touched.FAQ && !!errors.FAQ}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.FAQ}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+      ))}
 
-//       <Col md={12} className="">
-//         <Button
-//           type="submit"
-//           onClick={handleAddFieldsForFAQ}
-//           className="btn btn-success roboto-semi-bold-16px-information mt-3"
-//         >
-//           Add Another
-//         </Button>
-//       </Col>
-//     </Row>
-//   );
-// }
+      <Col md={12} className="">
+        <Button
+          type="submit"
+          onClick={handleAddFieldsForFAQ}
+          className="btn btn-success roboto-semi-bold-16px-information mt-3"
+        >
+          Add Another
+        </Button>
+      </Col>
+    </Row>
+  );
+}
 
-// export default FAQs;
+export default FAQs;
