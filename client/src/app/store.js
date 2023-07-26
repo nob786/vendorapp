@@ -1,14 +1,16 @@
-import { configureStore } from "@reduxjs/toolkit";
-import loginReducer from "../views/redux/Login/loginSlice";
-import registerReducer from "../views/redux/Register/RegisterSlice";
-import stepperReducer from "../views/redux/Stepper/StepperSlice";
+// import { applyMiddleware } from 'redux'
+import { applyMiddleware, configureStore } from "@reduxjs/toolkit";
+import thunkMiddleware from 'redux-thunk'
+import { composeWithDevTools } from 'redux-devtools-extension'
+import rootReducer from "./reducer";
 
-const store = configureStore({
-  reducer: {
-    login: loginReducer,
-    register: registerReducer,
-    stepper: stepperReducer,
-  },
-});
+const composedEnhancer = composeWithDevTools(
+  applyMiddleware(thunkMiddleware)
+  // other store enhancers if any
+)
 
-export default store;
+const store = configureStore(
+  { reducer: rootReducer },
+  composedEnhancer
+)
+export default store
