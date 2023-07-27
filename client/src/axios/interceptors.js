@@ -1,34 +1,27 @@
 import store from "../app/store";
+import { refreshToken } from "../views/redux/Auth/authSlice";
 // import * as authActions from "../redux/actions/auth.actions";
 
-export const addInterceptors = (instance) => {
-  instance.interceptors.request.use(addAccessToken, handleRequestError);
-  instance.interceptors.response.use(handleResponseOK, handleResponseError);
-};
 
-export const addAccessToken = (config) => {
+export const addAccessToken = async (config) => {
   const state = store.getState();
-  console.log("state-----------------", state)
-  // const user = state.authReducer.user;
+  const { user } = state.auth;
+  const { accessToken } = user;
 
-  // const accessToken = user.accessToken;
-
-  // if (!accessToken) {
-  //   store.dispatch(authActions.refreshToken());
-  //   console.log("===============================================================================");
-  //   // return config;
-  // } else {
-  //   return {
-  //     ...config,
-  //     headers: {
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //   };
-  // }
+  if (!accessToken) {
+    await store.dispatch(refreshToken());
+  } else {
+    return {
+      ...config,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: "application/json"
+      },
+    };
+  }
 };
 
 export const handleRequestError = (error) => {
-  // console.log("handleRequestError", error);
   return Promise.reject(error);
 };
 
@@ -43,4 +36,9 @@ export const handleResponseError = (error) => {
     // return handleRefreshToken(error.config);
   }
   return Promise.reject(error);
+};
+
+export const addInterceptors = (instance) => {
+  instance.interceptors.request.use(addAccessToken, handleRequestError);
+  instance.interceptors.response.use(handleResponseOK, handleResponseError);
 };

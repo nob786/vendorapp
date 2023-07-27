@@ -22,6 +22,7 @@ function Header() {
   const [navbarToggler, setNavbarToggler] = useState(false);
   const isRegisterView = useSelector((state) => state.register.isRegisterView);
   const isLoginView = useSelector((state) => state.login.isLoginView);
+  const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
 
   console.log("isLoginView INSIDE NAVBAR COMP", isLoginView);
@@ -63,21 +64,22 @@ function Header() {
 
   return (
     <Navbar bg="body-tertiary" expand="lg" className="navbar">
-      <Navbar.Brand href="/">
+      <Navbar.Brand onClick={() => navigate("/")}>
         <img src={Allevents} alt="Allevents" style={{ minWidth: "100%" }} />
       </Navbar.Brand>
-      <Button
-        type="button"
-        // className="login-button"
-        // variant="success"
-        // type="submit"
-        className="btn-no-border roboto-semi-bold-16px-information login-button-mobile me-2"
-        style={{ padding: "0" }}
-        onClick={(e) => handleLoginClick(e)}
-      >
-        Login
-
-      </Button>
+      {user.userId === null && (
+        <Button
+          type="button"
+          // className="login-button"
+          // variant="success"
+          // type="submit"
+          className="btn-no-border roboto-semi-bold-16px-information login-button-mobile me-2"
+          style={{ padding: "0" }}
+          onClick={(e) => handleLoginClick(e)}
+        >
+          Login
+        </Button>
+      )}
       {/* <i className="fas fa-bars" style="color:#fff; font-size:28px;" /> */}
       {/* <FontAwesomeIcon icon={faBars} style={{ color: "#FFF" }} size="2xl" /> */}
       <Navbar.Toggle
@@ -183,38 +185,50 @@ function Header() {
 
         </Nav>
         <Form role="search" style={{ maxHeight: "40px" }}>
-          <Row>
-            <Col lg={3}>
-              <Button
-                type="button"
-                // className="login-button"
-                // variant="success"
-                // type="submit"
-                className="btn-no-border login-button roboto-semi-bold-16px-information"
-                style={{
-                  fontSize: "16px", fontWeight: "700", color: "#A0C49D", padding: "0",
-                }}
-                onClick={(e) => handleLoginClick(e)}
-              >
-                Login
-              </Button>
-            </Col>
+          {user.userId === null ? (
+            <Row>
+              <Col lg={3}>
+                <Button
+                  type="button"
+                  // className="login-button"
+                  // variant="success"
+                  // type="submit"
+                  className="btn-no-border login-button roboto-semi-bold-16px-information"
+                  style={{
+                    fontSize: "16px", fontWeight: "700", color: "#A0C49D", padding: "0",
+                  }}
+                  onClick={(e) => handleLoginClick(e)}
+                >
+                  Login
+                </Button>
+              </Col>
 
-            <Col lg={2}>
-              <Button
-                variant="outline-success"
-                type="button"
-                className="create-account-btn align-items-center justify-content-center"
-                onClick={(e) => handleRegisterClick(e)}
-                style={{ padding: "0 2vw" }}
-              >
-                <span style={{ whiteSpace: "nowrap" }}>
-                  Create Account
-                </span>
+              <Col lg={2}>
+                <Button
+                  variant="outline-success"
+                  type="button"
+                  className="create-account-btn align-items-center justify-content-center"
+                  onClick={(e) => handleRegisterClick(e)}
+                  style={{ padding: "0 2vw" }}
+                >
+                  <span style={{ whiteSpace: "nowrap" }}>
+                    Create Account
+                  </span>
 
-              </Button>
-            </Col>
-          </Row>
+                </Button>
+              </Col>
+            </Row>
+          ) : (
+            <Button
+              variant="outline-success"
+              type="submit"
+              className="mb-2"
+              onClick={(e) => navigate("/post-ad")}
+            >
+              Post Ad
+
+            </Button>
+          )}
         </Form>
       </Navbar.Collapse>
 

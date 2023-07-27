@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button, Col, Container, Form, Modal, Row,
 } from "react-bootstrap";
@@ -21,10 +21,11 @@ import "./Login.css";
 import { toggleLoginModal, toggleLoginView } from "../redux/Login/loginSlice";
 import { toggleRegisterView } from "../redux/Register/RegisterSlice";
 import StepperForm from "../../components/Stepper/Stepper";
-import { handleNextStep, handlePrevStep } from "../redux/Stepper/StepperSlice";
+import { handleNextStep, handlePrevStep, setActiveStep } from "../redux/Stepper/StepperSlice";
 import ForgotPassword from "./ForgotPassword";
 import CarouselFadeExample from "../../components/Carousel/SingleImgCarousel";
-import { handleLogin, handleRegister } from "../redux/Auth/authSlice";
+import { handleLogin, handleLoginStatusFalse, handleRegister, handleResgisterationStatus } from "../redux/Auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const counties = [
   "Alba", "Arad", "Arges", "Bacau", "Bihor", "Bistrita-Nasaud",
@@ -39,6 +40,7 @@ const counties = [
 function Login() {
   const dispatch = useDispatch();
   const { Formik } = formik;
+  const navigate = useNavigate();
 
   const step1InitialValues = {
     email: "",
@@ -111,6 +113,8 @@ function Login() {
 
   const isLoginModal = useSelector((state) => state.login.isLoginModal);
   const isLoginView = useSelector((state) => state.login.isLoginView);
+  const isRegistered = useSelector((state) => state.auth.isRegistered);
+  const isLoggedInState = useSelector((state) => state.auth.isLoggedInState);
   const isRegisterView = useSelector((state) => state.register.isRegisterView);
   const activeStep = useSelector((state) => state.stepper.activeStep);
 
@@ -187,13 +191,6 @@ function Login() {
 
   const handleRegisterationSubmit = (values, { resetForm }) => {
     values.phone = `+${phone}`;
-    // const newObj = {
-    //   ...values,
-    //   phone: {
-    //     phone,
-    //   },
-    // };
-    console.log(values);
 
     const data = {
       user: {
@@ -217,36 +214,7 @@ function Login() {
     }
 
     dispatch(handleRegister(data));
-
-    // axios
-    //   .post("http://localhost:8000/api/companies/", {
-    //     user: {
-    //       email: values.email,
-    //       first_name: values.contact_person_first_name,
-    //       last_name: values.contact_person_last_name,
-    //       phone: values.phone,
-    //       password: values.password,
-    //       role: "vendor_user",
-    //       newsletter: values.newsletter,
-    //       terms_acceptance: values.terms_acceptance,
-    //     },
-    //     name: values.company_name,
-    //     is_active: true,
-    //     phone: values.phone,
-    //     postal_code: values.postal_code,
-    //     fiscal_code: values.fiscal_code,
-    //     address: values.address,
-    //     firm_number: values.firm_number,
-    //     bank_name: values.bank_name,
-    //     bank_iban: values.bank_iban,
-    //   })
-    //   .then((response) => {
-    //     // setPost(response.data);
-    //     console.log("response.data----------------------", response.data);
-    //   });
-
     // resetForm();
-    // handleNextStep();
   };
 
   const handleSubmitLogin = (values, { resetForm }) => {
@@ -267,6 +235,22 @@ function Login() {
       }
     ))
   };
+
+  useEffect(() => {
+    if (isRegistered) {
+      handleLoginClick();
+      dispatch(handleResgisterationStatus());
+      dispatch(setActiveStep(0));
+    }
+  }, [isRegistered]);
+
+  useEffect(() => {
+    if (isLoggedInState) {
+      // handleLoginClick();
+      handleClose();
+      dispatch(handleLoginStatusFalse());
+    }
+  }, [isLoggedInState]);
 
   const dynamicRegisterationView = (handleNextStep) => (
     activeStep === 0

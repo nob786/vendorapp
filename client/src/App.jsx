@@ -1,21 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import { Route, Routes } from "react-router-dom";
+// import { useSelector } from "react-redux";
 import "./App.css";
 import Homepage from "./views/Homepage/Homepage";
 import Login from "./views/Login/Login";
 import PostAd from "./views/PostAd/PostAd";
 import ProfileSettings from "./views/ProfileSettings/ProfileSettings";
 import ProfileView from "./views/ProfileSettings/ProfileView";
+import ProtectedRoute from "./views/ProtectedRoute";
 // import "../src/assets/scss/_buttons.scss"
 function App() {
+
   // const [count, setCount] = useState(0)
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // useEffect(() => {
+  //   // Check if the user has a valid access token
+  //   const accessToken = localStorage.getItem("accessToken");
+  //   if (accessToken) {
+  //     // You can also check if the access token is expired here
+  //     setIsAuthenticated(true);
+  //   } else {
+  //     setIsAuthenticated(false);
+  //   }
+  // }, []);
 
   return (
     <Routes>
       <Route path="/" element={<Homepage />} />
-      <Route path="/post-ad" element={<PostAd />} />
+      {/* <Route path="/post-ad" element={<PostAd />} /> */}
+      {/* <ProtectedRoute
+        path="/post-ad"
+        component={PostAd}
+      /> */}
+      <Route
+        path="/post-ad"
+        element={(
+          <ProtectedRoute>
+            <PostAd />
+          </ProtectedRoute>
+        )}
+      />
+      {/* // isAuthenticated={isAuthenticated} */}
       <Route path="/profile-settings" element={<ProfileView />} />
       {/* <Route path="login" element={<Login />} /> */}
       {/* <Route index element={<Homepage />} /> */}

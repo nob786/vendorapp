@@ -6,6 +6,7 @@ module.exports = {
   extends: [
     "plugin:react/recommended",
     "airbnb",
+    "plugin:import/recommended"
   ],
   overrides: [
   ],
@@ -26,7 +27,15 @@ module.exports = {
     ],
     "max-len": ["error", { code: 120 }],
     "react/prop-types": 0,
-    "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
+    // "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
     "no-param-reassign": [2, { props: false }],
+    "react/function-component-definition": [
+      2,
+      {
+        namedComponents: ["arrow-function", "function-declaration"],
+        unnamedComponents: "arrow-function",
+      },
+    ],
+    "react/jsx-props-no-spreading": "off",
   },
 };
