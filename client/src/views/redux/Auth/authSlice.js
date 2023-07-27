@@ -1,10 +1,7 @@
 /* eslint-disable no-useless-catch */
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { instance, secure_instance } from '../../../axios/axios-config';
-import { toggleLoginView } from '../Login/loginSlice';
-import { toggleRegisterView } from '../Register/RegisterSlice';
-import { getCookie, setCookie } from '../../../utilities/utils';
-// import { loginAPI, refreshTokenAPI } from '../api/auth'; // Replace with your actual API functions
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { instance, secure_instance } from "../../../axios/axios-config";
+import { getCookie, setCookie } from "../../../utilities/utils";
 
 // Create an initial state for the auth slice
 const initialState = {
@@ -20,7 +17,7 @@ const initialState = {
 };
 
 // Asynchronous action to handle login
-export const handleRegister = createAsyncThunk('auth/register', async (data) => {
+export const handleRegister = createAsyncThunk("auth/register", async (data) => {
   try {
     const response = await instance.request({
       url: "/api/companies/",
@@ -35,7 +32,7 @@ export const handleRegister = createAsyncThunk('auth/register', async (data) => 
   }
 });
 
-export const handleLogin = createAsyncThunk('auth/login', async ({ email, password }) => {
+export const handleLogin = createAsyncThunk("auth/login", async ({ email, password }) => {
   const response = await instance.request({
     url: "/api/token/?accept=application/json",
     method: "Post",
@@ -57,7 +54,6 @@ export const refreshToken = createAsyncThunk("auth/refresh", async () => {
       refresh: getCookie("refresh_token"),
     },
   });
-  console.log("getCookie", getCookie("refresh_token"));
   return request.data;
   // if (
   //   !request?.data?.is_active &&
@@ -78,7 +74,6 @@ export const refreshToken = createAsyncThunk("auth/refresh", async () => {
   //     : HANDLE_REFRESH_TOKEN,
   //   payload: request.data,
   // });
-
 });
 
 export const getAuthenticatedUser = createAsyncThunk("auth/authenticatedUser", async () => {
@@ -89,22 +84,9 @@ export const getAuthenticatedUser = createAsyncThunk("auth/authenticatedUser", a
   return response.data;
 });
 
-
-
-// Asynchronous action to handle token refresh
-// export const refreshToken = createAsyncThunk('auth/refreshToken', async () => {
-//   try {
-//     const response = await refreshTokenAPI(); // Implement your refreshTokenAPI function
-//     return response.data; // Assuming your refreshTokenAPI returns data with access_token, user_id, and role_id
-//   } catch (error) {
-//     // Handle token refresh error here if needed
-//     throw error;
-//   }
-// });
-
 // Create the loginSlice
 export const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     handleResgisterationStatus: (state) => {
