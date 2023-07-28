@@ -1,18 +1,41 @@
 import React, { useState } from "react";
 import { Col, Container, Modal, Row } from "react-bootstrap";
-import "../../views/Login/Login.css"
+import "../../views/Login/Login.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd, faClose } from "@fortawesome/free-solid-svg-icons";
-function ImagesModal({ showModal, handleClose, setparentImagesUploadedImages, imagesError, setImagesError, setShowImagesModal }) {
-
+import { secure_instance } from "../../axios/axios-config";
+function ImagesModal({
+  showModal,
+  handleClose,
+  setparentImagesUploadedImages,
+  imagesError,
+  setImagesError,
+  setShowImagesModal,
+  uploadedImages,
+  imagesToUpload,
+  setImagesToUpload,
+}) {
   const [images, setImages] = useState(Array(50).fill(null));
 
-  console.log("imagesError imagesError imagesError", imagesError);
+  // const toggleImagesModal = (event, image) => {
+  //   setShowImagesModal(true);
+  //   console.log({ images });
+  // };
 
-  const toggleImagesModal = (event, image) => {
-    setShowImagesModal(true)
-    console.log({ images });
+  const uploadFileToCloud = async (uploadedImage) => {
+    const imageToUpload = {
+      file_name: uploadedImage.name,
+      content_type: uploadedImage.type,
+      upload_type: "images",
+    };
+    const request = await secure_instance.request({
+      url: "/api/ads/upload-url/",
+      method: "Post",
+      data: imageToUpload,
+    });
+    setImagesToUpload([...imagesToUpload, request.data.data.upload_url]);
   };
+
   const handleImageUpload = (event, index) => {
     event.preventDefault();
     const uploadedImage = event.target.files[0];
@@ -27,9 +50,12 @@ function ImagesModal({ showModal, handleClose, setparentImagesUploadedImages, im
       };
       setImages(updatedImages);
     };
-    console.log("updatedImages inside image component", updatedImages);
-    setImagesError(false);
+    console.log("uploadedImage", uploadedImage);
+    uploadFileToCloud(uploadedImage);
     setparentImagesUploadedImages(updatedImages);
+
+    // console.log("updatedImages inside image component", updatedImages);
+    setImagesError(false);
     reader.readAsDataURL(uploadedImage);
   };
 
@@ -49,38 +75,66 @@ function ImagesModal({ showModal, handleClose, setparentImagesUploadedImages, im
       aria-labelledby="example-custom-modal-styling-title"
       centered="true"
     >
-
       <div className="box" style={{ position: "absolute", right: "0" }} />
-      <div style={{
-        position: "absolute", right: "10px", top: "8px", zIndex: "20",
-      }}
+      <div
+        style={{
+          position: "absolute",
+          right: "10px",
+          top: "8px",
+          zIndex: "20",
+        }}
       >
-        <div role="presentation"
-          onClick={handleClose}
-          className="close-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ cursor: "pointer" }}>
-            <path d="M17 1L1 17M1 1L17 17" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <div role="presentation" onClick={handleClose} className="close-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
+            style={{ cursor: "pointer" }}
+          >
+            <path
+              d="M17 1L1 17M1 1L17 17"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </div>
       </div>
 
-      <Container fluid style={{ height: "auto", padding: "100px 50px", overflowY: "scroll", maxHeight: "700px" }}>
+      <Container
+        fluid
+        style={{
+          height: "auto",
+          padding: "100px 50px",
+          overflowY: "scroll",
+          maxHeight: "700px",
+        }}
+      >
         <Row className="h-100 col-12 g-0 flex-column-reverse flex-md-row">
-
           <div className="d-flex" style={{ flexWrap: "wrap" }}>
             {images.map((image, index) => (
-              < Col md={3} lg={3} key={index} >
-                {console.log({ index })}
+              <Col md={3} lg={3} key={index}>
+                {/* {console.log({ index })} */}
                 <div className="mb-5">
                   {image !== null ? (
-                    <div style={{
-                      position: "relative", border: "2px dotted #386C34", width: "145px", height: "126px",
-                    }}
+                    <div
+                      style={{
+                        position: "relative",
+                        border: "2px dotted #386C34",
+                        width: "145px",
+                        height: "126px",
+                      }}
                     >
                       <img
                         src={image.previewURL}
                         alt={`Preview ${index + 1}`}
-                        style={{ width: "141px", height: "122px", objectFit: "cover" }}
+                        style={{
+                          width: "141px",
+                          height: "122px",
+                          objectFit: "cover",
+                        }}
                       />
                       <button
                         type="button"
@@ -91,27 +145,39 @@ function ImagesModal({ showModal, handleClose, setparentImagesUploadedImages, im
                         <FontAwesomeIcon
                           icon={faClose}
                           style={{
-                            position: "absolute", top: "2px", right: "5px", color: "#FFF",
+                            position: "absolute",
+                            top: "2px",
+                            right: "5px",
+                            color: "#FFF",
                           }}
                         />
                       </button>
                     </div>
                   ) : (
-                    <div style={{
-                      border: "2px dashed #A0C49D", width: "141px", height: "122px",
-                    }}
+                    <div
+                      style={{
+                        border: "2px dashed #A0C49D",
+                        width: "141px",
+                        height: "122px",
+                      }}
                     >
                       <label
                         htmlFor={`file-input-${index}`}
                         className="d-flex align-items-center justify-content-center"
                         style={{
-                          width: "141px", height: "122px", cursor: "pointer",
+                          width: "141px",
+                          height: "122px",
+                          cursor: "pointer",
                         }}
                       >
                         <FontAwesomeIcon
                           icon={faAdd}
                           style={{
-                            color: "#A0C49D", width: "40px", height: "40px", marginRight: "10px", marginBottom: "8px",
+                            color: "#A0C49D",
+                            width: "40px",
+                            height: "40px",
+                            marginRight: "10px",
+                            marginBottom: "8px",
                           }}
                         />
                       </label>
@@ -130,9 +196,8 @@ function ImagesModal({ showModal, handleClose, setparentImagesUploadedImages, im
           </div>
         </Row>
       </Container>
-    </Modal >
-  )
+    </Modal>
+  );
 }
 
-
-export default ImagesModal
+export default ImagesModal;

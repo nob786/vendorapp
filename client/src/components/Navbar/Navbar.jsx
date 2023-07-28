@@ -51,7 +51,11 @@ function Header() {
   }, []);
 
   useEffect(() => {
-    if (user.userId === null && user.accessToken !== null) {
+    if (
+      user.userId === null &&
+      user.accessToken !== null &&
+      window.location.pathname === "/"
+    ) {
       dispatch(getAuthenticatedUser());
     }
   }, [user, user.accessToken]);

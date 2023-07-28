@@ -30,25 +30,33 @@ function PostAd() {
     selectedCountriesforContactInformation,
     setSelectedCountriesforContactInformation,
   ] = useState([]);
-  const [uploadedImages, setUploadedImages] = useState(Array(5).fill(null));
+  // const [uploadedImages, setUploadedImages] = useState(Array(5).fill(null));
+  const [imagesToPreview, setImagesToPreview] = useState(Array(5).fill(null));
+  const [imagesToUpload, setImagesToUpload] = useState([]);
   const [imagesError, setImagesError] = useState(false);
-  const [uploadedPdfs, setUploadedPdfs] = useState(Array(5).fill(null));
+  const [pdfsToUpload, setPdfsToUpload] = useState([]);
   const [pdfsError, setPdfsError] = useState(false);
-  const [uploadedVideos, setUploadedVideos] = useState([]);
+  const [videoToPreview, setVideoToPreview] = useState([]);
+  const [videoToUpload, setVideoToUpload] = useState([]);
   const [showImagesModal, setShowImagesModal] = useState(false);
 
   const handleSubmitAllForms = (values) => {
     // ...(uploadedImages && { imageUploader: { images: uploadedImages } }),
     const newObj = {
       ...values,
-      imageUploader: {
-        images: uploadedImages,
-      },
-      pdfUploader: {
-        pdfs: uploadedPdfs,
-      },
-      VideoUploader: {
-        videos: uploadedVideos,
+      // imageUploader: {
+      //   images: imagesToUpload,
+      // },
+      // pdfUploader: {
+      //   pdfs: pdfsToUpload,
+      // },
+      // VideoUploader: {
+      //   videos: videoToUpload,
+      // },
+      media_urls: {
+        images: imagesToUpload,
+        video: videoToUpload,
+        pdf: pdfsToUpload,
       },
     };
     console.log(
@@ -169,7 +177,7 @@ function PostAd() {
   const validate = (values) => {
     const errors = {};
 
-    const isAnyValueNotNull = uploadedImages.some((value) => value !== null);
+    const isAnyValueNotNull = imagesToPreview.some((value) => value !== null);
 
     if (!isAnyValueNotNull) {
       setImagesError(true);
@@ -201,15 +209,15 @@ function PostAd() {
   };
 
   const handleImageUpdates = (images) => {
-    setUploadedImages(images);
+    setImagesToPreview(images);
   };
 
   const handlePdfsUpdates = (images) => {
-    setUploadedPdfs(images);
+    setPdfsToUpload(images);
   };
 
-  const handleVideoUpload = (videos) => {
-    setUploadedVideos(videos);
+  const handleVideoToPreview = (videos) => {
+    setVideoToPreview(videos);
   };
 
   const handleClickSubmit = () => {
@@ -276,8 +284,11 @@ function PostAd() {
         handleClose={() => setShowImagesModal(false)}
         setShowImagesModal={setShowImagesModal}
         setparentImagesUploadedImages={handleImageUpdates}
+        uploadedImages={imagesToPreview}
         imagesError={imagesError}
         setImagesError={setImagesError}
+        imagesToUpload={imagesToUpload}
+        setImagesToUpload={setImagesToUpload}
       />
 
       <div className="ad-banner d-flex align-items-center justify-content-between">
@@ -348,12 +359,18 @@ function PostAd() {
                   // parentImages={values.imageUploader.images}
                   setShowImagesModal={setShowImagesModal}
                   setparentImagesUploadedImages={handleImageUpdates}
-                  uploadedImages={uploadedImages}
+                  uploadedImages={imagesToPreview}
                   imagesError={imagesError}
                   setImagesError={setImagesError}
+                  // imagesToUpload={imagesToUpload}
+                  // setImagesToUpload={setImagesToUpload}
                 />
 
-                <VideoUploader setparentVideoUploaded={handleVideoUpload} />
+                <VideoUploader
+                  setparentVideoUploaded={handleVideoToPreview}
+                  videoToUpload={videoToUpload}
+                  setVideoToUpload={setVideoToUpload}
+                />
 
                 <ContactInformationForm
                   values={values.contactInformation}
@@ -389,6 +406,7 @@ function PostAd() {
 
                 <PdfUploader
                   setparentImagesUploadedImages={handlePdfsUpdates}
+                  pdfsToUpload={pdfsToUpload}
                   imagesError={pdfsError}
                   setImagesError={setPdfsError}
                 />

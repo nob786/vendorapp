@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-import {
-  Button, Col, Container, Form, Modal, Row,
-} from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import Select from "react-select";
 import commercialNameIcon from "../../assets/images/post-ad/commercial_name.svg";
 import categoryIcon from "../../assets/images/post-ad/category.svg";
@@ -9,23 +7,56 @@ import subCategoryIcon from "../../assets/images/post-ad/sub-category.svg";
 import descriptionIcon from "../../assets/images/post-ad/description.svg";
 import mapIcon from "../../assets/images/post-ad/map.svg";
 import "./PostAd.css";
+import { secure_instance } from "../../axios/axios-config";
 
-const countries = [
-  "Alba", "Arad", "Arges", "Bacau", "Bihor", "Bistrita-Nasaud",
-  "Botosani", "Braila", "Brasov", "Buzau", "Calarasi",
-  "Caras-Severin", "Cluj", "Constanta", "Covasna", "Dambovita",
-  "Dolj", "Galati", "Giurgiu", "Gorj", "Harghita",
-  "Hunedoara", "Ialomita", "Iasi", "Ilfov", "Maramures", "Mehedinti",
-  "Mures", "Neamt", "Olt", "Prahova", "Salaj", "Satu-Mare", "Sibiu",
-  "Suceava", "Teleorman", "Timis", "Tulcea", "Valcea", "Vaslui", "Vrancea",
-];
+// const countries = [
+//   "Alba",
+//   "Arad",
+//   "Arges",
+//   "Bacau",
+//   "Bihor",
+//   "Bistrita-Nasaud",
+//   "Botosani",
+//   "Braila",
+//   "Brasov",
+//   "Buzau",
+//   "Calarasi",
+//   "Caras-Severin",
+//   "Cluj",
+//   "Constanta",
+//   "Covasna",
+//   "Dambovita",
+//   "Dolj",
+//   "Galati",
+//   "Giurgiu",
+//   "Gorj",
+//   "Harghita",
+//   "Hunedoara",
+//   "Ialomita",
+//   "Iasi",
+//   "Ilfov",
+//   "Maramures",
+//   "Mehedinti",
+//   "Mures",
+//   "Neamt",
+//   "Olt",
+//   "Prahova",
+//   "Salaj",
+//   "Satu-Mare",
+//   "Sibiu",
+//   "Suceava",
+//   "Teleorman",
+//   "Timis",
+//   "Tulcea",
+//   "Valcea",
+//   "Vaslui",
+//   "Vrancea",
+// ];
 
-const categories = [
-  "venues", "vendors", "for_him", "for_her",
-];
-const subCategories = [
-  "Testing",
-];
+// const categories = [
+//   "venues", "vendors", "for_him", "for_her",
+// ];
+// const subCategories = ["Testing"];
 
 function CompanyInformation({
   values,
@@ -36,7 +67,19 @@ function CompanyInformation({
   handleChange,
   handleBlur,
 }) {
-  const countryOptions = countries.map((country) => ({ value: country, label: country }));
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [countriesList, setCountries] = useState([]);
+
+  const countryOptions = countriesList.map((country) => ({
+    value: country.id,
+    label: country.name,
+  }));
+
+  // const countryOptions = countries.map((country) => ({
+  //   value: country,
+  //   label: country,
+  // }));
 
   const handleCountryChange = (selectedOptions) => {
     const countryNames = selectedOptions.map((option) => option.value);
@@ -49,6 +92,39 @@ function CompanyInformation({
       },
     });
   };
+
+  const listCategories = async () => {
+    const request = await secure_instance.request({
+      url: "/api/ads/category/",
+      method: "Get",
+    });
+    // console.log(request.data);
+    setCategories(request.data.data);
+  };
+
+  const listSubCategories = async () => {
+    const request = await secure_instance.request({
+      url: "/api/ads/sub_category/",
+      method: "Get",
+    });
+    // console.log(request.data);
+    setSubCategories(request.data.data);
+  };
+
+  const listCountries = async () => {
+    const request = await secure_instance.request({
+      url: "/api/ads/country/",
+      method: "Get",
+    });
+    // console.log(request.data);
+    setCountries(request.data.data);
+  };
+
+  useEffect(() => {
+    listCategories();
+    listSubCategories();
+    listCountries();
+  }, []);
 
   // console.log("values", values);
   // console.log("touched", touched);
@@ -64,18 +140,25 @@ function CompanyInformation({
 
   return (
     <Container fluid style={{ marginTop: "40px" }}>
-
       <Row>
-        <div className="roboto-semi-bold-28px-h2" style={{ marginBottom: "40px" }}>Company Information</div>
+        <div
+          className="roboto-semi-bold-28px-h2"
+          style={{ marginBottom: "40px" }}
+        >
+          Company Information
+        </div>
         <div className="">
-
           <Col md={6} lg={4}>
             <Form.Group className="form-group mb-3" controlId="form3Example3">
               <Form.Label
                 className="roboto-medium-20px-body1 d-flex align-items-center"
                 style={{ marginBottom: "20px" }}
               >
-                <img src={commercialNameIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                <img
+                  src={commercialNameIcon}
+                  alt="commercialName"
+                  style={{ marginRight: "16px" }}
+                />
                 Commercial Name
               </Form.Label>
               <Form.Control
@@ -101,10 +184,12 @@ function CompanyInformation({
                 className="roboto-medium-20px-body1 d-flex align-items-center"
                 style={{ marginBottom: "20px" }}
               >
-                <img src={categoryIcon} alt="categoryIcon" style={{ marginRight: "16px" }} />
-
+                <img
+                  src={categoryIcon}
+                  alt="categoryIcon"
+                  style={{ marginRight: "16px" }}
+                />
                 Select Category
-
               </Form.Label>
               <Form.Select
                 aria-label="Default select example"
@@ -122,10 +207,14 @@ function CompanyInformation({
                 isInvalid={touched.category && !!errors.category}
                 className={errors.category ? "border-danger" : ""}
               >
-                <option selected value hidden="true">Select Category</option>
-                {categories.map((category, index) => (
+                <option selected value hidden="true">
+                  Select Category
+                </option>
+                {categories?.map((category, index) => (
                   // eslint-disable-next-line react/no-array-index-key
-                  <option key={index} value={category}>{category}</option>
+                  <option key={index} value={Number(category.id)}>
+                    {category.name}
+                  </option>
                 ))}
               </Form.Select>
               {/* <Form.Control.Feedback type="invalid"> */}
@@ -142,10 +231,12 @@ function CompanyInformation({
                 className="roboto-medium-20px-body1 d-flex align-items-center"
                 style={{ marginBottom: "20px" }}
               >
-                <img src={subCategoryIcon} alt="categoryIcon" style={{ marginRight: "16px" }} />
-
+                <img
+                  src={subCategoryIcon}
+                  alt="categoryIcon"
+                  style={{ marginRight: "16px" }}
+                />
                 Select sub-category
-
               </Form.Label>
               <Form.Select
                 aria-label="Default select example"
@@ -159,10 +250,14 @@ function CompanyInformation({
                 className={errors.sub_category ? "border-danger" : ""}
               >
                 {/* <option selected value hidden="true">Select sub_category</option> */}
-                <option selected value hidden="true">Select sub category</option>
+                <option selected value hidden="true">
+                  Select sub category
+                </option>
                 {subCategories.map((subCategory, index) => (
                   // eslint-disable-next-line react/no-array-index-key
-                  <option key={index} value={subCategory}>{subCategory}</option>
+                  <option key={index} value={subCategory.id}>
+                    {subCategory.name}
+                  </option>
                 ))}
               </Form.Select>
               {/* <Form.Control.Feedback type="invalid"> */}
@@ -181,10 +276,12 @@ function CompanyInformation({
                 className="roboto-medium-20px-body1 d-flex align-items-center"
                 style={{ marginBottom: "20px" }}
               >
-                <img src={descriptionIcon} alt="categoryIcon" style={{ marginRight: "16px" }} />
-
+                <img
+                  src={descriptionIcon}
+                  alt="categoryIcon"
+                  style={{ marginRight: "16px" }}
+                />
                 Description
-
               </Form.Label>
               <Form.Control
                 style={{ minHeight: "300px" }}
@@ -258,20 +355,28 @@ function CompanyInformation({
                 className="roboto-medium-20px-body1 d-flex align-items-center"
                 style={{ marginBottom: "20px" }}
               >
-                <img src={mapIcon} alt="categoryIcon" style={{ marginRight: "16px" }} />
-
+                <img
+                  src={mapIcon}
+                  alt="categoryIcon"
+                  style={{ marginRight: "16px" }}
+                />
                 Country
-
               </Form.Label>
               <Select
                 options={countryOptions}
                 isMulti
                 name="companyInformation.country"
                 styles={{ height: "56px" }}
-                value={countryOptions.filter((option) => selectedCountries.includes(option.value))}
+                value={countryOptions.filter((option) =>
+                  selectedCountries.includes(option.value)
+                )}
                 onChange={handleCountryChange}
                 onBlur={handleBlur("companyInformation.country")}
-                className={errors?.country ? "border-danger country-field" : "country-field"}
+                className={
+                  errors?.country
+                    ? "border-danger country-field"
+                    : "country-field"
+                }
                 classNamePrefix="select"
               />
               {errors?.country && (

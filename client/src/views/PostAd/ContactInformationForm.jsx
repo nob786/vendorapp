@@ -1,21 +1,54 @@
-import React from "react";
-import {
-  Button, Col, Container, Form, Modal, Row,
-} from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import Select from "react-select";
 import contactIcon from "../../assets/images/post-ad/contact.svg";
 // import videosIcon from "../../assets/images/post-ad/videos.svg";
 import mapIcon from "../../assets/images/post-ad/map.svg";
+import { secure_instance } from "../../axios/axios-config";
 // import descriptionIcon from "../../assets/images/post-ad/images.svg";
 
 const countries = [
-  "Alba", "Arad", "Arges", "Bacau", "Bihor", "Bistrita-Nasaud",
-  "Botosani", "Braila", "Brasov", "Buzau", "Calarasi",
-  "Caras-Severin", "Cluj", "Constanta", "Covasna", "Dambovita",
-  "Dolj", "Galati", "Giurgiu", "Gorj", "Harghita",
-  "Hunedoara", "Ialomita", "Iasi", "Ilfov", "Maramures", "Mehedinti",
-  "Mures", "Neamt", "Olt", "Prahova", "Salaj", "Satu-Mare", "Sibiu",
-  "Suceava", "Teleorman", "Timis", "Tulcea", "Valcea", "Vaslui", "Vrancea",
+  "Alba",
+  "Arad",
+  "Arges",
+  "Bacau",
+  "Bihor",
+  "Bistrita-Nasaud",
+  "Botosani",
+  "Braila",
+  "Brasov",
+  "Buzau",
+  "Calarasi",
+  "Caras-Severin",
+  "Cluj",
+  "Constanta",
+  "Covasna",
+  "Dambovita",
+  "Dolj",
+  "Galati",
+  "Giurgiu",
+  "Gorj",
+  "Harghita",
+  "Hunedoara",
+  "Ialomita",
+  "Iasi",
+  "Ilfov",
+  "Maramures",
+  "Mehedinti",
+  "Mures",
+  "Neamt",
+  "Olt",
+  "Prahova",
+  "Salaj",
+  "Satu-Mare",
+  "Sibiu",
+  "Suceava",
+  "Teleorman",
+  "Timis",
+  "Tulcea",
+  "Valcea",
+  "Vaslui",
+  "Vrancea",
 ];
 
 function ContactInformationForm({
@@ -27,8 +60,12 @@ function ContactInformationForm({
   handleChange,
   handleBlur,
 }) {
-  const countryOptions = countries.map((country) => ({ value: country, label: country }));
+  const [countriesList, setCountries] = useState([]);
 
+  const countryOptions = countriesList.map((country) => ({
+    value: country.id,
+    label: country.name,
+  }));
   const handleCountryChange = (selectedOptions) => {
     const countryNames = selectedOptions.map((option) => option.value);
     setSelectedCountries(countryNames);
@@ -40,14 +77,29 @@ function ContactInformationForm({
       },
     });
   };
+
+  const listCountries = async () => {
+    const request = await secure_instance.request({
+      url: "/api/ads/country/",
+      method: "Get",
+    });
+    // console.log(request.data);
+    setCountries(request.data.data);
+  };
+
+  useEffect(() => {
+    listCountries();
+  }, []);
   // const handleSubmit = (values) => {
   //   console.log(values);
   // };
 
   return (
     <Container style={{ paddingTop: "40px" }}>
-
-      <div className="roboto-semi-bold-28px-h2" style={{ marginBottom: "40px" }}>
+      <div
+        className="roboto-semi-bold-28px-h2"
+        style={{ marginBottom: "40px" }}
+      >
         Contact Information
       </div>
 
@@ -58,9 +110,12 @@ function ContactInformationForm({
               className="roboto-medium-20px-body1"
               style={{ marginBottom: "20px" }}
             >
-              <img src={contactIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+              <img
+                src={contactIcon}
+                alt="commercialName"
+                style={{ marginRight: "16px" }}
+              />
               Contact Person Number
-
             </Form.Label>
             <Form.Control
               style={{ height: "56px" }}
@@ -85,10 +140,12 @@ function ContactInformationForm({
               className="roboto-medium-20px-body1"
               style={{ marginBottom: "20px" }}
             >
-              <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
-
+              <img
+                src={mapIcon}
+                alt="commercialName"
+                style={{ marginRight: "16px" }}
+              />
               Website URL
-
             </Form.Label>
             <Form.Control
               style={{ height: "56px" }}
@@ -137,19 +194,27 @@ function ContactInformationForm({
               className="roboto-medium-20px-body1"
               style={{ marginBottom: "20px" }}
             >
-              <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
-
+              <img
+                src={mapIcon}
+                alt="commercialName"
+                style={{ marginRight: "16px" }}
+              />
               Country
-
             </Form.Label>
             <Select
               options={countryOptions}
               isMulti
               name="contactInformation.country"
-              value={countryOptions.filter((option) => selectedCountries.includes(option.value))}
+              value={countryOptions.filter((option) =>
+                selectedCountries.includes(option.value)
+              )}
               onChange={handleCountryChange}
               onBlur={handleBlur("contactInformation.country")}
-              className={errors?.country ? "border-danger country-field" : "country-field"}
+              className={
+                errors?.country
+                  ? "border-danger country-field"
+                  : "country-field"
+              }
               classNamePrefix="select"
             />
             {errors?.country && (
@@ -163,10 +228,12 @@ function ContactInformationForm({
               className="roboto-medium-20px-body1"
               style={{ marginBottom: "20px" }}
             >
-              <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
-
+              <img
+                src={mapIcon}
+                alt="commercialName"
+                style={{ marginRight: "16px" }}
+              />
               City
-
             </Form.Label>
             <Form.Control
               style={{ height: "56px" }}
@@ -193,10 +260,12 @@ function ContactInformationForm({
               className="roboto-medium-20px-body1"
               style={{ marginBottom: "20px" }}
             >
-              <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
-
+              <img
+                src={mapIcon}
+                alt="commercialName"
+                style={{ marginRight: "16px" }}
+              />
               Street
-
             </Form.Label>
             <Form.Control
               style={{ height: "56px" }}
@@ -223,10 +292,12 @@ function ContactInformationForm({
               className="roboto-medium-20px-body1"
               style={{ marginBottom: "20px" }}
             >
-              <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
-
+              <img
+                src={mapIcon}
+                alt="commercialName"
+                style={{ marginRight: "16px" }}
+              />
               Full Address
-
             </Form.Label>
             <Form.Control
               style={{ height: "56px" }}

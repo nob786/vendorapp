@@ -3,13 +3,17 @@ import { faHeart, faPlus } from "@fortawesome/fontawesome-free-solid";
 import { faAdd, faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import {
-  Button, Col, Container, Row,
-} from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import InfoIcon from "../../assets/images/gg_info.svg";
 import "./ImageUploader.css";
 
-function ImageUploader({ setparentImagesUploadedImages, imagesError, uploadedImages, setImagesError, setShowImagesModal }) {
+function ImageUploader({
+  setparentImagesUploadedImages,
+  imagesError,
+  uploadedImages,
+  setImagesError,
+  setShowImagesModal,
+}) {
   const [mainImage, setMainImage] = useState(null);
 
   useEffect(() => {
@@ -26,7 +30,7 @@ function ImageUploader({ setparentImagesUploadedImages, imagesError, uploadedIma
   console.log("imagesError imagesError imagesError", imagesError);
 
   const toggleImagesModal = (event, image) => {
-    setShowImagesModal(true)
+    setShowImagesModal(true);
     // console.log({ images });
   };
   // const handleImageUpload = (event, index) => {
@@ -61,49 +65,74 @@ function ImageUploader({ setparentImagesUploadedImages, imagesError, uploadedIma
 
   return (
     <Container fluid style={{ marginTop: "30px" }}>
-      <div className="roboto-medium-20px-body1" style={{ marginBottom: "25px" }}>Upload Images</div>
+      <div
+        className="roboto-medium-20px-body1"
+        style={{ marginBottom: "25px" }}
+      >
+        Upload Images
+      </div>
 
-      {imagesError
-        && <span className="text-danger">Atleast 1 photo is Required</span>}
-      <div style={{ maxWidth: "900px", border: "2px dashed #E3E3E4", padding: "16px" }}>
-
+      {imagesError && (
+        <span className="text-danger">Atleast 1 photo is Required</span>
+      )}
+      <div
+        style={{
+          maxWidth: "900px",
+          border: "2px dashed #E3E3E4",
+          padding: "16px",
+        }}
+      >
         <ul style={{ paddingLeft: "20px" }}>
-          <li className="roboto-regular-16px-information" style={{ color: "#A9A8AA", lineHeight: "22px" }}>
+          <li
+            className="roboto-regular-16px-information"
+            style={{ color: "#A9A8AA", lineHeight: "22px" }}
+          >
             Upload 5 of the best images that describe your service
-
           </li>
-          <li className="roboto-regular-16px-information" style={{ color: "#A9A8AA", lineHeight: "22px" }}>
+          <li
+            className="roboto-regular-16px-information"
+            style={{ color: "#A9A8AA", lineHeight: "22px" }}
+          >
             Images can be upload in JPEG or PNG format
-
           </li>
-          <li className="roboto-regular-16px-information" style={{ color: "#A9A8AA", lineHeight: "22px" }}>
+          <li
+            className="roboto-regular-16px-information"
+            style={{ color: "#A9A8AA", lineHeight: "22px" }}
+          >
             Size of images cannot exceed 5 Mb
-
           </li>
         </ul>
 
         <Button
           type="button"
           className="btn btn-success roboto-semi-bold-16px-information"
-          style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem", height: "44px" }}
+          style={{
+            paddingLeft: "2.5rem",
+            paddingRight: "2.5rem",
+            height: "44px",
+          }}
           onClick={toggleImagesModal}
         >
           Upload Images
         </Button>
 
         <div className="d-flex align-items-center">
-          <img
-            src={InfoIcon}
-            alt={InfoIcon}
-          />
-          <span className="mx-1 roboto-regular-14px-information" style={{ color: "#A9A8AA", margin: "15px 0" }}>
+          <img src={InfoIcon} alt={InfoIcon} />
+          <span
+            className="mx-1 roboto-regular-14px-information"
+            style={{ color: "#A9A8AA", margin: "15px 0" }}
+          >
             Click on “View All” to preview all images
           </span>
         </div>
-        {mainImage !== null && (
-          <div style={{
-            position: "relative", border: "2px dotted #386C34", width: "145px", height: "126px",
-          }}
+        {mainImage !== null && uploadedImages.length > 0 && (
+          <div
+            style={{
+              position: "relative",
+              border: "2px dotted #386C34",
+              width: "145px",
+              height: "126px",
+            }}
           >
             <img
               src={mainImage.previewURL}
@@ -119,7 +148,10 @@ function ImageUploader({ setparentImagesUploadedImages, imagesError, uploadedIma
               <FontAwesomeIcon
                 icon={faClose}
                 style={{
-                  position: "absolute", top: "2px", right: "5px", color: "#FFF",
+                  position: "absolute",
+                  top: "2px",
+                  right: "5px",
+                  color: "#FFF",
                 }}
               />
             </button>
