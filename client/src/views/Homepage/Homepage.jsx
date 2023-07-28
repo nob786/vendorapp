@@ -19,6 +19,7 @@ import StartPlanning from "./StartPlanning";
 import Footer from "../../components/Footer/Footer";
 import Login from "../Login/Login";
 import TopBanner from "../../components/TopBanner";
+import ImagesModal from "../../components/ImageUploader/ImagesModal";
 
 // import Register from "../Register/Register";
 

@@ -1,9 +1,7 @@
 import React, { useRef, useState } from "react";
 import * as formik from "formik";
 import * as Yup from "yup";
-import {
-  Button, Col, Container, Form, Modal, Row,
-} from "react-bootstrap";
+import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import Header from "../../components/Navbar/Navbar";
 import TopBanner from "../../components/TopBanner";
 import postAdBanner1 from "../../assets/images/post-ad-banner-1.svg";
@@ -21,27 +19,42 @@ import SocialMediaForm from "./SocialMediaForm";
 import ServicesOffered from "./ServicesOffered";
 import CompanyInformation from "./CompanyInformation";
 import FAQs from "./FAQs";
+import PdfUploader from "../../components/PdfUploader/PdfUploader";
+import ImagesModal from "../../components/ImageUploader/ImagesModal";
 
 function PostAd() {
   const { Formik } = formik;
 
   const [selectedCountries, setSelectedCountries] = useState([]);
-  const [selectedCountriesforContactInformation, setSelectedCountriesforContactInformation] = useState([]);
+  const [
+    selectedCountriesforContactInformation,
+    setSelectedCountriesforContactInformation,
+  ] = useState([]);
   const [uploadedImages, setUploadedImages] = useState(Array(5).fill(null));
   const [imagesError, setImagesError] = useState(false);
+  const [uploadedPdfs, setUploadedPdfs] = useState(Array(5).fill(null));
+  const [pdfsError, setPdfsError] = useState(false);
   const [uploadedVideos, setUploadedVideos] = useState([]);
+  const [showImagesModal, setShowImagesModal] = useState(false);
 
   const handleSubmitAllForms = (values) => {
+    // ...(uploadedImages && { imageUploader: { images: uploadedImages } }),
     const newObj = {
       ...values,
       imageUploader: {
         images: uploadedImages,
       },
+      pdfUploader: {
+        pdfs: uploadedPdfs,
+      },
       VideoUploader: {
         videos: uploadedVideos,
       },
     };
-    console.log("newObj-------------------------------------------------:", newObj);
+    console.log(
+      "newObj-------------------------------------------------:",
+      newObj
+    );
     // console.log("Form 2 data:", formData2);
     // }
   };
@@ -148,6 +161,9 @@ function PostAd() {
         { question: "predefined 2", answer: "", added: true },
       ],
     },
+    servicesOffered: {
+      services: [],
+    },
   };
 
   const validate = (values) => {
@@ -159,14 +175,20 @@ function PostAd() {
       setImagesError(true);
     }
 
-    if (!values.companyInformation.country || values.companyInformation.country.length === 0) {
+    if (
+      !values.companyInformation.country ||
+      values.companyInformation.country.length === 0
+    ) {
       errors.companyInformation = {
         ...errors.companyInformation,
         country: "Please select at least one country.",
       };
     }
 
-    if (!values.contactInformation.country || values.contactInformation.country.length === 0) {
+    if (
+      !values.contactInformation.country ||
+      values.contactInformation.country.length === 0
+    ) {
       errors.contactInformation = {
         ...errors.contactInformation,
         country: "Please select at least one country.",
@@ -180,6 +202,10 @@ function PostAd() {
 
   const handleImageUpdates = (images) => {
     setUploadedImages(images);
+  };
+
+  const handlePdfsUpdates = (images) => {
+    setUploadedPdfs(images);
   };
 
   const handleVideoUpload = (videos) => {
@@ -204,6 +230,33 @@ function PostAd() {
     });
   };
 
+  const handleAddServices = (currentService, values, setValues) => {
+    // const currentService = values.servicesOffered.services[index];
+    // currentFAQ.added = true;
+    // const updatedServices = [...values.FAQ.faqs];
+    // updatedServices[index] = currentService;
+    console.log("currentService", currentService);
+    setValues({
+      ...values,
+      servicesOffered: {
+        services: [...values.servicesOffered.services, currentService],
+      },
+    });
+  };
+
+  const handleRemoveService = (indexToRemove, values, setValues) => {
+    const clonedServices = [...values.servicesOffered.services];
+    const deletedService = clonedServices.filter(
+      (_, index) => index !== indexToRemove
+    );
+    setValues({
+      ...values,
+      servicesOffered: {
+        services: deletedService,
+      },
+    });
+  };
+
   const handleAddFAQsFields = (values, setValues) => {
     setValues({
       ...values,
@@ -214,34 +267,56 @@ function PostAd() {
   };
 
   return (
-    <div>
+    <div style={{ position: "relative" }}>
       <TopBanner />
       <Header />
+
+      <ImagesModal
+        showModal={showImagesModal}
+        handleClose={() => setShowImagesModal(false)}
+        setShowImagesModal={setShowImagesModal}
+        setparentImagesUploadedImages={handleImageUpdates}
+        imagesError={imagesError}
+        setImagesError={setImagesError}
+      />
 
       <div className="ad-banner d-flex align-items-center justify-content-between">
         <div style={{ marginLeft: "100px" }}>
           <div className="roboto-bold-36px-h1">Post an Ad</div>
-          <div className="roboto-regular-18px-body3">Reach thousands of buyers on our platform</div>
+          <div className="roboto-regular-18px-body3">
+            Reach thousands of buyers on our platform
+          </div>
         </div>
 
-        <div style={{
-          position: "absolute", right: "-50px", top: "-32px", display: "flex",
-        }}
+        <div
+          style={{
+            position: "absolute",
+            right: "-50px",
+            top: "-32px",
+            display: "flex",
+          }}
         >
           <div style={{ marginTop: "30px" }} className="postAdBanner1">
             <img src={postAdBanner1} alt="postAdBanner1" />
           </div>
           <div style={{ margin: "0 -65px" }}>
-            <img src={postAdBanner3} alt="postAdBanner3" className="postAdBanner3" />
+            <img
+              src={postAdBanner3}
+              alt="postAdBanner3"
+              className="postAdBanner3"
+            />
           </div>
           <div style={{ marginTop: "30px" }}>
-            <img src={postAdBanner2} alt="postAdBanner2" className="postAdBanner2" />
+            <img
+              src={postAdBanner2}
+              alt="postAdBanner2"
+              className="postAdBanner2"
+            />
           </div>
         </div>
       </div>
 
       <Container fluid style={{ marginTop: "40px", paddingLeft: "150px" }}>
-
         <Row>
           <Formik
             initialValues={initialValues}
@@ -250,10 +325,15 @@ function PostAd() {
             onSubmit={handleSubmitAllForms}
           >
             {({
-              values, errors, touched, handleChange, handleBlur, handleSubmit, setValues,
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              setValues,
             }) => (
               <Form noValidate onSubmit={handleSubmit}>
-
                 <CompanyInformation
                   values={values.companyInformation}
                   errors={errors.companyInformation ?? errors}
@@ -266,21 +346,23 @@ function PostAd() {
 
                 <ImageUploader
                   // parentImages={values.imageUploader.images}
+                  setShowImagesModal={setShowImagesModal}
                   setparentImagesUploadedImages={handleImageUpdates}
+                  uploadedImages={uploadedImages}
                   imagesError={imagesError}
                   setImagesError={setImagesError}
                 />
 
-                <VideoUploader
-                  setparentVideoUploaded={handleVideoUpload}
-                />
+                <VideoUploader setparentVideoUploaded={handleVideoUpload} />
 
                 <ContactInformationForm
                   values={values.contactInformation}
                   errors={errors.contactInformation ?? errors}
                   touched={touched.contactInformation ?? touched}
                   selectedCountries={selectedCountriesforContactInformation}
-                  setSelectedCountries={setSelectedCountriesforContactInformation}
+                  setSelectedCountries={
+                    setSelectedCountriesforContactInformation
+                  }
                   handleChange={handleChange}
                   handleBlur={handleBlur}
                 />
@@ -292,20 +374,44 @@ function PostAd() {
                   handleChange={handleChange}
                 />
 
-                <ServicesOffered />
+                <ServicesOffered
+                  values={values}
+                  // errors={errors.FAQ ?? errors}
+                  // touched={touched.FAQ ?? touched}
+                  handleChange={handleChange}
+                  handleAddServices={(currentService) =>
+                    handleAddServices(currentService, values, setValues)
+                  }
+                  handleRemoveService={(index) =>
+                    handleRemoveService(index, values, setValues)
+                  }
+                />
+
+                <PdfUploader
+                  setparentImagesUploadedImages={handlePdfsUpdates}
+                  imagesError={pdfsError}
+                  setImagesError={setPdfsError}
+                />
 
                 <FAQs
                   values={values}
                   errors={errors.FAQ ?? errors}
                   touched={touched.FAQ ?? touched}
                   handleChange={handleChange}
-                  handleAddFieldsForFAQ={() => handleAddFAQsFields(values, setValues)}
-                  handleAddFAQ={(index) => handleAddFAQ(index, values, setValues)}
+                  handleAddFieldsForFAQ={() =>
+                    handleAddFAQsFields(values, setValues)
+                  }
+                  handleAddFAQ={(index) =>
+                    handleAddFAQ(index, values, setValues)
+                  }
                 />
 
                 <div style={{ paddingBottom: "300px" }} />
                 {/* disabled={!isValid} */}
-                <Col className="d-flex justify-content-end" style={{ marginRight: "150px" }}>
+                <Col
+                  className="d-flex justify-content-end"
+                  style={{ marginRight: "150px" }}
+                >
                   <Button
                     type="submit"
                     onClick={handleClickSubmit}

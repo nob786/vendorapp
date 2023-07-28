@@ -34,7 +34,7 @@ function VideoUploader({ setparentVideoUploaded }) {
   return (
     <Container fluid style={{ marginTop: "40px" }}>
       <span className="roboto-medium-20px-body1">Upload Video</span>
-      <div style={{ maxWidth: "900px", border: "2px dashed #A0C49D", padding: "16px" }}>
+      <div style={{ maxWidth: "900px", border: "2px dashed #E3E3E4", padding: "16px" }}>
 
         <ul style={{ paddingLeft: "20px" }}>
           <li className="roboto-regular-16px-information" style={{ color: "#A9A8AA", lineHeight: "22px" }}>

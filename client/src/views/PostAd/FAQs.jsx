@@ -185,13 +185,16 @@
 
 // FAQs.js
 import React from "react";
-import {
-  Form, Row, Col, Button,
-} from "react-bootstrap";
+import { Form, Row, Col, Button } from "react-bootstrap";
 import FAQsIcon from "../../assets/images/FAQsIcon.svg";
 
 function FAQs({
-  values, errors, touched, handleChange, handleAddFieldsForFAQ, handleAddFAQ,
+  values,
+  errors,
+  touched,
+  handleChange,
+  handleAddFieldsForFAQ,
+  handleAddFAQ,
 }) {
   return (
     <Row>
@@ -202,22 +205,20 @@ function FAQs({
       {values.FAQ.faqs.map((faq, index) => (
         <Row key={index}>
           <Col md={6} lg={7}>
-            <Form.Group className="form-group mb-3" controlId={`form3ExampleDynamic${index}`}>
+            <Form.Group
+              className="form-group mb-3"
+              controlId={`form3ExampleDynamic${index}`}
+            >
               <Form.Label
                 className="roboto-medium-20px-body1 d-flex align-items-center justify-content-between"
                 style={{ marginBottom: "20px" }}
               >
                 <div className="d-flex align-items-center roboto-medium-20px-body1">
                   <img src={FAQsIcon} alt="FAQsIcon" className="me-2" />
-                  Question
-                  {" "}
-                  {index + 1}
-                  :
-                  {" "}
-                  {faq.added === true && faq.question}
+                  Question {index + 1}: {faq.added === true && faq.question}
                 </div>
                 <div style={{ color: "#A0C49D" }}>
-                  {(faq.added === false) && (
+                  {faq.added === false && (
                     <span
                       style={{ textDecoration: "underline" }}
                       onClick={() => handleAddFAQ(index)}
@@ -227,7 +228,7 @@ function FAQs({
                   )}
                 </div>
               </Form.Label>
-              {(faq.added === false) && (
+              {faq.added === false && (
                 <Form.Control
                   style={{ height: "56px" }}
                   className="lg-input-small-text"
@@ -242,7 +243,10 @@ function FAQs({
             </Form.Group>
           </Col>
           <Col key={index} md={6} lg={7}>
-            <Form.Group className="form-group mb-3" controlId={`form3Example${index}`}>
+            <Form.Group
+              className="form-group mb-3"
+              controlId={`form3Example${index}`}
+            >
               <Form.Control
                 style={{ height: "56px" }}
                 className="lg-input-small-text"
