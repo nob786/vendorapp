@@ -12,6 +12,7 @@ import questionIcon from "../../assets/images/profile-settings/question.svg";
 import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
+import { secure_instance } from "../../axios/axios-config";
 
 const reasons = ["I want to", "I am not satisfied"];
 
@@ -33,6 +34,14 @@ function DeleteAccount() {
       .required("Passwords must match")
       .oneOf([Yup.ref("password")], "Passwords must match"),
   });
+
+  const handleDeleteAccount = async (vales) => {
+    console.log(vales);
+    const request = await secure_instance.request({
+      url: "/api/users/me/",
+      method: "Patch",
+    });
+  };
 
   return (
     <>
@@ -71,7 +80,7 @@ function DeleteAccount() {
             <Formik
               validationSchema={Schema}
               // onSubmit={handleNextStep}
-              onSubmit={console.log}
+              onSubmit={handleDeleteAccount}
               initialValues={initialValues}
             >
               {({ handleSubmit, handleChange, values, touched, errors }) => (

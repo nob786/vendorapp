@@ -48,7 +48,15 @@ function App() {
         }
       />
       {/* // isAuthenticated={isAuthenticated} */}
-      <Route path="/profile-settings" element={<ProfileView />} />
+      <Route
+        path="/profile-settings"
+        element={
+          <ProtectedRoute>
+            <ProfileView />
+          </ProtectedRoute>
+        }
+      />
+      {/* <Route path="/profile-settings" element={<ProfileView />} /> */}
       {/* <Route path="login" element={<Login />} /> */}
       {/* <Route index element={<Homepage />} /> */}
       {/* <Route path="dashboard" element={<Dashboard />} /> */}

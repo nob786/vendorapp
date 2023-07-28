@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import * as formik from "formik";
 import * as Yup from "yup";
@@ -15,22 +15,27 @@ import bankIcon from "../../assets/images/profile-settings/bank.svg";
 import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
+import { secure_instance } from "../../axios/axios-config";
 
 function CompanyInformationSettings() {
   const { Formik } = formik;
 
+  const [companyInformation, setCompanyInformation] = useState("");
+
   const initialValues = {
-    company_name: "",
-    country: "",
-    county: "",
-    municipality: "",
-    commune: "",
-    postal_code: "",
-    fiscal_code: "",
-    firm_number: "",
-    bank_name: "",
-    bank_iban: "",
+    company_name: companyInformation.name,
+    country: companyInformation.country,
+    county: companyInformation.county,
+    postal_code: companyInformation.postal_code,
+    fiscal_code: companyInformation.fiscal_code,
+    firm_number: companyInformation.firm_number,
+    bank_name: companyInformation.bank_name,
+    bank_iban: companyInformation.bank_iban,
+    // municipality: companyInformation.municipality,
+    // commune: companyInformation.commune,
   };
+
+  // console.log(first);
 
   const Schema = Yup.object().shape({
     // person_name: Yup.string().matches(/^[A-Za-z\s]{1,25}$/, "Invalid input"),
@@ -39,12 +44,12 @@ function CompanyInformationSettings() {
       .matches(/^[A-Za-z\s]*$/, "Only letters and spaces are allowed"),
     country: "",
     county: "",
-    municipality: Yup.string()
-      .max(25, "String must be at most 25 characters")
-      .matches(/^[A-Za-z\s]*$/, "Only letters and spaces are allowed"),
-    commune: Yup.string()
-      .max(25, "String must be at most 25 characters")
-      .matches(/^[A-Za-z\s]*$/, "Only letters and spaces are allowed"),
+    // municipality: Yup.string()
+    //   .max(25, "String must be at most 25 characters")
+    //   .matches(/^[A-Za-z\s]*$/, "Only letters and spaces are allowed"),
+    // commune: Yup.string()
+    //   .max(25, "String must be at most 25 characters")
+    //   .matches(/^[A-Za-z\s]*$/, "Only letters and spaces are allowed"),
     postal_code: Yup.string().matches(
       /^\d{1,7}$/,
       "Only up to 7 digits are allowed"
@@ -63,6 +68,30 @@ function CompanyInformationSettings() {
       "Only up to 30 letters and digits are allowed"
     ),
   });
+
+  const handleUpdateCompanyInfo = async (values) => {
+    console.log(values);
+    await secure_instance.request({
+      url: "/api/companies/1/",
+      method: "Patch",
+      data: values,
+    });
+  };
+
+  const getCompanyInfo = async () => {
+    // console.log(values);
+
+    const request = await secure_instance.request({
+      url: "/api/companies/1/",
+      method: "Get",
+    });
+    setCompanyInformation(request.data.data);
+  };
+
+  useEffect(() => {
+    console.log("whaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    getCompanyInfo();
+  }, []);
 
   return (
     <>
@@ -101,8 +130,9 @@ function CompanyInformationSettings() {
             <Formik
               validationSchema={Schema}
               // onSubmit={handleNextStep}
-              onSubmit={console.log}
+              onSubmit={handleUpdateCompanyInfo}
               initialValues={initialValues}
+              enableReinitialize
             >
               {({ handleSubmit, handleChange, values, touched, errors }) => (
                 <Form noValidate onSubmit={handleSubmit}>
@@ -118,6 +148,7 @@ function CompanyInformationSettings() {
                             alt="commercialName"
                             style={{ marginRight: "16px" }}
                           />
+                          Name
                         </Form.Label>
                         <Form.Control
                           style={{ height: "56px" }}

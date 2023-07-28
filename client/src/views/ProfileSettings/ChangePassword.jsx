@@ -13,6 +13,7 @@ import confirmPasswordIcon from "../../assets/images/profile-settings/confirm-pa
 import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
+import { secure_instance } from "../../axios/axios-config";
 
 function ChangePassword() {
   const { Formik } = formik;
@@ -34,6 +35,18 @@ function ChangePassword() {
       .required("Passwords must match")
       .oneOf([Yup.ref("new_password")], "Passwords must match"),
   });
+
+  const handleResetPassword = async (values) => {
+    const request = await secure_instance.request({
+      url: "/api/users/update-password/",
+      method: "Patch",
+      data: {
+        old_password: values.old_password,
+        new_password: values.new_password,
+      },
+    });
+    // request
+  };
 
   return (
     <>
@@ -72,10 +85,17 @@ function ChangePassword() {
             <Formik
               validationSchema={Schema}
               // onSubmit={handleNextStep}
-              onSubmit={console.log}
+              onSubmit={handleResetPassword}
               initialValues={initialValues}
             >
-              {({ handleSubmit, handleChange, values, touched, errors }) => (
+              {({
+                handleSubmit,
+                handleChange,
+                values,
+                touched,
+                errors,
+                setErrors,
+              }) => (
                 <Form noValidate onSubmit={handleSubmit}>
                   <Col lg={4}>
                     <Form.Group
