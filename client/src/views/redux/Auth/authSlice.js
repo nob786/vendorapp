@@ -17,34 +17,40 @@ const initialState = {
 };
 
 // Asynchronous action to handle login
-export const handleRegister = createAsyncThunk("auth/register", async (data) => {
-  try {
-    const response = await instance.request({
-      url: "/api/companies/",
-      method: "Post",
-      data
-    });
-    // window.location.replace("/");
-    return response.data; // Assuming your loginAPI returns data with access_token, user_id, and role_id
-  } catch (error) {
-    // Handle login error here if needed
-    throw error;
+export const handleRegister = createAsyncThunk(
+  "auth/register",
+  async (data) => {
+    try {
+      const response = await instance.request({
+        url: "/api/companies/",
+        method: "Post",
+        data,
+      });
+      // window.location.replace("/");
+      return response.data; // Assuming your loginAPI returns data with access_token, user_id, and role_id
+    } catch (error) {
+      // Handle login error here if needed
+      throw error;
+    }
   }
-});
+);
 
-export const handleLogin = createAsyncThunk("auth/login", async ({ email, password }) => {
-  const response = await instance.request({
-    url: "/api/token/?accept=application/json",
-    method: "Post",
-    data: {
-      email,
-      password,
-    },
-  });
-  setCookie("refresh_token", response.data.refresh, 7);
+export const handleLogin = createAsyncThunk(
+  "auth/login",
+  async ({ email, password }) => {
+    const response = await instance.request({
+      url: "/api/token/?accept=application/json",
+      method: "Post",
+      data: {
+        email,
+        password,
+      },
+    });
+    setCookie("refresh_token", response.data.refresh, 7);
 
-  return response.data; // Assuming your loginAPI returns data with access_token, user_id, and role_id
-});
+    return response.data; // Assuming your loginAPI returns data with access_token, user_id, and role_id
+  }
+);
 
 export const refreshToken = createAsyncThunk("auth/refresh", async () => {
   const request = await instance.request({
@@ -76,13 +82,16 @@ export const refreshToken = createAsyncThunk("auth/refresh", async () => {
   // });
 });
 
-export const getAuthenticatedUser = createAsyncThunk("auth/authenticatedUser", async () => {
-  const response = await secure_instance.request({
-    url: "/api/users/me/",
-    method: "GET",
-  });
-  return response.data;
-});
+export const getAuthenticatedUser = createAsyncThunk(
+  "auth/authenticatedUser",
+  async () => {
+    const response = await secure_instance.request({
+      url: "/api/users/me/",
+      method: "GET",
+    });
+    return response.data;
+  }
+);
 
 // Create the loginSlice
 export const authSlice = createSlice({
@@ -143,7 +152,9 @@ export const authSlice = createSlice({
       .addCase(refreshToken.rejected, (state, action) => {
         state.loading = false;
         // state.error = action.error.message;
-        window.location.href = "/";
+        if (window.location.pathname !== "/") {
+          window.location.href = "/";
+        }
       })
       .addCase(getAuthenticatedUser.fulfilled, (state, action) => {
         const { data } = action.payload;
@@ -159,7 +170,7 @@ export const authSlice = createSlice({
         // state.loading = false;
         // state.error = action.error.message;
         // state.user.accessToken = access;
-      })
+      });
     // .addCase(refreshToken.pending, (state) => {
     //   state.loading = true;
     //   state.error = null;
@@ -178,9 +189,8 @@ export const authSlice = createSlice({
   },
 });
 
-export const {
-  handleResgisterationStatus, handleLoginStatusFalse
-} = authSlice.actions;
+export const { handleResgisterationStatus, handleLoginStatusFalse } =
+  authSlice.actions;
 
 // Export the reducer and actions
 export default authSlice.reducer;

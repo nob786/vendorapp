@@ -48,7 +48,7 @@ function Header() {
     if (refreshTokenValue && user.accessToken === null) {
       dispatch(refreshToken());
     }
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (user.userId === null && user.accessToken !== null) {
