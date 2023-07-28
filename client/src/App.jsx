@@ -10,9 +10,9 @@ import PostAd from "./views/PostAd/PostAd";
 import ProfileSettings from "./views/ProfileSettings/ProfileSettings";
 import ProfileView from "./views/ProfileSettings/ProfileView";
 import ProtectedRoute from "./views/ProtectedRoute";
+import { getCookie } from "./utilities/utils";
 // import "../src/assets/scss/_buttons.scss"
 function App() {
-
   // const [count, setCount] = useState(0)
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -27,6 +27,10 @@ function App() {
   //   }
   // }, []);
 
+  // useEffect(() => {
+  //   const refreshToken = getCookie("refresh_token")
+  // }, [third])
+
   return (
     <Routes>
       <Route path="/" element={<Homepage />} />
@@ -37,11 +41,11 @@ function App() {
       /> */}
       <Route
         path="/post-ad"
-        element={(
+        element={
           <ProtectedRoute>
             <PostAd />
           </ProtectedRoute>
-        )}
+        }
       />
       {/* // isAuthenticated={isAuthenticated} */}
       <Route path="/profile-settings" element={<ProfileView />} />
