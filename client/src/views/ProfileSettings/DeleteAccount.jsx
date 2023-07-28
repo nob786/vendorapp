@@ -1,7 +1,5 @@
 import React from "react";
-import {
-  Button, Col, Container, Form, Modal, Row,
-} from "react-bootstrap";
+import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import * as formik from "formik";
 import * as Yup from "yup";
 import Header from "../../components/Navbar/Navbar";
@@ -13,11 +11,9 @@ import questionIcon from "../../assets/images/profile-settings/question.svg";
 // import profile_bg from "../../assets/images/profile-settings/profile-bg.svg";
 import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
+import TabNavigation from "../../components/TabNavigation/TabNavigation";
 
-const reasons = [
-  "I want to",
-  "I am not satisfied",
-];
+const reasons = ["I want to", "I am not satisfied"];
 
 function DeleteAccount() {
   const { Formik } = formik;
@@ -33,22 +29,31 @@ function DeleteAccount() {
     password: Yup.string()
       .required("Password is required")
       .min(5, "Your password is too short."),
-    confirm_password: Yup.string().required("Passwords must match")
+    confirm_password: Yup.string()
+      .required("Passwords must match")
       .oneOf([Yup.ref("password")], "Passwords must match"),
   });
 
   return (
     <>
       <Header />
+      <TabNavigation />
+
       <div className="profile-settings-banner d-flex align-items-center justify-content-between">
         <div style={{ marginLeft: "100px" }}>
           <div className="roboto-bold-36px-h1">Delete Account</div>
-          <div className="roboto-regular-18px-body3">We are sorry to see you leave</div>
+          <div className="roboto-regular-18px-body3">
+            We are sorry to see you leave
+          </div>
         </div>
 
-        <div style={{
-          position: "absolute", right: "100px", top: "-28px", display: "flex",
-        }}
+        <div
+          style={{
+            position: "absolute",
+            right: "100px",
+            top: "-28px",
+            display: "flex",
+          }}
         >
           <div style={{ marginTop: "30px" }}>
             <img src={user} alt="user" />
@@ -56,7 +61,11 @@ function DeleteAccount() {
         </div>
       </div>
 
-      <Container fluid style={{ marginTop: "100px", marginBottom: "200px" }} className="">
+      <Container
+        fluid
+        style={{ marginTop: "100px", marginBottom: "200px" }}
+        className=""
+      >
         <Row className="justify-content-center">
           <Col lg={10}>
             <Formik
@@ -65,19 +74,24 @@ function DeleteAccount() {
               onSubmit={console.log}
               initialValues={initialValues}
             >
-              {({
-                handleSubmit, handleChange, values, touched, errors,
-              }) => (
+              {({ handleSubmit, handleChange, values, touched, errors }) => (
                 <Form noValidate onSubmit={handleSubmit}>
                   <Col lg={4}>
-                    <Form.Group className="form-group mb-4" controlId="form3Example4" style={{ position: "relative" }}>
+                    <Form.Group
+                      className="form-group mb-4"
+                      controlId="form3Example4"
+                      style={{ position: "relative" }}
+                    >
                       <Form.Label
                         className="roboto-medium-20px-body1 d-flex align-items-center"
                         style={{ marginBottom: "20px" }}
                       >
-                        <img src={oldPasswordIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                        <img
+                          src={oldPasswordIcon}
+                          alt="commercialName"
+                          style={{ marginRight: "16px" }}
+                        />
                         Enter Password
-
                       </Form.Label>
                       <Form.Control
                         style={{ height: "56px" }}
@@ -99,15 +113,21 @@ function DeleteAccount() {
                   </Col>
 
                   <Col lg={4}>
-
-                    <Form.Group className="form-group mb-4" controlId="form3Example4" style={{ position: "relative" }}>
+                    <Form.Group
+                      className="form-group mb-4"
+                      controlId="form3Example4"
+                      style={{ position: "relative" }}
+                    >
                       <Form.Label
                         className="roboto-medium-20px-body1 d-flex align-items-center"
                         style={{ marginBottom: "20px" }}
                       >
-                        <img src={oldPasswordIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                        <img
+                          src={oldPasswordIcon}
+                          alt="commercialName"
+                          style={{ marginRight: "16px" }}
+                        />
                         Confirm Password
-
                       </Form.Label>
 
                       <Form.Control
@@ -119,7 +139,9 @@ function DeleteAccount() {
                         placeholder="Enter New Password"
                         value={values.confirm_password}
                         onChange={handleChange}
-                        isValid={touched.confirm_password && !errors.confirm_password}
+                        isValid={
+                          touched.confirm_password && !errors.confirm_password
+                        }
                         isInvalid={!!errors.confirm_password}
                       />
                       {/* {getVisibilityIcon()} */}
@@ -130,15 +152,21 @@ function DeleteAccount() {
                   </Col>
 
                   <Col lg={4}>
-
-                    <Form.Group className="form-group mb-4" controlId="form3Example4" style={{ position: "relative" }}>
+                    <Form.Group
+                      className="form-group mb-4"
+                      controlId="form3Example4"
+                      style={{ position: "relative" }}
+                    >
                       <Form.Label
                         className="roboto-medium-20px-body1 d-flex align-items-center"
                         style={{ marginBottom: "20px" }}
                       >
-                        <img src={oldPasswordIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                        <img
+                          src={oldPasswordIcon}
+                          alt="commercialName"
+                          style={{ marginRight: "16px" }}
+                        />
                         Why are you leaving?
-
                       </Form.Label>
                       <Form.Select
                         aria-label="Default select example"
@@ -148,13 +176,19 @@ function DeleteAccount() {
                         onChange={handleChange}
                         // onBlur={handleBlur}
                         // isValid={touched.reasonToLeave && !errors.reasonToLeave}
-                        isInvalid={touched.reasonToLeave && !!errors.reasonToLeave}
+                        isInvalid={
+                          touched.reasonToLeave && !!errors.reasonToLeave
+                        }
                         className={errors.reasonToLeave ? "border-danger" : ""}
                       >
-                        <option selected value hidden="true">Select</option>
+                        <option selected value hidden="true">
+                          Select
+                        </option>
                         {reasons.map((reason, index) => (
                           // eslint-disable-next-line react/no-array-index-key
-                          <option key={index} value={reason}>{reason}</option>
+                          <option key={index} value={reason}>
+                            {reason}
+                          </option>
                         ))}
                       </Form.Select>
 
@@ -174,7 +208,6 @@ function DeleteAccount() {
                       Delete
                     </Button>
                   </Col>
-
                 </Form>
               )}
             </Formik>

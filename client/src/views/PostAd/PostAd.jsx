@@ -21,6 +21,7 @@ import CompanyInformation from "./CompanyInformation";
 import FAQs from "./FAQs";
 import PdfUploader from "../../components/PdfUploader/PdfUploader";
 import ImagesModal from "../../components/ImageUploader/ImagesModal";
+import TabNavigation from "../../components/TabNavigation/TabNavigation";
 
 function PostAd() {
   const { Formik } = formik;
@@ -278,7 +279,7 @@ function PostAd() {
     <div style={{ position: "relative" }}>
       <TopBanner />
       <Header />
-
+      <TabNavigation />
       <ImagesModal
         showModal={showImagesModal}
         handleClose={() => setShowImagesModal(false)}

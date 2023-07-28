@@ -95,7 +95,7 @@ function ContactInformationForm({
   // };
 
   return (
-    <Container style={{ paddingTop: "40px" }}>
+    <Container fluid style={{ paddingTop: "40px" }}>
       <div
         className="roboto-semi-bold-28px-h2"
         style={{ marginBottom: "40px" }}

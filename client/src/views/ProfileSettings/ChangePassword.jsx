@@ -1,7 +1,5 @@
 import React from "react";
-import {
-  Button, Col, Container, Form, Modal, Row,
-} from "react-bootstrap";
+import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import * as formik from "formik";
 import * as Yup from "yup";
 import Header from "../../components/Navbar/Navbar";
@@ -14,6 +12,7 @@ import confirmPasswordIcon from "../../assets/images/profile-settings/confirm-pa
 // import profile_bg from "../../assets/images/profile-settings/profile-bg.svg";
 import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
+import TabNavigation from "../../components/TabNavigation/TabNavigation";
 
 function ChangePassword() {
   const { Formik } = formik;
@@ -31,22 +30,31 @@ function ChangePassword() {
     new_password: Yup.string()
       .required("Password is required")
       .min(5, "Your password is too short."),
-    confirm_password: Yup.string().required("Passwords must match")
+    confirm_password: Yup.string()
+      .required("Passwords must match")
       .oneOf([Yup.ref("new_password")], "Passwords must match"),
   });
 
   return (
     <>
       <Header />
+      <TabNavigation />
+
       <div className="profile-settings-banner d-flex align-items-center justify-content-between">
         <div style={{ marginLeft: "100px" }}>
           <div className="roboto-bold-36px-h1">Change Password</div>
-          <div className="roboto-regular-18px-body3">Update your information with ease</div>
+          <div className="roboto-regular-18px-body3">
+            Update your information with ease
+          </div>
         </div>
 
-        <div style={{
-          position: "absolute", right: "100px", top: "-28px", display: "flex",
-        }}
+        <div
+          style={{
+            position: "absolute",
+            right: "100px",
+            top: "-28px",
+            display: "flex",
+          }}
         >
           <div style={{ marginTop: "30px" }}>
             <img src={user} alt="user" />
@@ -54,7 +62,11 @@ function ChangePassword() {
         </div>
       </div>
 
-      <Container fluid style={{ marginTop: "100px", marginBottom: "200px" }} className="">
+      <Container
+        fluid
+        style={{ marginTop: "100px", marginBottom: "200px" }}
+        className=""
+      >
         <Row className="justify-content-center">
           <Col lg={10}>
             <Formik
@@ -63,20 +75,24 @@ function ChangePassword() {
               onSubmit={console.log}
               initialValues={initialValues}
             >
-              {({
-                handleSubmit, handleChange, values, touched, errors,
-              }) => (
+              {({ handleSubmit, handleChange, values, touched, errors }) => (
                 <Form noValidate onSubmit={handleSubmit}>
                   <Col lg={4}>
-                    <Form.Group className="form-group mb-4" controlId="form3Example4" style={{ position: "relative" }}>
+                    <Form.Group
+                      className="form-group mb-4"
+                      controlId="form3Example4"
+                      style={{ position: "relative" }}
+                    >
                       <Form.Label
                         className="roboto-medium-20px-body1 d-flex align-items-center"
                         style={{ marginBottom: "20px" }}
                       >
-                        <img src={oldPasswordIcon} alt="commercialName" style={{ marginRight: "16px" }} />
-
+                        <img
+                          src={oldPasswordIcon}
+                          alt="commercialName"
+                          style={{ marginRight: "16px" }}
+                        />
                         Old Password
-
                       </Form.Label>
                       <Form.Control
                         style={{ height: "56px" }}
@@ -98,16 +114,21 @@ function ChangePassword() {
                   </Col>
 
                   <Col lg={4}>
-
-                    <Form.Group className="form-group mb-4" controlId="form3Example4" style={{ position: "relative" }}>
+                    <Form.Group
+                      className="form-group mb-4"
+                      controlId="form3Example4"
+                      style={{ position: "relative" }}
+                    >
                       <Form.Label
                         className="roboto-medium-20px-body1 d-flex align-items-center"
                         style={{ marginBottom: "20px" }}
                       >
-                        <img src={newPasswordIcon} alt="commercialName" style={{ marginRight: "16px" }} />
-
+                        <img
+                          src={newPasswordIcon}
+                          alt="commercialName"
+                          style={{ marginRight: "16px" }}
+                        />
                         New Password
-
                       </Form.Label>
                       <Form.Control
                         style={{ height: "56px" }}
@@ -129,16 +150,21 @@ function ChangePassword() {
                   </Col>
 
                   <Col lg={4}>
-
-                    <Form.Group className="form-group mb-4" controlId="form3Example4" style={{ position: "relative" }}>
+                    <Form.Group
+                      className="form-group mb-4"
+                      controlId="form3Example4"
+                      style={{ position: "relative" }}
+                    >
                       <Form.Label
                         className="roboto-medium-20px-body1 d-flex align-items-center"
                         style={{ marginBottom: "20px" }}
                       >
-                        <img src={confirmPasswordIcon} alt="commercialName" style={{ marginRight: "16px" }} />
-
+                        <img
+                          src={confirmPasswordIcon}
+                          alt="commercialName"
+                          style={{ marginRight: "16px" }}
+                        />
                         Confirm New Password
-
                       </Form.Label>
                       <Form.Control
                         style={{ height: "56px" }}
@@ -149,7 +175,9 @@ function ChangePassword() {
                         placeholder="Confirm New Password"
                         value={values.confirm_password}
                         onChange={handleChange}
-                        isValid={touched.confirm_password && !errors.confirm_password}
+                        isValid={
+                          touched.confirm_password && !errors.confirm_password
+                        }
                         isInvalid={!!errors.confirm_password}
                       />
                       {/* {getVisibilityIcon()} */}
@@ -169,7 +197,6 @@ function ChangePassword() {
                       Save Changes
                     </Button>
                   </Col>
-
                 </Form>
               )}
             </Formik>

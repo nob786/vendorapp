@@ -21,7 +21,7 @@ function ServicesOffered({
   };
 
   return (
-    <Container>
+    <Container fluid>
       <div
         className="roboto-semi-bold-28px-h2"
         style={{ marginBottom: "24px" }}

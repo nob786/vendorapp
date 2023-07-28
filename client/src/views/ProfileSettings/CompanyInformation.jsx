@@ -1,7 +1,5 @@
 import React from "react";
-import {
-  Button, Col, Container, Form, Modal, Row,
-} from "react-bootstrap";
+import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import * as formik from "formik";
 import * as Yup from "yup";
 import Header from "../../components/Navbar/Navbar";
@@ -16,6 +14,7 @@ import bankIcon from "../../assets/images/profile-settings/bank.svg";
 // import profile_bg from "../../assets/images/profile-settings/profile-bg.svg";
 import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
+import TabNavigation from "../../components/TabNavigation/TabNavigation";
 
 function CompanyInformationSettings() {
   const { Formik } = formik;
@@ -35,33 +34,56 @@ function CompanyInformationSettings() {
 
   const Schema = Yup.object().shape({
     // person_name: Yup.string().matches(/^[A-Za-z\s]{1,25}$/, "Invalid input"),
-    company_name: Yup.string().max(25, "String must be at most 25 characters")
+    company_name: Yup.string()
+      .max(25, "String must be at most 25 characters")
       .matches(/^[A-Za-z\s]*$/, "Only letters and spaces are allowed"),
     country: "",
     county: "",
-    municipality: Yup.string().max(25, "String must be at most 25 characters")
+    municipality: Yup.string()
+      .max(25, "String must be at most 25 characters")
       .matches(/^[A-Za-z\s]*$/, "Only letters and spaces are allowed"),
-    commune: Yup.string().max(25, "String must be at most 25 characters")
+    commune: Yup.string()
+      .max(25, "String must be at most 25 characters")
       .matches(/^[A-Za-z\s]*$/, "Only letters and spaces are allowed"),
-    postal_code: Yup.string().matches(/^\d{1,7}$/, "Only up to 7 digits are allowed"),
-    fiscal_code: Yup.string().matches(/^[a-zA-Z0-9]{1,11}$/, "Only up to 11 letters and digits are allowed"),
-    firm_number: Yup.string().matches(/^[\w/.]{1,11}$/, 'Only up to 11 letters, digits, and "/." signs are allowed'),
+    postal_code: Yup.string().matches(
+      /^\d{1,7}$/,
+      "Only up to 7 digits are allowed"
+    ),
+    fiscal_code: Yup.string().matches(
+      /^[a-zA-Z0-9]{1,11}$/,
+      "Only up to 11 letters and digits are allowed"
+    ),
+    firm_number: Yup.string().matches(
+      /^[\w/.]{1,11}$/,
+      'Only up to 11 letters, digits, and "/." signs are allowed'
+    ),
     bank_name: Yup.string().max(30, "Only up to 30 letters are allowed"),
-    bank_iban: Yup.string().matches(/^[a-zA-Z0-9]{1,30}$/, "Only up to 30 letters and digits are allowed"),
+    bank_iban: Yup.string().matches(
+      /^[a-zA-Z0-9]{1,30}$/,
+      "Only up to 30 letters and digits are allowed"
+    ),
   });
 
   return (
     <>
       <Header />
+      <TabNavigation />
+
       <div className="profile-settings-banner d-flex align-items-center justify-content-between">
         <div style={{ marginLeft: "100px" }}>
           <div className="roboto-bold-36px-h1">Company Information</div>
-          <div className="roboto-regular-18px-body3">Update your information with ease</div>
+          <div className="roboto-regular-18px-body3">
+            Update your information with ease
+          </div>
         </div>
 
-        <div style={{
-          position: "absolute", right: "100px", top: "-28px", display: "flex",
-        }}
+        <div
+          style={{
+            position: "absolute",
+            right: "100px",
+            top: "-28px",
+            display: "flex",
+          }}
         >
           <div style={{ marginTop: "30px" }}>
             <img src={user} alt="user" />
@@ -69,7 +91,11 @@ function CompanyInformationSettings() {
         </div>
       </div>
 
-      <Container fluid style={{ marginTop: "100px", marginBottom: "200px" }} className="">
+      <Container
+        fluid
+        style={{ marginTop: "100px", marginBottom: "200px" }}
+        className=""
+      >
         <Row className="justify-content-center">
           <Col lg={10}>
             <Formik
@@ -78,11 +104,8 @@ function CompanyInformationSettings() {
               onSubmit={console.log}
               initialValues={initialValues}
             >
-              {({
-                handleSubmit, handleChange, values, touched, errors,
-              }) => (
+              {({ handleSubmit, handleChange, values, touched, errors }) => (
                 <Form noValidate onSubmit={handleSubmit}>
-
                   <Row className="mb-5">
                     <Col lg={4}>
                       <Form.Group className="mb-4" controlId="form3Example3">
@@ -90,8 +113,11 @@ function CompanyInformationSettings() {
                           className="roboto-medium-20px-body1 d-flex align-items-center"
                           style={{ marginBottom: "20px" }}
                         >
-                          <img src={personIcon} alt="commercialName" style={{ marginRight: "16px" }} />
-
+                          <img
+                            src={personIcon}
+                            alt="commercialName"
+                            style={{ marginRight: "16px" }}
+                          />
                         </Form.Label>
                         <Form.Control
                           style={{ height: "56px" }}
@@ -112,15 +138,20 @@ function CompanyInformationSettings() {
                     </Col>
 
                     <Col lg={4}>
-
-                      <Form.Group className="form-group mb-3" controlId="form3Example4">
+                      <Form.Group
+                        className="form-group mb-3"
+                        controlId="form3Example4"
+                      >
                         <Form.Label
                           className="roboto-medium-20px-body1 d-flex align-items-center"
                           style={{ marginBottom: "20px" }}
                         >
-                          <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                          <img
+                            src={mapIcon}
+                            alt="commercialName"
+                            style={{ marginRight: "16px" }}
+                          />
                           Country
-
                         </Form.Label>
                         <Form.Select
                           aria-label="Default select example"
@@ -128,29 +159,40 @@ function CompanyInformationSettings() {
                           name="reasonToLeave"
                           value={values.reasonToLeave || ""}
                           onChange={handleChange}
-                          isInvalid={touched.reasonToLeave && !!errors.reasonToLeave}
-                          className={errors.reasonToLeave ? "border-danger" : ""}
+                          isInvalid={
+                            touched.reasonToLeave && !!errors.reasonToLeave
+                          }
+                          className={
+                            errors.reasonToLeave ? "border-danger" : ""
+                          }
                         >
-                          <option selected value hidden="true">Select</option>
+                          <option selected value hidden="true">
+                            Select
+                          </option>
                           {/* {reasons.map((reason, index) => (
                             <option key={index} value={reason}>{reason}</option>
                           ))} */}
                         </Form.Select>
                       </Form.Group>
-
                     </Col>
                   </Row>
 
                   <Row className="mb-5">
                     <Col lg={4}>
-                      <Form.Group className="form-group mb-3" controlId="form3Example4">
+                      <Form.Group
+                        className="form-group mb-3"
+                        controlId="form3Example4"
+                      >
                         <Form.Label
                           className="roboto-medium-20px-body1 d-flex align-items-center"
                           style={{ marginBottom: "20px" }}
                         >
-                          <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                          <img
+                            src={mapIcon}
+                            alt="commercialName"
+                            style={{ marginRight: "16px" }}
+                          />
                           County
-
                         </Form.Label>
                         <Form.Select
                           aria-label="Default select example"
@@ -158,10 +200,16 @@ function CompanyInformationSettings() {
                           name="reasonToLeave"
                           value={values.reasonToLeave || ""}
                           onChange={handleChange}
-                          isInvalid={touched.reasonToLeave && !!errors.reasonToLeave}
-                          className={errors.reasonToLeave ? "border-danger" : ""}
+                          isInvalid={
+                            touched.reasonToLeave && !!errors.reasonToLeave
+                          }
+                          className={
+                            errors.reasonToLeave ? "border-danger" : ""
+                          }
                         >
-                          <option selected value hidden="true">Select</option>
+                          <option selected value hidden="true">
+                            Select
+                          </option>
                           {/* {reasons.map((reason, index) => (
                             <option key={index} value={reason}>{reason}</option>
                           ))} */}
@@ -170,14 +218,20 @@ function CompanyInformationSettings() {
                     </Col>
 
                     <Col lg={4}>
-                      <Form.Group className="form-group mb-3" controlId="form3Example4">
+                      <Form.Group
+                        className="form-group mb-3"
+                        controlId="form3Example4"
+                      >
                         <Form.Label
                           className="roboto-medium-20px-body1 d-flex align-items-center"
                           style={{ marginBottom: "20px" }}
                         >
-                          <img src={postalIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                          <img
+                            src={postalIcon}
+                            alt="commercialName"
+                            style={{ marginRight: "16px" }}
+                          />
                           Postal Code
-
                         </Form.Label>
                         <Form.Control
                           style={{ height: "56px" }}
@@ -224,14 +278,20 @@ function CompanyInformationSettings() {
                   </Row>
                   <Row className="mb-5">
                     <Col lg={4}>
-                      <Form.Group className="form-group mb-3" controlId="form3Example4">
+                      <Form.Group
+                        className="form-group mb-3"
+                        controlId="form3Example4"
+                      >
                         <Form.Label
                           className="roboto-medium-20px-body1 d-flex align-items-center"
                           style={{ marginBottom: "20px" }}
                         >
-                          <img src={fiscalIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                          <img
+                            src={fiscalIcon}
+                            alt="commercialName"
+                            style={{ marginRight: "16px" }}
+                          />
                           Fiscal Code
-
                         </Form.Label>
                         <Form.Control
                           style={{ height: "56px" }}
@@ -252,14 +312,20 @@ function CompanyInformationSettings() {
                     </Col>
 
                     <Col lg={4}>
-                      <Form.Group className="form-group mb-3" controlId="form3Example4">
+                      <Form.Group
+                        className="form-group mb-3"
+                        controlId="form3Example4"
+                      >
                         <Form.Label
                           className="roboto-medium-20px-body1 d-flex align-items-center"
                           style={{ marginBottom: "20px" }}
                         >
-                          <img src={firmIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                          <img
+                            src={firmIcon}
+                            alt="commercialName"
+                            style={{ marginRight: "16px" }}
+                          />
                           Firm Number
-
                         </Form.Label>
                         <Form.Control
                           style={{ height: "56px" }}
@@ -281,14 +347,20 @@ function CompanyInformationSettings() {
                   </Row>
                   <Row className="mb-5">
                     <Col lg={4}>
-                      <Form.Group className="form-group mb-3" controlId="form3Example4">
+                      <Form.Group
+                        className="form-group mb-3"
+                        controlId="form3Example4"
+                      >
                         <Form.Label
                           className="roboto-medium-20px-body1 d-flex align-items-center"
                           style={{ marginBottom: "20px" }}
                         >
-                          <img src={bankIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                          <img
+                            src={bankIcon}
+                            alt="commercialName"
+                            style={{ marginRight: "16px" }}
+                          />
                           Bank Name
-
                         </Form.Label>
                         <Form.Control
                           style={{ height: "56px" }}
@@ -309,14 +381,20 @@ function CompanyInformationSettings() {
                     </Col>
 
                     <Col lg={4}>
-                      <Form.Group className="form-group mb-3" controlId="form3Example4">
+                      <Form.Group
+                        className="form-group mb-3"
+                        controlId="form3Example4"
+                      >
                         <Form.Label
                           className="roboto-medium-20px-body1 d-flex align-items-center"
                           style={{ marginBottom: "20px" }}
                         >
-                          <img src={firmIcon} alt="commercialName" style={{ marginRight: "16px" }} />
+                          <img
+                            src={firmIcon}
+                            alt="commercialName"
+                            style={{ marginRight: "16px" }}
+                          />
                           Bank IBAN
-
                         </Form.Label>
                         <Form.Control
                           style={{ height: "56px" }}
@@ -347,7 +425,6 @@ function CompanyInformationSettings() {
                       Save Changes
                     </Button>
                   </Col>
-
                 </Form>
               )}
             </Formik>
