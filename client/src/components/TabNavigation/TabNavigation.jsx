@@ -28,7 +28,7 @@ const tabs = [
   {
     label: "My Ads",
     icon: list,
-    path: "/",
+    path: "/my-ads",
   },
   {
     label: "Settings",
@@ -63,7 +63,7 @@ const TabNavigation = () => {
       className="d-flex align-items-center justify-content-center"
       style={{ height: "50px", width: "100%" }}
     >
-      <div className="d-flex justify-content-between" style={{ width: "40vw" }}>
+      <div className="d-flex justify-content-between" style={{ width: "50vw" }}>
         {tabs.map((tab, index) => (
           <div
             className={`d-flex align-items-center ${

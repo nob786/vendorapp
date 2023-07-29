@@ -11,6 +11,8 @@ import ProfileSettings from "./views/ProfileSettings/ProfileSettings";
 import ProfileView from "./views/ProfileSettings/ProfileView";
 import ProtectedRoute from "./views/ProtectedRoute";
 import { getCookie } from "./utilities/utils";
+import MyAds from "./views/Ads/MyAds";
+import ViewAd from "./views/Ads/ViewAd";
 // import "../src/assets/scss/_buttons.scss"
 function App() {
   // const [count, setCount] = useState(0)
@@ -53,6 +55,22 @@ function App() {
         element={
           <ProtectedRoute>
             <ProfileView />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/my-ads"
+        element={
+          <ProtectedRoute>
+            <MyAds />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/view-ad"
+        element={
+          <ProtectedRoute>
+            <ViewAd />
           </ProtectedRoute>
         }
       />
