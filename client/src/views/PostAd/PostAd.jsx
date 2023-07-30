@@ -43,98 +43,127 @@ function PostAd() {
 
   const handleSubmitAllForms = (values) => {
     // ...(uploadedImages && { imageUploader: { images: uploadedImages } }),
-    const newObj = {
-      ...values,
-      // imageUploader: {
-      //   images: imagesToUpload,
-      // },
-      // pdfUploader: {
-      //   pdfs: pdfsToUpload,
-      // },
-      // VideoUploader: {
-      //   videos: videoToUpload,
-      // },
+    if (imagesError) {
+      return;
+    }
+
+    const objToSubmit = {
       media_urls: {
         images: imagesToUpload,
         video: videoToUpload,
         pdf: pdfsToUpload,
       },
+      website: values.contactInformation.websiteUrl,
+      city: values.contactInformation.city,
+      street: values.contactInformation.street,
+      number: values.contactInformation.contact_number,
+      full_address: values.contactInformation.fullAddress,
+      facebook: values.SocialMedia.facebookURL,
+      instagram: values.SocialMedia.instagramURL,
+      youtube: values.SocialMedia.youtubeURL,
+      tiktok: values.SocialMedia.tiktokURL,
+      twitter: values.SocialMedia.twitterURL,
+      // others: values.SocialMedia.othersURL,
+      offered_services: values.servicesOffered.services,
+      sub_category: parseInt(values.companyInformation.sub_category, 10),
+      related_sub_categories: 1,
+      country: 1,
+      activation_countries: values.companyInformation.country,
     };
+
+    // const newObj = {
+    //   ...values,
+    //   // imageUploader: {
+    //   //   images: imagesToUpload,
+    //   // },
+    //   // pdfUploader: {
+    //   //   pdfs: pdfsToUpload,
+    //   // },
+    //   // VideoUploader: {
+    //   //   videos: videoToUpload,
+    //   // },
+    //   media_urls: {
+    //     images: imagesToUpload,
+    //     video: videoToUpload,
+    //     pdf: pdfsToUpload,
+    //   },
+    //   // values.FAQs
+    // };
     console.log(
       "newObj-------------------------------------------------:",
-      newObj
+      objToSubmit
     );
     // console.log("Form 2 data:", formData2);
     // }
   };
   const Schema = Yup.object().shape({
-    // companyInformation: Yup.object().shape({
-    //   commercial_name: Yup.string().required("Commercial Name is required"),
-    //   category: Yup.string().required("Category is required"),
-    //   sub_category: Yup.string().required("Sub-category is required"),
-    //   description: Yup.string()
-    //     .max(2000, "Must be at most 2000 characters")
-    //     .matches(
-    //       /^[a-zA-Z0-9.,;:'"/?!@&*()^+\-|\s]+$/,
-    //       'Only letters, digits, ".,;:\'/?!@&*()^+-|" signs, and spaces are allowed',
-    //     ),
-    //   // .required("Required"),
-    //   country: Yup.array().min(1, "country is required"),
-    // }),
-    // contactInformation: Yup.object().shape({
-    //   websiteUrl: Yup.string()
-    //     .max(30, "Must be at most 30 characters")
-    //     .matches(
-    //       /^[a-zA-Z0-9.\-+_]+$/,
-    //       'Only letters, digits, ".", "-", "+", and "_" signs are allowed',
-    //     ),
-    //   county: Yup.array().min(1, "country is required"),
-    //   city: Yup.string()
-    //     .max(25, "Must be at most 25 characters")
-    //     .matches(
-    //       /^[a-zA-Z\s-]+$/,
-    //       'Only letters, spaces, and "-" sign are allowed',
-    //     )
-    //     .required("Required"),
-    //   street: Yup.string()
-    //     .max(35, "Must be at most 25 characters")
-    //     .matches(
-    //       /^[a-zA-Z\s-]+$/,
-    //       'Only letters, spaces, and "-" sign are allowed',
-    //     )
-    //     .required("Required"),
-    //   contact_number: Yup.string()
-    //     .max(10, "Must be at most 10 characters")
-    //     .matches(
-    //       /^[a-zA-Z0-9\-/]+$/,
-    //       'Only digits, letters, "-" and "/" signs are allowed',
-    //     )
-    //     .required("Required"),
-    //   fullAddress: Yup.string()
-    //     .max(70, "Must be at most 70 characters")
-    //     .matches(
-    //       /^[a-zA-Z0-9",\-./\s]+$/,
-    //       'Only letters, ",-./" signs, spaces, and digits are allowed',
-    //     )
-    //     .required("Full Address is required"),
-    // }),
-    // SocialMedia: Yup.object().shape({
-    //   facebookURL: Yup.string()
-    //     .max(40, "Must be 40 characters or less")
-    //     .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
-    //   instagramURL: Yup.string()
-    //     .max(40, "Must be 40 characters or less")
-    //     .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
-    //   youtubeURL: Yup.string()
-    //     .max(40, "Must be 40 characters or less")
-    //     .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
-    //   tiktokURL: Yup.string()
-    //     .max(40, "Must be 40 characters or less")
-    //     .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
-    //   twitterURL: Yup.string()
-    //     .max(40, "Must be 40 characters or less")
-    //     .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
-    // }),
+    companyInformation: Yup.object().shape({
+      commercial_name: Yup.string().required("Commercial Name is required"),
+      category: Yup.string().required("Category is required"),
+      sub_category: Yup.string().required("Sub-category is required"),
+      description: Yup.string()
+        .max(2000, "Must be at most 2000 characters")
+        .matches(
+          /^[a-zA-Z0-9.,;:'"/?!@&*()^+\-|\s]+$/,
+          'Only letters, digits, ".,;:\'/?!@&*()^+-|" signs, and spaces are allowed'
+        ),
+      // .required("Required"),
+      country: Yup.array().min(1, "country is required"),
+    }),
+    contactInformation: Yup.object().shape({
+      websiteUrl: Yup.string()
+        .max(30, "Must be at most 30 characters")
+        .matches(
+          /^[a-zA-Z0-9.\-+_]+$/,
+          'Only letters, digits, ".", "-", "+", and "_" signs are allowed'
+        ),
+      county: Yup.array().min(1, "country is required"),
+      city: Yup.string()
+        .max(25, "Must be at most 25 characters")
+        .matches(
+          /^[a-zA-Z\s-]+$/,
+          'Only letters, spaces, and "-" sign are allowed'
+        )
+        .required("Required"),
+      street: Yup.string()
+        .max(35, "Must be at most 25 characters")
+        .matches(
+          /^[a-zA-Z\s-]+$/,
+          'Only letters, spaces, and "-" sign are allowed'
+        )
+        .required("Required"),
+      contact_number: Yup.string()
+        .max(10, "Must be at most 10 characters")
+        .matches(
+          /^[a-zA-Z0-9\-/]+$/,
+          'Only digits, letters, "-" and "/" signs are allowed'
+        )
+        .required("Required"),
+      fullAddress: Yup.string()
+        .max(70, "Must be at most 70 characters")
+        .matches(
+          /^[a-zA-Z0-9",\-./\s]+$/,
+          'Only letters, ",-./" signs, spaces, and digits are allowed'
+        )
+        .required("Full Address is required"),
+    }),
+    SocialMedia: Yup.object().shape({
+      facebookURL: Yup.string()
+        .max(40, "Must be 40 characters or less")
+        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+      instagramURL: Yup.string()
+        .max(40, "Must be 40 characters or less")
+        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+      youtubeURL: Yup.string()
+        .max(40, "Must be 40 characters or less")
+        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+      tiktokURL: Yup.string()
+        .max(40, "Must be 40 characters or less")
+        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+      twitterURL: Yup.string()
+        .max(40, "Must be 40 characters or less")
+        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+    }),
     // Images: Yup.object().shape({
     //   image1: Yup.string().required("Image 1 is required"),
     //   Image2: Yup.string().required("Image 2 is required"),

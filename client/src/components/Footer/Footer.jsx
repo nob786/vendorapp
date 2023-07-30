@@ -1,7 +1,10 @@
 import React from "react";
 import "./Footer.css";
 import {
-  faTwitter, faInstagram, faFacebook, faLinkedin,
+  faTwitter,
+  faInstagram,
+  faFacebook,
+  faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Container } from "react-bootstrap";
@@ -15,7 +18,10 @@ function Footer() {
 
   return (
     <div className="d-flex flex-column h-100" style={{ position: "relative" }}>
-      <footer className="w-100 pt-4 flex-shrink-0" style={{ background: "#000F0D", paddingBottom: "0" }}>
+      <footer
+        className="w-100 pt-4 flex-shrink-0"
+        style={{ background: "#000F0D", paddingBottom: "0" }}
+      >
         <div className="container pt-4" style={{ paddingBottom: "0" }}>
           <Container>
             <div className="row gy-4 gx-5">
@@ -25,7 +31,8 @@ function Footer() {
 
                 {/* <i className="fas fa-brands fa-instagram" style={{ color: "#ffffff" }}></i> */}
                 <p className="roboto-regular-14px-information text-white mt-5">
-                  Maecenas consectetur in a a imperdiet nunc cras ipsum. Consequat sed eu sed pharetra velit.
+                  Maecenas consectetur in a a imperdiet nunc cras ipsum.
+                  Consequat sed eu sed pharetra velit.
                 </p>
               </div>
               <div className="col-lg-4 col-md-6 links-container">
@@ -33,10 +40,38 @@ function Footer() {
                   <li className="col-heading">
                     <h3> Resources </h3>
                   </li>
-                  <li><a href="/" className="roboto-regular-14px-information text-white">For him</a></li>
-                  <li><a href="/" className="roboto-regular-14px-information text-white">For her</a></li>
-                  <li><a href="/" className="roboto-regular-14px-information text-white">Event types</a></li>
-                  <li><a href="/" className="roboto-regular-14px-information text-white">Contact</a></li>
+                  <li style={{ listStyle: "none" }}>
+                    <a
+                      href="/"
+                      className="roboto-regular-14px-information text-white"
+                    >
+                      For him
+                    </a>
+                  </li>
+                  <li style={{ listStyle: "none" }}>
+                    <a
+                      href="/"
+                      className="roboto-regular-14px-information text-white"
+                    >
+                      For her
+                    </a>
+                  </li>
+                  <li style={{ listStyle: "none" }}>
+                    <a
+                      href="/"
+                      className="roboto-regular-14px-information text-white"
+                    >
+                      Event types
+                    </a>
+                  </li>
+                  <li style={{ listStyle: "none" }}>
+                    <a
+                      href="/"
+                      className="roboto-regular-14px-information text-white"
+                    >
+                      Contact
+                    </a>
+                  </li>
                 </ul>
               </div>
               <div className="col-lg-4 col-md-6 links-container">
@@ -45,22 +80,44 @@ function Footer() {
                     <h3> Contact </h3>
                   </li>
                   <div className="d-flex align-items-center">
-                    <FontAwesomeIcon icon={faEnvelope} style={{ color: "#A0C49D", marginRight: "14px" }} />
-                    <li className="p-0 m-0" style={{ textDecoration: "none", listStyle: "none" }}>
-                      <a href="/" className="roboto-regular-14px-information text-white">support@allevents.com</a>
+                    <FontAwesomeIcon
+                      icon={faEnvelope}
+                      style={{ color: "#A0C49D", marginRight: "14px" }}
+                    />
+                    <li
+                      className="p-0 m-0"
+                      style={{ textDecoration: "none", listStyle: "none" }}
+                    >
+                      <a
+                        href="/"
+                        className="roboto-regular-14px-information text-white"
+                      >
+                        support@allevents.com
+                      </a>
                     </li>
                   </div>
                   <div className="d-flex">
                     <div className="d-flex align-items-center">
                       <FontAwesomeIcon
                         icon={faLocationDot}
-                        style={{ color: "#A0C49D", marginRight: "14px", marginLeft: "2px" }}
+                        style={{
+                          color: "#A0C49D",
+                          marginRight: "14px",
+                          marginLeft: "2px",
+                        }}
                       />
                     </div>
                     <div className="d-flex align-items-center">
-                      <li className="p-0 m-0 mt-3" style={{ textDecoration: "none", listStyle: "none" }}>
-                        <a href="/" className="roboto-regular-14px-information text-white text-right">
-                          A cursus turpis eu a pellentesque. Nulla neque donec mauris at.
+                      <li
+                        className="p-0 m-0 mt-3"
+                        style={{ textDecoration: "none", listStyle: "none" }}
+                      >
+                        <a
+                          href="/"
+                          className="roboto-regular-14px-information text-white text-right"
+                        >
+                          A cursus turpis eu a pellentesque. Nulla neque donec
+                          mauris at.
                         </a>
                       </li>
                     </div>
@@ -70,10 +127,26 @@ function Footer() {
                       className="col item social d-flex align-items-center justify-content-between mt-5"
                       style={{ width: "204px" }}
                     >
-                      <FontAwesomeIcon icon={faInstagram} style={{ color: "#FFF" }} size="2xl" />
-                      <FontAwesomeIcon icon={faFacebook} style={{ color: "#FFF" }} size="2xl" />
-                      <FontAwesomeIcon icon={faTwitter} style={{ color: "#FFF" }} size="2xl" />
-                      <FontAwesomeIcon icon={faLinkedin} style={{ color: "#FFF" }} size="2xl" />
+                      <FontAwesomeIcon
+                        icon={faInstagram}
+                        style={{ color: "#FFF" }}
+                        size="2xl"
+                      />
+                      <FontAwesomeIcon
+                        icon={faFacebook}
+                        style={{ color: "#FFF" }}
+                        size="2xl"
+                      />
+                      <FontAwesomeIcon
+                        icon={faTwitter}
+                        style={{ color: "#FFF" }}
+                        size="2xl"
+                      />
+                      <FontAwesomeIcon
+                        icon={faLinkedin}
+                        style={{ color: "#FFF" }}
+                        size="2xl"
+                      />
                     </div>
                   </li>
                 </ul>
@@ -83,7 +156,10 @@ function Footer() {
               className="d-flex align-items-center justify-content-center p-4 mt-3"
               style={{ borderTop: "1px solid #ffffff1a" }}
             >
-              <span className="copyright roboto-regular-14px-information text-white" style={{ opacity: "0.6" }}>
+              <span
+                className="copyright roboto-regular-14px-information text-white"
+                style={{ opacity: "0.6" }}
+              >
                 Allevents © 2023 - All Right Are Reserved
               </span>
             </div>
@@ -92,7 +168,12 @@ function Footer() {
       </footer>
 
       <div style={{ position: "absolute", right: "150px", top: "-40px" }}>
-        <button id="goTop" className="btn-footer-top btn-up" type="button" onClick={handleScrollToTop}>
+        <button
+          id="goTop"
+          className="btn-footer-top btn-up"
+          type="button"
+          onClick={handleScrollToTop}
+        >
           <svg
             fill="#ffffff"
             height="60px"
@@ -137,7 +218,6 @@ function Footer() {
               />
             </g>
           </svg>
-
         </button>
       </div>
     </div>

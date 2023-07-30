@@ -375,7 +375,7 @@ function CompanyInformation({
                 className={
                   errors?.country
                     ? "border-danger country-field"
-                    : "country-field"
+                    : "country-field border-custom"
                 }
                 classNamePrefix="select"
               />

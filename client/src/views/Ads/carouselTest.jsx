@@ -94,7 +94,20 @@ const FAQs = [
 ];
 
 // const images = [image1, image2, image3, image4, image1, image2, image3, image4];
-const images = [image1, image2, image3, image4, image1, image2, image3, image4];
+// const images = [image1, image2, image3, image4, image1, image2, image3, image4];
+const images = [
+  {
+    image1: one,
+    image2: two,
+    image3: three,
+  },
+  {
+    image1: three,
+    image2: two,
+    image3: one,
+  },
+  // Add more slides as needed...
+];
 
 // const slides = [
 //   {
@@ -230,73 +243,50 @@ function CarouselTest() {
             <div className="carousel__container__view__ad">
               <div className="embla__view__ad">
                 <div className="embla__viewport__view__ad" ref={emblaRef}>
-                  {/* <div className="embla__container">
-                    {componentToRender === undefined
-                      ?
-                        slides.map((index) => (
-                          <div className="embla__slide" key={index}>
-                            <img
-                              className="embla__slide__img"
-                              src={imageByIndex(index)}
-                              alt="Your alt text"
-                            />
-                          </div>
-                        ))
-                      : slides.map((index) => componentToRender(index))}
-                  </div> */}
                   <div className="embla__container__view__ad">
-                    {imageChunks.map((chunk, slideIndex) => (
-                      <Row>
-                        {/* Render the first image in the chunk as the main image */}
-                        <Col
-                          sm={12}
-                          md={6}
-                          lg={6}
-                          xl={6}
-                          className="main-image-container"
-                        >
-                          <img
-                            src={chunk[0]}
-                            alt={`Main Image ${slideIndex + 1}`}
-                            className="main-image"
-                          />
-                        </Col>
-                        <Col
-                          sm={12}
-                          md={6}
-                          lg={6}
-                          xl={6}
-                          className="image-stack"
-                        >
-                          {/* Render the other two images in the chunk as stacked images */}
-                          <img
-                            src={chunk[1]}
-                            alt={`Stacked Image ${slideIndex + 1}`}
-                            className="stacked-image"
-                          />
-                          <img
-                            src={chunk[2]}
-                            alt={`Stacked Image ${slideIndex + 1}`}
-                            className="stacked-image"
-                          />
-                        </Col>
-                      </Row>
+                    {images.map((slide, index) => (
+                      <div key={index} className="carousel-slide">
+                        <Row>
+                          <Col
+                            sm={6}
+                            md={6}
+                            lg={6}
+                            xl={6}
+                            className="main-image-container"
+                          >
+                            <img
+                              src={slide.image1}
+                              alt="image1"
+                              className="main-image"
+                            />
+                          </Col>
+
+                          <Col
+                            sm={6}
+                            md={6}
+                            lg={6}
+                            xl={6}
+                            className="image-stack"
+                          >
+                            <img
+                              src={slide.image2}
+                              alt="Image2"
+                              className="stacked-image"
+                            />
+                            <img
+                              src={slide.image3}
+                              alt="Image3"
+                              className="stacked-image"
+                            />
+                          </Col>
+                        </Row>
+                      </div>
                     ))}
                   </div>
                 </div>
                 <PrevButton onClick={scrollPrev} enabled={prevBtnEnabled} />
                 <NextButton onClick={scrollNext} enabled={nextBtnEnabled} />
               </div>
-
-              {/* <div className="embla__dots__view__ad">
-                {visibleDots.map((_, index) => (
-                  <DotButton
-                    key={index}
-                    selected={index === selectedIndex}
-                    onClick={() => scrollTo(index)}
-                  />
-                ))}
-              </div> */}
             </div>
             {/* <div ref={carouselRef} className="carousel">
               {slides.map((slide, index) => (

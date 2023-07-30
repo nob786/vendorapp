@@ -15,7 +15,10 @@
 }
 
 .country-field .select__control {
-  /* height: 56px; */
+  min-height: 56px;
+}
+.border-custom .select__control {
+  border-color: #797979;
 }
 
 .postAdBanner1:hover {

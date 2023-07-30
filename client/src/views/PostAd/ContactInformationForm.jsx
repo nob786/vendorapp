@@ -156,7 +156,7 @@ function ContactInformationForm({
               placeholder="Enter websiteUrl"
               value={values.websiteUrl}
               onChange={handleChange}
-              isValid={touched.websiteUrl && !errors.websiteUrl}
+              // isValid={touched.websiteUrl && !errors.websiteUrl}
               isInvalid={!!errors.websiteUrl}
             />
             <Form.Control.Feedback type="invalid">
@@ -213,7 +213,7 @@ function ContactInformationForm({
               className={
                 errors?.country
                   ? "border-danger country-field"
-                  : "country-field"
+                  : "country-field border-custom"
               }
               classNamePrefix="select"
             />
