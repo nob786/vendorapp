@@ -1,9 +1,20 @@
-import React from "react";
-import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Modal,
+  Row,
+  Spinner,
+} from "react-bootstrap";
 import * as formik from "formik";
 import * as Yup from "yup";
+import { useSelector } from "react-redux";
+import { Alert } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/Navbar/Navbar";
-import user from "../../assets/images/profile-settings/user.svg";
+import userIcon from "../../assets/images/profile-settings/user.svg";
 import oldPasswordIcon from "../../assets/images/profile-settings/old-password.svg";
 import confirmPasswordIcon from "../../assets/images/profile-settings/confirm-password.svg";
 import questionIcon from "../../assets/images/profile-settings/question.svg";
@@ -13,11 +24,17 @@ import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
+import { deleteCookie } from "../../utilities/utils";
 
 const reasons = ["I want to", "I am not satisfied"];
 
 function DeleteAccount() {
   const { Formik } = formik;
+  const navigate = useNavigate();
+
+  const [isFailedAlert, setIsFailedAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const user = useSelector((state) => state.auth.user);
 
   const initialValues = {
     password: "",
@@ -35,12 +52,30 @@ function DeleteAccount() {
       .oneOf([Yup.ref("password")], "Passwords must match"),
   });
 
+  const handleFailedAlert = () => {
+    setIsFailedAlert(true);
+    setTimeout(() => {
+      setIsFailedAlert(false);
+    }, 3000);
+  };
+
   const handleDeleteAccount = async (vales) => {
     console.log(vales);
-    const request = await secure_instance.request({
-      url: "/api/users/me/",
-      method: "Patch",
-    });
+    try {
+      setLoading(true);
+      const request = await secure_instance.request({
+        url: `/api/users/${user.userId}/`,
+        method: "Patch",
+      });
+      setLoading(false);
+      deleteCookie("refresh_token");
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
+    } catch (error) {
+      handleFailedAlert();
+      setLoading(false);
+    }
   };
 
   return (
@@ -65,10 +100,26 @@ function DeleteAccount() {
           }}
         >
           <div style={{ marginTop: "30px" }}>
-            <img src={user} alt="user" />
+            <img src={userIcon} alt="user" />
           </div>
         </div>
       </div>
+
+      <Alert
+        severity="error"
+        variant="filled"
+        style={{
+          position: "fixed",
+          top: isFailedAlert ? "80px" : "-80px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          transition: "ease 200ms",
+          opacity: isFailedAlert ? 1 : 0,
+          // width: "150px",
+        }}
+      >
+        Something went wrong
+      </Alert>
 
       <Container
         fluid
@@ -177,14 +228,26 @@ function DeleteAccount() {
                         />
                         Why are you leaving?
                       </Form.Label>
-                      <Form.Select
+                      <Form.Control
+                        style={{ height: "56px" }}
+                        className="hide-validation-icon lg-input-small-text"
+                        name="reasonToLeave"
+                        type="text"
+                        size="lg"
+                        placeholder="Let us know what made you leave"
+                        value={values.reasonToLeave}
+                        onChange={handleChange}
+                        // isValid={
+                        //   touched.reasonToLeave && !errors.reasonToLeave
+                        // }
+                        isInvalid={!!errors.reasonToLeave}
+                      />
+                      {/* <Form.Select
                         aria-label="Default select example"
                         style={{ height: "56px" }}
                         name="reasonToLeave"
                         value={values.reasonToLeave || ""}
                         onChange={handleChange}
-                        // onBlur={handleBlur}
-                        // isValid={touched.reasonToLeave && !errors.reasonToLeave}
                         isInvalid={
                           touched.reasonToLeave && !!errors.reasonToLeave
                         }
@@ -194,12 +257,11 @@ function DeleteAccount() {
                           Select
                         </option>
                         {reasons.map((reason, index) => (
-                          // eslint-disable-next-line react/no-array-index-key
                           <option key={index} value={reason}>
                             {reason}
                           </option>
                         ))}
-                      </Form.Select>
+                      </Form.Select> */}
 
                       {/* <Form.Control.Feedback type="invalid">
                         {errors.confirm_password}
@@ -210,11 +272,17 @@ function DeleteAccount() {
                   <Col className="d-flex justify-content-end">
                     <Button
                       type="submit"
+                      disabled={loading}
                       // onClick={handleClickSubmit}
                       style={{ marginTop: "8rem", width: "30%" }}
                       className="btn btn-success roboto-semi-bold-16px-information btn-lg"
                     >
-                      Delete
+                      {loading ? (
+                        // "Loading…"
+                        <Spinner animation="border" size="sm" />
+                      ) : (
+                        "Delete"
+                      )}
                     </Button>
                   </Col>
                 </Form>

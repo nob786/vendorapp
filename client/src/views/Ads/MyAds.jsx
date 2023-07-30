@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 // import * as formik from "formik";
 // import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/Navbar/Navbar";
 import AdTemp from "../../assets/images/post-ad/ad-temp.svg";
 import TimeIcon from "../../assets/images/post-ad/carbon_time.svg";
@@ -30,7 +31,6 @@ import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
 import "./Ads.css";
-import { useNavigate } from "react-router-dom";
 
 const AdsList = [
   {
@@ -171,6 +171,7 @@ function MyAds() {
                                     src={gotoIcon}
                                     alt="gotoIcon"
                                     className="me-3"
+                                    onClick={() => navigate(`/view-ad/${id}`)}
                                   />
                                   <img
                                     src={deleteIcon}

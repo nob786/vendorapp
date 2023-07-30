@@ -67,7 +67,7 @@ function App() {
         }
       />
       <Route
-        path="/view-ad"
+        path="/view-ad/:adId"
         element={
           <ProtectedRoute>
             <ViewAd />

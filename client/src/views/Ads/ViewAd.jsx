@@ -12,6 +12,10 @@ import {
 } from "react-bootstrap";
 // import * as formik from "formik";
 // import * as Yup from "yup";
+import { useNavigate, useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/fontawesome-free-solid";
+import useEmblaCarousel from "embla-carousel-react";
 import Header from "../../components/Navbar/Navbar";
 import InstaIcon from "../../assets/images/post-ad/insta-outlined.svg";
 import FbIcon from "../../assets/images/post-ad/fb-outlined.svg";
@@ -35,10 +39,6 @@ import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
 import "./Ads.css";
-import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/fontawesome-free-solid";
-import useEmblaCarousel from "embla-carousel-react";
 import CarouselTest from "./carouselTest";
 // import { NextButton, PrevButton } from "../../components/Carousel/Carousel";
 
@@ -170,7 +170,8 @@ function ViewAd() {
   // const navigate = useNavigate();
 
   const [currentTab, setCurrentTab] = useState(1);
-
+  const params = useParams();
+  console.log(params); // 👉️
   // const { slides, options, componentToRender } = props;
   const options = { slidesToScroll: "auto", containScroll: "trimSnaps" };
 
@@ -202,6 +203,10 @@ function ViewAd() {
   // const onInit = useCallback((emblaApi) => {
   //   setScrollSnaps(emblaApi.scrollSnapList());
   // }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const onSelect = useCallback((emblaApi) => {
     // setSelectedIndex(emblaApi.selectedScrollSnap());

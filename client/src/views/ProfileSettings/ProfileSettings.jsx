@@ -50,7 +50,7 @@ function ProfileSettings({ setCurrentView }) {
         className=""
       >
         <Row className="justify-content-center">
-          <Col lg={7}>
+          <Col md={11} lg={9} xl={8}>
             <Row className="mb-5">
               <Col md={6}>
                 <Card

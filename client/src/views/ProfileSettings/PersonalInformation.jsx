@@ -1,7 +1,17 @@
-import React from "react";
-import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Modal,
+  Row,
+  Spinner,
+} from "react-bootstrap";
 import * as formik from "formik";
 import * as Yup from "yup";
+import { useSelector } from "react-redux";
+import { Alert } from "@mui/material";
 import Header from "../../components/Navbar/Navbar";
 import user from "../../assets/images/profile-settings/user.svg";
 import personIcon from "../../assets/images/profile-settings/person.svg";
@@ -11,22 +21,84 @@ import contactIcon from "../../assets/images/post-ad/contact.svg";
 import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
+import { secure_instance } from "../../axios/axios-config";
 
 function PersonalInformation() {
   const { Formik } = formik;
 
+  const [personalInfo, setPersonalInfo] = useState("");
+  const [isAlert, setIsAlert] = useState(false);
+  const [isFailedAlert, setIsFailedAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
+  // const user = useSelector((state) => state.auth.user);
+
   const initialValues = {
-    person_name: "",
-    person_number: "",
+    person_firstName: personalInfo.first_name,
+    person_lastName: personalInfo.last_name,
+    person_number: personalInfo.phone,
   };
 
   const Schema = Yup.object().shape({
-    person_name: Yup.string().matches(/^[A-Za-z\s]{1,25}$/, "Invalid input"),
-    person_number: Yup.string().matches(
-      /^\+?[0-9]{1,15}$/,
-      "Invalid phone number"
-    ),
+    person_firstName: Yup.string()
+      .matches(/^[A-Za-z\s]{1,25}$/, "Invalid input")
+      .required("Required"),
+    person_lastName: Yup.string()
+      .matches(/^[A-Za-z\s]{1,25}$/, "Invalid input")
+      .required("Required"),
+    person_number: Yup.string()
+      .matches(/^\+?[0-9]{1,15}$/, "Invalid phone number")
+      .required("Required"),
   });
+
+  const getPersonalInfo = async () => {
+    // console.log(values);
+
+    const request = await secure_instance.request({
+      url: "/api/users/me/",
+      method: "Get",
+    });
+    setPersonalInfo(request.data.data);
+  };
+
+  const handleAlert = () => {
+    setIsAlert(true);
+    setTimeout(() => {
+      setIsAlert(false);
+    }, 3000);
+  };
+  const handleFailedAlert = () => {
+    setIsFailedAlert(true);
+    setTimeout(() => {
+      setIsFailedAlert(false);
+    }, 3000);
+  };
+
+  const handleUpdateUserInfo = async (values) => {
+    try {
+      setLoading(true);
+      const request = await secure_instance.request({
+        url: "/api/users/me/",
+        method: "Patch",
+        data: {
+          first_name: values.person_firstName,
+          last_name: values.person_lastName,
+          phone: values.person_number,
+        },
+      });
+
+      handleAlert();
+      setPersonalInfo(request.data.data);
+      setLoading(false);
+    } catch (error) {
+      handleFailedAlert();
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // console.log("whaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    getPersonalInfo();
+  }, []);
 
   return (
     <>
@@ -55,6 +127,38 @@ function PersonalInformation() {
         </div>
       </div>
 
+      <Alert
+        severity="success"
+        variant="filled"
+        style={{
+          position: "fixed",
+          top: isAlert ? "80px" : "-80px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          transition: "ease 200ms",
+          opacity: isAlert ? 1 : 0,
+          // width: "150px",
+        }}
+      >
+        Updated successfully
+      </Alert>
+
+      <Alert
+        severity="error"
+        variant="filled"
+        style={{
+          position: "fixed",
+          top: isFailedAlert ? "80px" : "-80px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          transition: "ease 200ms",
+          opacity: isFailedAlert ? 1 : 0,
+          // width: "150px",
+        }}
+      >
+        Something went wrong
+      </Alert>
+
       <Container
         fluid
         style={{ marginTop: "100px", marginBottom: "200px" }}
@@ -65,8 +169,9 @@ function PersonalInformation() {
             <Formik
               validationSchema={Schema}
               // onSubmit={handleNextStep}
-              onSubmit={console.log}
+              onSubmit={handleUpdateUserInfo}
               initialValues={initialValues}
+              enableReinitialize
             >
               {({ handleSubmit, handleChange, values, touched, errors }) => (
                 <Form noValidate onSubmit={handleSubmit}>
@@ -86,17 +191,32 @@ function PersonalInformation() {
                       <Form.Control
                         style={{ height: "56px" }}
                         className="lg-input-small-text"
-                        name="person_name"
+                        name="person_firstName"
                         type="text"
                         size="lg"
-                        placeholder="Enter Name"
-                        value={values.person_name}
+                        placeholder="Enter First Name"
+                        value={values.person_firstName}
                         onChange={handleChange}
-                        // isValid={touched.person_name && !errors.person_name}
-                        isInvalid={!!errors.person_name}
+                        // isValid={touched.person_firstName && !errors.person_firstName}
+                        isInvalid={!!errors.person_firstName}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.person_name}
+                        {errors.person_firstName}
+                      </Form.Control.Feedback>
+                      <Form.Control
+                        style={{ height: "56px" }}
+                        className="lg-input-small-text mt-3"
+                        name="person_lastName"
+                        type="text"
+                        size="lg"
+                        placeholder="Enter Last Name"
+                        value={values.person_lastName}
+                        onChange={handleChange}
+                        // isValid={touched.person_lastName && !errors.person_lastName}
+                        isInvalid={!!errors.person_lastName}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.person_lastName}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -136,11 +256,17 @@ function PersonalInformation() {
                   <Col className="d-flex justify-content-end">
                     <Button
                       type="submit"
+                      disabled={loading}
                       // onClick={handleClickSubmit}
                       style={{ marginTop: "8rem", width: "30%" }}
                       className="btn btn-success roboto-semi-bold-16px-information btn-lg"
                     >
-                      Save Changes
+                      {loading ? (
+                        // "Loading…"
+                        <Spinner animation="border" size="sm" />
+                      ) : (
+                        "Save Changes"
+                      )}
                     </Button>
                   </Col>
                 </Form>

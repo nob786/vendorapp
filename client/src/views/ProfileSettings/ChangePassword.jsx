@@ -1,7 +1,16 @@
-import React from "react";
-import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Modal,
+  Row,
+  Spinner,
+} from "react-bootstrap";
 import * as formik from "formik";
 import * as Yup from "yup";
+import { Alert } from "@mui/material";
 import Header from "../../components/Navbar/Navbar";
 import user from "../../assets/images/profile-settings/user.svg";
 import oldPasswordIcon from "../../assets/images/profile-settings/old-password.svg";
@@ -17,6 +26,9 @@ import { secure_instance } from "../../axios/axios-config";
 
 function ChangePassword() {
   const { Formik } = formik;
+  const [isAlert, setIsAlert] = useState(false);
+  const [isFailedAlert, setIsFailedAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const initialValues = {
     old_password: "",
@@ -36,15 +48,36 @@ function ChangePassword() {
       .oneOf([Yup.ref("new_password")], "Passwords must match"),
   });
 
+  const handleAlert = () => {
+    setIsAlert(true);
+    setTimeout(() => {
+      setIsAlert(false);
+    }, 3000);
+  };
+  const handleFailedAlert = () => {
+    setIsFailedAlert(true);
+    setTimeout(() => {
+      setIsFailedAlert(false);
+    }, 3000);
+  };
+
   const handleResetPassword = async (values) => {
-    const request = await secure_instance.request({
-      url: "/api/users/update-password/",
-      method: "Patch",
-      data: {
-        old_password: values.old_password,
-        new_password: values.new_password,
-      },
-    });
+    try {
+      setLoading(true);
+      const request = await secure_instance.request({
+        url: "/api/users/update-password/",
+        method: "Patch",
+        data: {
+          old_password: values.old_password,
+          new_password: values.new_password,
+        },
+      });
+      handleAlert();
+      setLoading(false);
+    } catch (error) {
+      handleFailedAlert();
+      setLoading(false);
+    }
     // request
   };
 
@@ -74,6 +107,38 @@ function ChangePassword() {
           </div>
         </div>
       </div>
+
+      <Alert
+        severity="success"
+        variant="filled"
+        style={{
+          position: "fixed",
+          top: isAlert ? "80px" : "-80px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          transition: "ease 200ms",
+          opacity: isAlert ? 1 : 0,
+          // width: "150px",
+        }}
+      >
+        Updated successfully
+      </Alert>
+
+      <Alert
+        severity="error"
+        variant="filled"
+        style={{
+          position: "fixed",
+          top: isFailedAlert ? "80px" : "-80px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          transition: "ease 200ms",
+          opacity: isFailedAlert ? 1 : 0,
+          // width: "150px",
+        }}
+      >
+        Something went wrong
+      </Alert>
 
       <Container
         fluid
@@ -210,11 +275,17 @@ function ChangePassword() {
                   <Col className="d-flex justify-content-end">
                     <Button
                       type="submit"
+                      disabled={loading}
                       // onClick={handleClickSubmit}
                       style={{ marginTop: "8rem", width: "30%" }}
                       className="btn btn-success roboto-semi-bold-16px-information btn-lg"
                     >
-                      Save Changes
+                      {loading ? (
+                        // "Loading…"
+                        <Spinner animation="border" size="sm" />
+                      ) : (
+                        "Save Changes"
+                      )}
                     </Button>
                   </Col>
                 </Form>

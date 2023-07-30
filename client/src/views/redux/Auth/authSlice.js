@@ -19,7 +19,7 @@ const initialState = {
 // Asynchronous action to handle login
 export const handleRegister = createAsyncThunk(
   "auth/register",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     try {
       const response = await instance.request({
         url: "/api/companies/",
@@ -28,27 +28,33 @@ export const handleRegister = createAsyncThunk(
       });
       // window.location.replace("/");
       return response.data; // Assuming your loginAPI returns data with access_token, user_id, and role_id
-    } catch (error) {
+    } catch (err) {
       // Handle login error here if needed
-      throw error;
+      return rejectWithValue(err.response.data);
     }
   }
 );
 
 export const handleLogin = createAsyncThunk(
   "auth/login",
-  async ({ email, password }) => {
-    const response = await instance.request({
-      url: "/api/token/?accept=application/json",
-      method: "Post",
-      data: {
-        email,
-        password,
-      },
-    });
-    setCookie("refresh_token", response.data.refresh, 7);
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      const response = await instance.request({
+        url: "/api/token/?accept=application/json",
+        method: "Post",
+        data: {
+          email,
+          password,
+        },
+      });
+      setCookie("refresh_token", response.data.refresh, 7);
 
-    return response.data; // Assuming your loginAPI returns data with access_token, user_id, and role_id
+      return response.data; // Assuming your loginAPI returns data with access_token, user_id, and role_id
+    } catch (err) {
+      // Use `err.response.data` as `action.payload` for a `rejected` action,
+      // by explicitly returning it using the `rejectWithValue()` utility
+      return rejectWithValue(err.response.data);
+    }
   }
 );
 
@@ -120,8 +126,9 @@ export const authSlice = createSlice({
         state.isLoggedInState = true;
       })
       .addCase(handleLogin.rejected, (state, action) => {
+        // console.log(action);
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload;
       })
       .addCase(handleRegister.pending, (state) => {
         state.loading = true;
@@ -141,7 +148,7 @@ export const authSlice = createSlice({
       })
       .addCase(handleRegister.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload;
       })
       .addCase(refreshToken.fulfilled, (state, action) => {
         const { access } = action.payload;

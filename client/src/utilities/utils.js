@@ -21,3 +21,11 @@ export const getCookie = function (cname) {
 
   return token.split("=")[1];
 };
+
+export const deleteCookie = function (cname) {
+  // const d = new Date();
+  // d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+
+  const expires = "expires=" + "Thu, 01 Jan 1970 00:00:00 GMT";
+  document.cookie = `${cname}=${""};${expires};path=/`;
+};
