@@ -42,7 +42,10 @@ function PostAd() {
   const [videoToPreview, setVideoToPreview] = useState([]);
   const [videoToUpload, setVideoToUpload] = useState([]);
   const [showImagesModal, setShowImagesModal] = useState(false);
+  const [relatedSubCategoryId, setRelatedSubCategoryId] = useState(null);
   const dispatch = useDispatch();
+
+  console.log({ relatedSubCategoryId });
 
   const handleSubmitAllForms = (values) => {
     // ...(uploadedImages && { imageUploader: { images: uploadedImages } }),
@@ -77,7 +80,9 @@ function PostAd() {
       // others: values.SocialMedia.othersURL,
       offered_services: values.servicesOffered.services,
       sub_category: parseInt(values.companyInformation.sub_category, 10),
-      related_sub_categories: 1,
+      ...(relatedSubCategoryId !== null && {
+        related_sub_categories: relatedSubCategoryId,
+      }),
       country: 1,
       activation_countries: values.companyInformation.country,
       faqs: values.FAQ.faqs,
@@ -121,7 +126,48 @@ function PostAd() {
           'Only letters, digits, ".,;:\'/?!@&*()^+-|" signs, and spaces are allowed'
         ),
       // .required("Required"),
-      country: Yup.array().min(1, "country is required"),
+      country: Yup.mixed().when({
+        is: (value) => value !== undefined, // Apply the validation when the field is present
+        then: () =>
+          Yup.lazy((value) => {
+            if (Array.isArray(value)) {
+              // If it's an array, apply array validation and validate the array elements
+              return Yup.array()
+                .of(
+                  Yup.lazy((element) => {
+                    // Define validation for each array element based on its type
+                    if (typeof element === "string") {
+                      return Yup.string();
+                    } else if (typeof element === "number") {
+                      return Yup.number().integer();
+                    } else if (typeof element === "object") {
+                      return Yup.object({
+                        // Add your object schema here for array elements that are objects...
+                      });
+                    } else {
+                      // Return null or throw an error if none of the types match
+                      throw new Error("Invalid array element");
+                    }
+                  })
+                )
+                .required("Array must not be empty"); // You can customize this error message
+            } else if (typeof value === "object") {
+              // If it's an object, define the object shape
+              return Yup.object({
+                // Add your object schema here...
+              });
+            } else if (typeof value === "number") {
+              // If it's a number, apply integer validation
+              return Yup.number().integer();
+            } else if (typeof value === "string") {
+              // If it's a string, apply string validation
+              return Yup.string();
+            }
+
+            // Return null or throw an error if none of the types match
+            throw new Error("Invalid field type");
+          }),
+      }),
     }),
     contactInformation: Yup.object().shape({
       websiteUrl: Yup.string()
@@ -273,6 +319,8 @@ function PostAd() {
     console.log("submit clickedddddddddddd");
   };
 
+  console.log("imagesToUpload", imagesToUpload);
+
   const handleAddFAQ = (index, values, setValues) => {
     const currentFAQ = values.FAQ.faqs[index];
     currentFAQ.added = true;
@@ -362,7 +410,7 @@ function PostAd() {
       <TopBanner />
       <Header />
       <TabNavigation />
-      <ImagesModal
+      {/* <ImagesModal
         showModal={showImagesModal}
         handleClose={() => setShowImagesModal(false)}
         setShowImagesModal={setShowImagesModal}
@@ -372,7 +420,7 @@ function PostAd() {
         setImagesError={setImagesError}
         imagesToUpload={imagesToUpload}
         setImagesToUpload={setImagesToUpload}
-      />
+      /> */}
 
       <div className="ad-banner d-flex align-items-center justify-content-between">
         <div style={{ marginLeft: "100px" }}>
@@ -434,6 +482,8 @@ function PostAd() {
                   touched={touched.companyInformation ?? touched}
                   selectedCountries={selectedCountries}
                   setSelectedCountries={setSelectedCountries}
+                  relatedSubCategoryId={relatedSubCategoryId}
+                  setRelatedSubCategoryId={setRelatedSubCategoryId}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
                 />
@@ -447,6 +497,13 @@ function PostAd() {
                   setImagesError={setImagesError}
                   // imagesToUpload={imagesToUpload}
                   // setImagesToUpload={setImagesToUpload}
+                  // setShowImagesModal={setShowImagesModal}
+                  // setparentImagesUploadedImages={handleImageUpdates}
+                  // uploadedImages={imagesToPreview}
+                  // imagesError={imagesError}
+                  // setImagesError={setImagesError}
+                  imagesToUpload={imagesToUpload}
+                  setImagesToUpload={setImagesToUpload}
                 />
 
                 <VideoUploader

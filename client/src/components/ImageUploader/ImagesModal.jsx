@@ -5,17 +5,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd, faClose } from "@fortawesome/free-solid-svg-icons";
 import { secure_instance } from "../../axios/axios-config";
 function ImagesModal({
-  showModal,
-  handleClose,
   setparentImagesUploadedImages,
-  imagesError,
   setImagesError,
-  setShowImagesModal,
-  uploadedImages,
   imagesToUpload,
   setImagesToUpload,
+  showModal,
+  handleClose,
+  imagesError,
+  setShowImagesModal,
+  uploadedImages,
 }) {
-  const [images, setImages] = useState(Array(50).fill(null));
+  const [images, setImages] = useState([]);
 
   // const toggleImagesModal = (event, image) => {
   //   setShowImagesModal(true);
@@ -23,17 +23,23 @@ function ImagesModal({
   // };
 
   const uploadFileToCloud = async (uploadedImage) => {
-    const imageToUpload = {
-      file_name: uploadedImage.name,
-      content_type: uploadedImage.type,
-      upload_type: "images",
-    };
-    const request = await secure_instance.request({
-      url: "/api/ads/upload-url/",
-      method: "Post",
-      data: imageToUpload,
-    });
-    setImagesToUpload([...imagesToUpload, request.data.data.upload_url]);
+    const formData = new FormData(); // pass in the form
+    formData.append("file", uploadedImage);
+    formData.append("content_type", uploadedImage.type);
+
+    try {
+      const request = await secure_instance.request({
+        url: "/api/ads/upload-url/",
+        method: "Post",
+        data: formData,
+      });
+
+      setImagesToUpload([...imagesToUpload, request.data.data.file_url]);
+      // setImageUrlToUpload(response.data.data);
+    } catch (e) {
+      // --------- WILL ROUTE ON SOME PAGE ON FAILURE ---------
+      console.log("error", e);
+    }
   };
 
   const handleImageUpload = (event, index) => {
@@ -44,10 +50,10 @@ function ImagesModal({
     const reader = new FileReader();
 
     reader.onload = () => {
-      updatedImages[index] = {
+      updatedImages.push({
         file: uploadedImage,
         previewURL: reader.result,
-      };
+      });
       setImages(updatedImages);
     };
     console.log("uploadedImage", uploadedImage);
@@ -59,172 +65,171 @@ function ImagesModal({
     reader.readAsDataURL(uploadedImage);
   };
 
-  // const handleSelectedImage = async (e) => {
-  // 	e.preventDefault();
+  const removeImage = async (image, index) => {
+    const urlToDelete = imagesToUpload[index];
 
-  // 	setLoadingImage(true);
-  // 	setSelectedImage(e.target.files[0]);
+    try {
+      const request = await secure_instance.request({
+        url: "/api/ads/delete-url/",
+        method: "Post",
+        data: {
+          url: urlToDelete,
+        },
+      });
 
-  // const formData = new FormData(); // pass in the form
-  // formData.append("image", e.target.files[0]);
+      if (request.status_code === 200) {
+        const imageIndex = images.indexOf(image);
 
-  // try {
-  // 	const response = await secure_instance.request({
-  // 		url: postImageURL,
-  // 		method: "Post",
-  // 		data: formData,
-  // 		headers: {
-  // 			"Content-Type": `multipart/form-data; boundary=${formData._boundary}`
-  // 		}
-  // 		});
+        const cloneImages = [...images];
 
-  // 		setImageUrlToUpload(response.data.data);
-  // 	} catch (e) {
-  // 		// --------- WILL ROUTE ON SOME PAGE ON FAILURE ---------
-  // 		console.log("error", e);
-  // 	}
+        if (imageIndex !== -1) {
+          cloneImages.splice(index, 1);
+        }
 
-  // 	e.target.value = "";
-  // };
+        setImages(cloneImages);
+      }
+    } catch (err) {}
 
-  const removeImage = (index) => {
-    console.log("index to be removed", index);
-    const updatedImages = [...images];
-    updatedImages[index] = null;
-    setImages(updatedImages);
-    setparentImagesUploadedImages(updatedImages);
+    const imageIndex = images.indexOf(image);
+
+    const cloneImages = [...images];
+
+    if (imageIndex !== -1) {
+      cloneImages.splice(index, 1);
+    }
+
+    setImages(cloneImages);
   };
 
   return (
-    <Modal
-      show={showModal}
-      onHide={handleClose}
-      dialogClassName="modal-90w"
-      aria-labelledby="example-custom-modal-styling-title"
-      centered="true"
-    >
-      <div className="box" style={{ position: "absolute", right: "0" }} />
-      <div
-        style={{
-          position: "absolute",
-          right: "10px",
-          top: "8px",
-          zIndex: "20",
-        }}
-      >
-        <div role="presentation" onClick={handleClose} className="close-icon">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 18 18"
-            fill="none"
-            style={{ cursor: "pointer" }}
-          >
-            <path
-              d="M17 1L1 17M1 1L17 17"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-      </div>
+    // <Modal
+    //   show={showModal}
+    //   onHide={handleClose}
+    //   dialogClassName="modal-90w"
+    //   aria-labelledby="example-custom-modal-styling-title"
+    //   centered="true"
+    // >
+    //   <div className="box" style={{ position: "absolute", right: "0" }} />
+    //   <div
+    //     style={{
+    //       position: "absolute",
+    //       right: "10px",
+    //       top: "8px",
+    //       zIndex: "20",
+    //     }}
+    //   >
+    //     <div role="presentation" onClick={handleClose} className="close-icon">
+    //       <svg
+    //         xmlns="http://www.w3.org/2000/svg"
+    //         width="18"
+    //         height="18"
+    //         viewBox="0 0 18 18"
+    //         fill="none"
+    //         style={{ cursor: "pointer" }}
+    //       >
+    //         <path
+    //           d="M17 1L1 17M1 1L17 17"
+    //           strokeWidth="2"
+    //           strokeLinecap="round"
+    //           strokeLinejoin="round"
+    //         />
+    //       </svg>
+    //     </div>
+    //   </div>
 
-      <Container
-        fluid
-        style={{
-          height: "auto",
-          padding: "100px 50px",
-          overflowY: "scroll",
-          maxHeight: "700px",
-        }}
-      >
-        <Row className="h-100 col-12 g-0 flex-column-reverse flex-md-row">
-          <div className="d-flex" style={{ flexWrap: "wrap" }}>
-            {images.map((image, index) => (
-              <Col md={3} lg={3} key={index}>
-                {/* {console.log({ index })} */}
-                <div className="mb-5">
-                  {image !== null ? (
-                    <div
+    <Container
+      fluid
+      style={{
+        height: "auto",
+        padding: "100px 50px",
+        overflowY: "scroll",
+        maxHeight: "700px",
+      }}
+    >
+      <Row className="h-100 col-12 g-0 flex-column-reverse flex-md-row">
+        <div className="d-flex" style={{ flexWrap: "wrap" }}>
+          {images.map((image, index) => (
+            <Col md={3} lg={3} key={index}>
+              {/* {console.log({ index })} */}
+              <div className="mb-5">
+                {image !== null && (
+                  <div
+                    style={{
+                      position: "relative",
+                      border: "2px dotted #386C34",
+                      width: "145px",
+                      height: "126px",
+                    }}
+                  >
+                    <img
+                      src={image.previewURL}
+                      alt={`Preview ${index + 1}`}
                       style={{
-                        position: "relative",
-                        border: "2px dotted #386C34",
-                        width: "145px",
-                        height: "126px",
-                      }}
-                    >
-                      <img
-                        src={image.previewURL}
-                        alt={`Preview ${index + 1}`}
-                        style={{
-                          width: "141px",
-                          height: "122px",
-                          objectFit: "cover",
-                        }}
-                      />
-                      <button
-                        type="button"
-                        style={{ position: "absolute", top: "0", right: "0" }}
-                        className="upload-img-close-btn"
-                        onClick={() => removeImage(index)}
-                      >
-                        <FontAwesomeIcon
-                          icon={faClose}
-                          style={{
-                            position: "absolute",
-                            top: "2px",
-                            right: "5px",
-                            color: "#FFF",
-                          }}
-                        />
-                      </button>
-                    </div>
-                  ) : (
-                    <div
-                      style={{
-                        border: "2px dashed #A0C49D",
                         width: "141px",
                         height: "122px",
+                        objectFit: "cover",
                       }}
+                    />
+                    <button
+                      type="button"
+                      style={{ position: "absolute", top: "0", right: "0" }}
+                      className="upload-img-close-btn"
+                      onClick={() => removeImage(image, index)}
                     >
-                      <label
-                        htmlFor={`file-input-${index}`}
-                        className="d-flex align-items-center justify-content-center"
+                      <FontAwesomeIcon
+                        icon={faClose}
                         style={{
-                          width: "141px",
-                          height: "122px",
-                          cursor: "pointer",
+                          position: "absolute",
+                          top: "2px",
+                          right: "5px",
+                          color: "#FFF",
                         }}
-                      >
-                        <FontAwesomeIcon
-                          icon={faAdd}
-                          style={{
-                            color: "#A0C49D",
-                            width: "40px",
-                            height: "40px",
-                            marginRight: "10px",
-                            marginBottom: "8px",
-                          }}
-                        />
-                      </label>
-                      <input
-                        id={`file-input-${index}`}
-                        type="file"
-                        accept="image/*"
-                        onChange={(event) => handleImageUpload(event, index)}
-                        style={{ display: "none", border: "1px solid red" }}
                       />
-                    </div>
-                  )}
-                </div>
-              </Col>
-            ))}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </Col>
+          ))}
+          <div
+            style={{
+              border: "2px dashed #A0C49D",
+              width: "141px",
+              height: "122px",
+            }}
+          >
+            <label
+              htmlFor={`file-input`}
+              className="d-flex align-items-center justify-content-center"
+              style={{
+                width: "141px",
+                height: "122px",
+                cursor: "pointer",
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faAdd}
+                style={{
+                  color: "#A0C49D",
+                  width: "40px",
+                  height: "40px",
+                  marginRight: "10px",
+                  marginBottom: "8px",
+                }}
+              />
+            </label>
+            <input
+              id={`file-input`}
+              type="file"
+              accept="image/*"
+              onChange={(event) => handleImageUpload(event)}
+              style={{ display: "none", border: "1px solid red" }}
+            />
           </div>
-        </Row>
-      </Container>
-    </Modal>
+        </div>
+      </Row>
+    </Container>
+    // </Modal>
   );
 }
 

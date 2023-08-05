@@ -8,6 +8,8 @@ import descriptionIcon from "../../assets/images/post-ad/description.svg";
 import mapIcon from "../../assets/images/post-ad/map.svg";
 import "./PostAd.css";
 import { secure_instance } from "../../axios/axios-config";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 // const countries = [
 //   "Alba",
@@ -64,14 +66,20 @@ function CompanyInformation({
   touched,
   selectedCountries,
   setSelectedCountries,
+  setRelatedSubCategoryId,
+  relatedSubCategoryId,
   handleChange,
   handleBlur,
 }) {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
+  const [isMultipleCountries, setIsMultipleCountries] = useState(false);
+  const [relatedSubCategory, setRelatedSubCategory] = useState(null);
+  const [modalShow, setModalShow] = React.useState(false);
   const [countriesList, setCountries] = useState(
     values.country.length > 0 ? values.country : []
   );
+  // const [subCategories, setSubCategories] = useState([]);
 
   const countryOptions = countriesList.map((country) => ({
     value: country.id,
@@ -106,13 +114,52 @@ function CompanyInformation({
     setCategories(request.data.data);
   };
 
-  const listSubCategories = async () => {
+  // const listSubCategories = async () => {
+  //   const request = await secure_instance.request({
+  //     url: "/api/ads/sub_category/",
+  //     method: "Get",
+  //   });
+  //   // console.log(request.data);
+  //   setSubCategories(request.data.data);
+  // };
+
+  const fetchSubCategories = async (id) => {
+    values.sub_category = "";
     const request = await secure_instance.request({
-      url: "/api/ads/sub_category/",
+      url: `/api/ads/category/${id}/sub-categroy-from-category/`,
       method: "Get",
     });
     // console.log(request.data);
     setSubCategories(request.data.data);
+  };
+
+  const handleSubCategorySelected = async (id) => {
+    // values.sub_category = "";
+    const request = await secure_instance.request({
+      url: `/api/ads/sub_category/${id}/activation-countries-exists/`,
+      method: "Get",
+    });
+
+    if (request.data.data.activation_country) {
+      setIsMultipleCountries(true);
+    } else {
+      setIsMultipleCountries(false);
+    }
+
+    const requestRelatedSub = await secure_instance.request({
+      url: `/api/ads/sub_category/${id}/public-related/`,
+      method: "Get",
+    });
+    // console.log("outsideeeeeeeeeeeeeeee", requestRelatedSub.data.data);
+    if (
+      Object.prototype.hasOwnProperty.call(requestRelatedSub.data.data, "id")
+    ) {
+      setRelatedSubCategory(requestRelatedSub.data.data);
+      setModalShow(true);
+      console.log("first", requestRelatedSub.data.data);
+    }
+    // console.log(request.data);
+    // setSubCategories(request.data.data);
   };
 
   const listCountries = async () => {
@@ -126,7 +173,7 @@ function CompanyInformation({
 
   useEffect(() => {
     listCategories();
-    listSubCategories();
+    // listSubCategories();
     listCountries();
   }, []);
 
@@ -144,6 +191,31 @@ function CompanyInformation({
 
   return (
     <Container fluid style={{ marginTop: "40px" }}>
+      <Modal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        size="md"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton style={{ border: "none" }} />
+        <Modal.Body>
+          <h4>{`${relatedSubCategory?.name} exists as a realted sub category`}</h4>
+          <h4>{`Do you want to add it?`}</h4>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => setModalShow(false)}>No</Button>
+          <Button
+            variant="success"
+            onClick={() => {
+              setRelatedSubCategoryId(relatedSubCategory.id);
+              setModalShow(false);
+            }}
+          >
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Row>
         <div
           className="roboto-semi-bold-28px-h2"
@@ -205,7 +277,12 @@ function CompanyInformation({
                 // }}
                 name="companyInformation.category"
                 value={values.category || ""}
-                onChange={handleChange}
+                // onChange={handleChange}
+                onChange={(e) => {
+                  console.log("category selected", e.target.value);
+                  fetchSubCategories(e.target.value);
+                  handleChange(e);
+                }}
                 // onBlur={handleBlur}
                 isValid={touched.category && !errors.category}
                 isInvalid={touched.category && !!errors.category}
@@ -247,7 +324,11 @@ function CompanyInformation({
                 style={{ height: "56px", border: "1px solid #797979" }}
                 name="companyInformation.sub_category"
                 value={values.sub_category || ""}
-                onChange={handleChange}
+                // onChange={handleChange}
+                onChange={(e) => {
+                  handleSubCategorySelected(e.target.value);
+                  handleChange(e);
+                }}
                 // onBlur={handleBlur}
                 isValid={touched.sub_category && !errors.sub_category}
                 isInvalid={touched.sub_category && !!errors.sub_category}
@@ -276,6 +357,30 @@ function CompanyInformation({
             </Form.Group>
           </Col>
 
+          {relatedSubCategoryId !== null && (
+            <Col md={6} lg={8} className="mb-3 mt-4 d-flex align-items-center">
+              <div
+                className="roboto-regular-18px-information"
+                style={{ fontWeight: "600" }}
+              >
+                {`${relatedSubCategory?.name} is added as sub category`}
+              </div>
+              <FontAwesomeIcon
+                icon={faClose}
+                style={{ marginLeft: "10px", cursor: "pointer" }}
+                onClick={() => {
+                  setRelatedSubCategoryId(null);
+                  setRelatedSubCategory(null);
+                }}
+                // style={{
+                //   position: "absolute",
+                //   top: "2px",
+                //   right: "5px",
+                //   color: "#FFF",
+                // }}
+              />
+            </Col>
+          )}
           <Col md={6} lg={8}>
             <Form.Group className="form-group mb-3" controlId="form3Example6">
               <Form.Label
@@ -368,46 +473,48 @@ function CompanyInformation({
                 />
                 Country
               </Form.Label>
-              <Select
-                options={countryOptions}
-                isMulti
-                name="companyInformation.country"
-                styles={{ height: "56px" }}
-                value={countryOptions.filter((option) =>
-                  selectedCountries.includes(option.value)
-                )}
-                onChange={handleCountryChange}
-                onBlur={handleBlur("companyInformation.country")}
-                className={
-                  errors?.country
-                    ? "border-danger country-field"
-                    : "country-field border-custom"
-                }
-                classNamePrefix="select"
-              />
 
-              <Form.Select
-                aria-label="Default select example"
-                style={{ height: "56px", border: "1px solid #797979" }}
-                name="companyInformation.country"
-                value={values.country || ""}
-                onChange={handleChange}
-                // onBlur={handleBlur}
-                isValid={touched.country && !errors.country}
-                isInvalid={touched.country && !!errors.country}
-                className={errors.country ? "border-danger" : ""}
-              >
-                <option selected value hidden="true">
-                  Select County
-                </option>
-                {countryOptions.map((county, index) => (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <option key={index} value={county.value}>
-                    {county.label}
+              {isMultipleCountries ? (
+                <Select
+                  options={countryOptions}
+                  isMulti
+                  name="companyInformation.country"
+                  styles={{ height: "56px" }}
+                  value={countryOptions.filter((option) =>
+                    selectedCountries.includes(option.value)
+                  )}
+                  onChange={handleCountryChange}
+                  onBlur={handleBlur("companyInformation.country")}
+                  className={
+                    errors?.country
+                      ? "border-danger country-field"
+                      : "country-field border-custom"
+                  }
+                  classNamePrefix="select"
+                />
+              ) : (
+                <Form.Select
+                  aria-label="Default select example"
+                  style={{ height: "56px", border: "1px solid #797979" }}
+                  name="companyInformation.country"
+                  value={values.country || ""}
+                  onChange={handleChange}
+                  // onBlur={handleBlur}
+                  isValid={touched.country && !errors.country}
+                  isInvalid={touched.country && !!errors.country}
+                  className={errors.country ? "border-danger" : ""}
+                >
+                  <option selected value hidden="true">
+                    Select County
                   </option>
-                ))}
-              </Form.Select>
-
+                  {countryOptions.map((county, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <option key={index} value={county.value}>
+                      {county.label}
+                    </option>
+                  ))}
+                </Form.Select>
+              )}
               {errors?.country && (
                 <div className="text-danger">{errors.country}</div>
               )}

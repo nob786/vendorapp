@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import InfoIcon from "../../assets/images/gg_info.svg";
 import "./ImageUploader.css";
+import { secure_instance } from "../../axios/axios-config";
 
 function ImageUploader({
   setparentImagesUploadedImages,
@@ -13,8 +14,11 @@ function ImageUploader({
   uploadedImages,
   setImagesError,
   setShowImagesModal,
+  imagesToUpload,
+  setImagesToUpload,
 }) {
   const [mainImage, setMainImage] = useState(null);
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     if (uploadedImages[0] === null) {
@@ -27,40 +31,83 @@ function ImageUploader({
     }
   }, [setparentImagesUploadedImages, uploadedImages]);
 
-  console.log("imagesError imagesError imagesError", imagesError);
+  const uploadFileToCloud = async (uploadedImage) => {
+    const formData = new FormData(); // pass in the form
+    formData.append("file", uploadedImage);
+    formData.append("content_type", uploadedImage.type);
 
-  const toggleImagesModal = (event, image) => {
-    setShowImagesModal(true);
-    // console.log({ images });
+    try {
+      const request = await secure_instance.request({
+        url: "/api/ads/upload-url/",
+        method: "Post",
+        data: formData,
+      });
+
+      setImagesToUpload([...imagesToUpload, request.data.data.file_url]);
+      // setImageUrlToUpload(response.data.data);
+    } catch (e) {
+      // --------- WILL ROUTE ON SOME PAGE ON FAILURE ---------
+      console.log("error", e);
+    }
   };
-  // const handleImageUpload = (event, index) => {
-  //   event.preventDefault();
-  //   const uploadedImage = event.target.files[0];
-  //   let updatedImages = mainImage;
 
-  //   const reader = new FileReader();
+  const handleImageUpload = (event, index) => {
+    event.preventDefault();
+    const uploadedImage = event.target.files[0];
+    const updatedImages = [...images];
 
-  //   reader.onload = () => {
-  //     updatedImages = {
-  //       file: uploadedImage,
-  //       previewURL: reader.result,
-  //     };
-  //     setMainImage(updatedImages);
-  //   };
-  //   console.log("updatedImages inside image component", updatedImages);
-  //   setImagesError(false);
-  //   setparentImagesUploadedImages(updatedImages);
-  //   reader.readAsDataURL(uploadedImage);
-  // };
+    const reader = new FileReader();
 
-  const removeImage = (index) => {
-    // const updatedImages = mainImage;
-    // updatedImages[index] = null;
-    // setMainImage(updatedImages);
-    const updatedImages = uploadedImages;
-    updatedImages[0] = null;
-    setMainImage(null);
+    reader.onload = () => {
+      updatedImages.push({
+        file: uploadedImage,
+        previewURL: reader.result,
+      });
+      setImages(updatedImages);
+    };
+    console.log("uploadedImage", uploadedImage);
+    uploadFileToCloud(uploadedImage);
     setparentImagesUploadedImages(updatedImages);
+
+    // console.log("updatedImages inside image component", updatedImages);
+    setImagesError(false);
+    reader.readAsDataURL(uploadedImage);
+  };
+
+  const removeImage = async (image, index) => {
+    const urlToDelete = imagesToUpload[index];
+
+    try {
+      const request = await secure_instance.request({
+        url: "/api/ads/delete-url/",
+        method: "Post",
+        data: {
+          url: urlToDelete,
+        },
+      });
+
+      if (request.status_code === 200) {
+        const imageIndex = images.indexOf(image);
+
+        const cloneImages = [...images];
+
+        if (imageIndex !== -1) {
+          cloneImages.splice(index, 1);
+        }
+
+        setImages(cloneImages);
+      }
+    } catch (err) {}
+
+    const imageIndex = images.indexOf(image);
+
+    const cloneImages = [...images];
+
+    if (imageIndex !== -1) {
+      cloneImages.splice(index, 1);
+    }
+
+    setImages(cloneImages);
   };
 
   return (
@@ -103,18 +150,89 @@ function ImageUploader({
           </li>
         </ul>
 
-        <Button
-          type="button"
-          className="btn btn-success roboto-semi-bold-16px-information"
-          style={{
-            paddingLeft: "2.5rem",
-            paddingRight: "2.5rem",
-            height: "44px",
-          }}
-          onClick={toggleImagesModal}
-        >
-          Upload Images
-        </Button>
+        {/* render images here */}
+        <Row className="h-100 col-12 g-0 flex-column-reverse flex-md-row">
+          <div className="d-flex" style={{ flexWrap: "wrap" }}>
+            {images.map((image, index) => (
+              <Col md={3} lg={3} key={index}>
+                {/* {console.log({ index })} */}
+                <div className="mb-5">
+                  {image !== null && (
+                    <div
+                      style={{
+                        position: "relative",
+                        border: "2px dotted #386C34",
+                        width: "145px",
+                        height: "126px",
+                      }}
+                    >
+                      <img
+                        src={image.previewURL}
+                        alt={`Preview ${index + 1}`}
+                        style={{
+                          width: "141px",
+                          height: "122px",
+                          objectFit: "cover",
+                        }}
+                      />
+                      <button
+                        type="button"
+                        style={{ position: "absolute", top: "0", right: "0" }}
+                        className="upload-img-close-btn"
+                        onClick={() => removeImage(image, index)}
+                      >
+                        <FontAwesomeIcon
+                          icon={faClose}
+                          style={{
+                            position: "absolute",
+                            top: "2px",
+                            right: "5px",
+                            color: "#FFF",
+                          }}
+                        />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </Col>
+            ))}
+            <div
+              style={{
+                border: "2px dashed #A0C49D",
+                width: "141px",
+                height: "122px",
+              }}
+            >
+              <label
+                htmlFor={`file-input`}
+                className="d-flex align-items-center justify-content-center"
+                style={{
+                  width: "141px",
+                  height: "122px",
+                  cursor: "pointer",
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faAdd}
+                  style={{
+                    color: "#A0C49D",
+                    width: "40px",
+                    height: "40px",
+                    marginRight: "10px",
+                    marginBottom: "8px",
+                  }}
+                />
+              </label>
+              <input
+                id={`file-input`}
+                type="file"
+                accept="image/*"
+                onChange={(event) => handleImageUpload(event)}
+                style={{ display: "none", border: "1px solid red" }}
+              />
+            </div>
+          </div>
+        </Row>
 
         <div className="d-flex align-items-center">
           <img src={InfoIcon} alt={InfoIcon} />
@@ -125,98 +243,6 @@ function ImageUploader({
             Click on “View All” to preview all images
           </span>
         </div>
-        {mainImage !== null && uploadedImages.length > 0 && (
-          <div
-            style={{
-              position: "relative",
-              border: "2px dotted #386C34",
-              width: "145px",
-              height: "126px",
-            }}
-          >
-            <img
-              src={mainImage.previewURL}
-              alt={"Preview"}
-              style={{ width: "141px", height: "122px", objectFit: "cover" }}
-            />
-            <button
-              type="button"
-              style={{ position: "absolute", top: "0", right: "0" }}
-              className="upload-img-close-btn"
-              onClick={() => removeImage(0)}
-            >
-              <FontAwesomeIcon
-                icon={faClose}
-                style={{
-                  position: "absolute",
-                  top: "2px",
-                  right: "5px",
-                  color: "#FFF",
-                }}
-              />
-            </button>
-          </div>
-        )}
-        {/* <div className="d-flex align-items-center justify-content-between" style={{ flexWrap: "wrap" }}>
-          {images.map((image, index) => (
-            <Col md={3} lg={2} key={index}>
-              <div className="mb-5">
-                {image !== null ? (
-                  <div style={{
-                    position: "relative", border: "2px dotted #386C34", width: "145px", height: "126px",
-                  }}
-                  >
-                    <img
-                      src={image.previewURL}
-                      alt={`Preview ${index + 1}`}
-                      style={{ width: "141px", height: "122px", objectFit: "cover" }}
-                    />
-                    <button
-                      type="button"
-                      style={{ position: "absolute", top: "0", right: "0" }}
-                      className="upload-img-close-btn"
-                      onClick={() => removeImage(index)}
-                    >
-                      <FontAwesomeIcon
-                        icon={faClose}
-                        style={{
-                          position: "absolute", top: "2px", right: "5px", color: "#FFF",
-                        }}
-                      />
-                    </button>
-                  </div>
-                ) : (
-                  <div style={{
-                    border: "2px dashed #A0C49D", width: "141px", height: "122px",
-                  }}
-                  >
-                    <label
-                      htmlFor={`file-input-${index}`}
-                      className="d-flex align-items-center justify-content-center"
-                      style={{
-                        width: "141px", height: "122px", cursor: "pointer",
-                      }}
-                    >
-                      <FontAwesomeIcon
-                        icon={faAdd}
-                        style={{
-                          color: "#A0C49D", width: "40px", height: "40px", marginRight: "10px", marginBottom: "8px",
-                        }}
-                      />
-                    </label>
-                    <input
-                      id={`file-input-${index}`}
-                      type="file"
-                      accept="image/*"
-                      onChange={(event) => handleImageUpload(event, index)}
-                      style={{ display: "none", border: "1px solid red" }}
-                    />
-                  </div>
-                )}
-              </div>
-            </Col>
-          ))}
-        </div> */}
       </div>
     </Container>
   );

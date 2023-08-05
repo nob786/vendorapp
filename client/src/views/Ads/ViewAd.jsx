@@ -116,7 +116,7 @@ const chunkArray = (array, chunkSize) => {
 };
 
 // Divide the image links into chunks of three
-const imageChunks = chunkArray(imageLinks, 2);
+const imageChunks = chunkArray(imageLinks, 3);
 
 // Create the slides array with dynamically generated keys
 const slidesModified = imageChunks.map((chunk, index) => {
