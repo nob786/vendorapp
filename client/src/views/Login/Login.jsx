@@ -43,6 +43,7 @@ import {
   handleRegister,
   handleResgisterationStatus,
 } from "../redux/Auth/authSlice";
+import { instance, secure_instance } from "../../axios/axios-config";
 
 const counties = [
   "Alba",
@@ -181,7 +182,11 @@ function Login() {
   const [phone, setPhone] = useState("");
   const [forgotPassword, setForgotPassword] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const [loginError, setLoginError] = useState(false);
+  const [countries, setCountries] = useState([]);
+  const countryOptions = countries.map((country) => ({
+    value: country.id,
+    label: country.name,
+  }));
 
   const handleClose = () => dispatch(toggleLoginModal());
 
@@ -192,6 +197,19 @@ function Login() {
       }
     }
   }, [error]);
+
+  const listCountries = async () => {
+    const request = await instance.request({
+      url: "/api/ads/country/",
+      method: "Get",
+    });
+    // console.log(request.data);
+    setCountries(request.data.data);
+  };
+
+  useEffect(() => {
+    listCountries();
+  }, []);
 
   const handleRegisterClick = () => {
     // hide login view
@@ -521,10 +539,10 @@ function Login() {
                   <option selected value hidden="true">
                     Select County
                   </option>
-                  {counties.map((county, index) => (
+                  {countryOptions.map((county, index) => (
                     // eslint-disable-next-line react/no-array-index-key
-                    <option key={index} value={county}>
-                      {county}
+                    <option key={index} value={county.value}>
+                      {county.label}
                     </option>
                   ))}
                 </Form.Select>

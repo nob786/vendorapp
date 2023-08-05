@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/fontawesome-free-solid";
 import { Card, Col, Container, Row } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import Header from "../../components/Navbar/Navbar";
 import user from "../../assets/images/profile-settings/user.svg";
 
@@ -14,10 +15,11 @@ import deleteIcon from "../../assets/images/profile-settings/delete.svg";
 import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
+import { handleProfileSettingsCurrentView } from "../redux/TabNavigation/TabNavigationSlice";
 
-function ProfileSettings({ setCurrentView }) {
+function ProfileSettings() {
   // const [currentView, setCurrentView] = useState("profileSettings");
-
+  const dispatch = useDispatch();
   return (
     <>
       <Header />
@@ -56,7 +58,11 @@ function ProfileSettings({ setCurrentView }) {
                 <Card
                   style={{ width: "21rem" }}
                   className="custom-card"
-                  onClick={() => setCurrentView("PersonalInformation")}
+                  onClick={() =>
+                    dispatch(
+                      handleProfileSettingsCurrentView("PersonalInformation")
+                    )
+                  }
                 >
                   <Card.Body>
                     <div className="d-flex justify-content-between">
@@ -84,7 +90,11 @@ function ProfileSettings({ setCurrentView }) {
                 <Card
                   style={{ width: "21rem" }}
                   className="custom-card"
-                  onClick={() => setCurrentView("CompanyInformation")}
+                  onClick={() =>
+                    dispatch(
+                      handleProfileSettingsCurrentView("CompanyInformation")
+                    )
+                  }
                 >
                   <Card.Body>
                     <div className="d-flex justify-content-between">
@@ -114,7 +124,9 @@ function ProfileSettings({ setCurrentView }) {
                 <Card
                   style={{ width: "21rem" }}
                   className="custom-card"
-                  onClick={() => setCurrentView("ChangePassword")}
+                  onClick={() =>
+                    dispatch(handleProfileSettingsCurrentView("ChangePassword"))
+                  }
                 >
                   <Card.Body>
                     <div className="d-flex justify-content-between">
@@ -138,7 +150,9 @@ function ProfileSettings({ setCurrentView }) {
                 <Card
                   style={{ width: "21rem" }}
                   className="custom-card"
-                  onClick={() => setCurrentView("DeleteAccount")}
+                  onClick={() =>
+                    dispatch(handleProfileSettingsCurrentView("DeleteAccount"))
+                  }
                 >
                   <Card.Body>
                     <div className="d-flex justify-content-between">

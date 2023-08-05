@@ -195,6 +195,8 @@ function FAQs({
   handleChange,
   handleAddFieldsForFAQ,
   handleAddFAQ,
+  handleRemoveFAQ,
+  handleEditFAQ,
 }) {
   return (
     <Container fluid>
@@ -205,7 +207,7 @@ function FAQs({
         </div>
         {values.FAQ.faqs.map((faq, index) => (
           <Row key={index}>
-            <Col md={6} lg={7}>
+            <Col md={7} lg={8}>
               <Form.Group
                 className="form-group mb-3"
                 controlId={`form3ExampleDynamic${index}`}
@@ -215,16 +217,30 @@ function FAQs({
                   style={{ marginBottom: "20px" }}
                 >
                   <div className="d-flex align-items-center roboto-medium-20px-body1">
-                    <img src={FAQsIcon} alt="FAQsIcon" className="me-2" />
+                    {faq.added === true && (
+                      <img
+                        src={FAQsIcon}
+                        alt="FAQsIcon"
+                        className="me-2"
+                        onClick={() => handleEditFAQ(index)}
+                      />
+                    )}
                     Question {index + 1}: {faq.added === true && faq.question}
                   </div>
                   <div style={{ color: "#A0C49D" }}>
-                    {faq.added === false && (
+                    {faq.added === false ? (
                       <span
                         style={{ textDecoration: "underline" }}
                         onClick={() => handleAddFAQ(index)}
                       >
                         Add FAQ
+                      </span>
+                    ) : (
+                      <span
+                        style={{ textDecoration: "underline" }}
+                        onClick={() => handleRemoveFAQ(index)}
+                      >
+                        Remove FAQ
                       </span>
                     )}
                   </div>
@@ -243,7 +259,7 @@ function FAQs({
                 )}
               </Form.Group>
             </Col>
-            <Col key={index} md={6} lg={7}>
+            <Col key={index} md={7} lg={8}>
               <Form.Group
                 className="form-group mb-3"
                 controlId={`form3Example${index}`}
@@ -252,10 +268,10 @@ function FAQs({
                   style={{ height: "56px" }}
                   className="lg-input-small-text"
                   type="text"
-                  name={`FAQ.faqs[${index}].answer`}
+                  name={`FAQ.faqs[${index}].answer_input`}
                   size="sm"
                   placeholder="Type your answer"
-                  value={faq.answer}
+                  value={faq.answer_input}
                   onChange={handleChange}
                   isValid={touched.FAQ && !errors.FAQ}
                   isInvalid={touched.FAQ && !!errors.FAQ}
@@ -274,7 +290,7 @@ function FAQs({
             onClick={handleAddFieldsForFAQ}
             className="btn btn-success roboto-semi-bold-16px-information mt-3"
           >
-            Add Another
+            {values.FAQ.faqs.length === 0 ? "Add FAQs" : "Add Another"}
           </Button>
         </Col>
       </Row>

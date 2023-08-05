@@ -13,6 +13,8 @@ import ProtectedRoute from "./views/ProtectedRoute";
 import { getCookie } from "./utilities/utils";
 import MyAds from "./views/Ads/MyAds";
 import ViewAd from "./views/Ads/ViewAd";
+import EditAd from "./views/EditAd/EditAd";
+// import EditAd from "./views/EditAd/EditAd";
 // import "../src/assets/scss/_buttons.scss"
 function App() {
   // const [count, setCount] = useState(0)
@@ -46,6 +48,14 @@ function App() {
         element={
           <ProtectedRoute>
             <PostAd />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/edit-ad/:id"
+        element={
+          <ProtectedRoute>
+            <EditAd />
           </ProtectedRoute>
         }
       />

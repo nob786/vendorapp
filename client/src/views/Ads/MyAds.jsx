@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Card,
@@ -12,6 +12,7 @@ import {
 // import * as formik from "formik";
 // import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Header from "../../components/Navbar/Navbar";
 import AdTemp from "../../assets/images/post-ad/ad-temp.svg";
 import TimeIcon from "../../assets/images/post-ad/carbon_time.svg";
@@ -31,37 +32,145 @@ import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
 import "./Ads.css";
+import { handleUpdateAds, listVendorAds } from "../redux/Posts/AdsSlice";
 
-const AdsList = [
-  {
-    id: 1,
-    category: "Ad Category",
-    sub_category: "Sub-category",
-    description: `Boost your business with our top-tier vendor services! Enjoy the flexibility of selling at your
-      pace, alongside dedicated 24/7 support. Join us today and start turning your passion into profit!`,
-    created_at: "Jan 12th, 2023",
-    country: "Pakistan",
-    // image: image1,
-  },
-  {
-    id: 2,
-    category: "Ad Category",
-    sub_category: "Sub-category",
-    description: `Boost your business with our top-tier vendor services! Enjoy the flexibility of selling at your
-      pace, alongside dedicated 24/7 support. Join us today and start turning your passion into profit!`,
-    created_at: "Jan 12th, 2023",
-    country: "Pakistan",
-    // image: image1,
-  },
-];
+// const AdsList = [
+//   {
+//     id: 1,
+//     category: "Ad Category",
+//     sub_category: "Sub-category",
+//     description: `Boost your business with our top-tier vendor services! Enjoy the flexibility of selling at your
+//       pace, alongside dedicated 24/7 support. Join us today and start turning your passion into profit!`,
+//     created_at: "Jan 12th, 2023",
+//     country: "Pakistan",
+//     // image: image1,
+//   },
+//   {
+//     id: 2,
+//     category: "Ad Category",
+//     sub_category: "Sub-category",
+//     description: `Boost your business with our top-tier vendor services! Enjoy the flexibility of selling at your
+//       pace, alongside dedicated 24/7 support. Join us today and start turning your passion into profit!`,
+//     created_at: "Jan 12th, 2023",
+//     country: "Pakistan",
+//     // image: image1,
+//   },
+// ];
+// const AdsList = [
+//   {
+//     id: 8,
+//     sub_category: {
+//       id: 3,
+//       name: "dogs",
+//       category: 2,
+//     },
+//     related_sub_categories: {
+//       id: 1,
+//       name: "jordans",
+//       category: 1,
+//     },
+//     activation_countries: [
+//       {
+//         id: 1,
+//         name: "Ind",
+//       },
+//     ],
+//     company: {
+//       name: "company1",
+//       postal_code: "postal",
+//       fiscal_code: "fiscal",
+//       address: "address 11",
+//       firm_number: "firm",
+//       bank_name: "bank name",
+//       bank_iban: "iban",
+//       id: 3,
+//     },
+//     ad_media: [
+//       {
+//         media_urls: {
+//           pdf: [],
+//           video: [],
+//           images: [
+//             "https://mehaio-buc.s3.amazonaws.com/uploads/employer/images/1691013632.019656_simple-903gbz5sd55q17nc.jpg?AWSAccessKeyId=AKIAYWNSEZVAODXPVR25&Signature=nNY%2FjukK%2BBmTjb1yqI9Gu20XuSU%3D&content-type=image%2Fjpeg&Expires=1691017232",
+//           ],
+//         },
+//         id: 8,
+//       },
+//     ],
+//     created_at: "2023-08-02T22:05:33.591360Z",
+//     updated_at: "2023-08-02T22:05:33.591591Z",
+//     website: "",
+//     city: "sdsd",
+//     street: "sdasdd",
+//     number: "2312312",
+//     full_address: "cvxcvx",
+//     facebook: "",
+//     instagram: "",
+//     youtube: "",
+//     tiktok: "",
+//     twitter: "",
+//     others: null,
+//     offered_services: ["service 1"],
+//     country: 1,
+//   },
+// ];
 
 function MyAds() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [modalShow, setModalShow] = React.useState(false);
+  const [currentAdId, setCurrentAdId] = React.useState(null);
+
+  const vendorAds = useSelector((state) => state.Ads.vendorAds);
+  console.log("vendorAds---------------", vendorAds);
+
+  const handleDeleteAd = async () => {
+    try {
+      // setLoading(true);
+      await secure_instance.request({
+        url: `/api/ads/${currentAdId}/`,
+        method: "Delete",
+      });
+      const updatedAds = vendorAds.filter((ad) => ad.id !== currentAdId);
+      dispatch(handleUpdateAds(updatedAds));
+      setModalShow(false);
+      // setCurrentAd(request.data.data);
+      // handleAlert();
+      // setPersonalInfo(request.data.data);
+      // setLoading(false);
+    } catch (error) {
+      // handleFailedAlert();
+      // setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    dispatch(listVendorAds());
+  }, []);
 
   return (
     <>
       <Header />
       <TabNavigation />
+      <Modal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        size="md"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton style={{ border: "none" }}></Modal.Header>
+        <Modal.Body>
+          <h4>Are you sure you want to delete this ad?</h4>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={() => handleDeleteAd()}>
+            Delete
+          </Button>
+          <Button onClick={() => setModalShow(false)}>No</Button>
+        </Modal.Footer>
+      </Modal>
 
       <div className="my-ad-banner d-flex align-items-center justify-content-between">
         <div style={{ marginLeft: "100px" }}>
@@ -78,8 +187,8 @@ function MyAds() {
         className=""
       >
         <Row className="justify-content-center">
-          {AdsList.length > 0 ? (
-            AdsList.map((product) => {
+          {vendorAds.length > 0 ? (
+            vendorAds.map((product) => {
               const {
                 id,
                 category,
@@ -87,6 +196,7 @@ function MyAds() {
                 sub_category,
                 created_at,
                 country,
+                ad_media,
               } = product;
               return (
                 <Col lg={10} className="mb-4">
@@ -94,7 +204,7 @@ function MyAds() {
                     <Row className="g-0">
                       <Col sm={3} style={{ padding: "20px" }}>
                         <Card.Img
-                          src={AdTemp}
+                          src={ad_media[0].media_urls.images[0]}
                           alt="AdTemp"
                           style={{ objectFit: "cover" }}
                         />
@@ -109,7 +219,7 @@ function MyAds() {
                               <Card.Title style={{ marginBottom: "8px" }}>
                                 <div className="d-flex justify-content-between">
                                   <div className="roboto-semi-bold-28px-h2">
-                                    {category}
+                                    Ad Category
                                   </div>
                                   <div
                                     className="roboto-regular-14px-information text-white"
@@ -120,7 +230,7 @@ function MyAds() {
                                       fontWeight: "500",
                                     }}
                                   >
-                                    {sub_category}
+                                    {sub_category.name}
                                   </div>
                                 </div>
 
@@ -141,7 +251,9 @@ function MyAds() {
                                   maxWidth: "70%",
                                 }}
                               >
-                                {`${description.slice(0, 200)}...`}
+                                {`${
+                                  description && description.slice(0, 200)
+                                }...`}
                               </Card.Text>
                             </div>
 
@@ -177,6 +289,10 @@ function MyAds() {
                                     src={deleteIcon}
                                     alt="deleteIcon"
                                     className="me-3"
+                                    onClick={() => {
+                                      setModalShow(true);
+                                      setCurrentAdId(id);
+                                    }}
                                   />
                                 </div>
                               </div>
@@ -262,7 +378,7 @@ function MyAds() {
           )}
         </Row>
 
-        {AdsList.length > 0 && (
+        {vendorAds.length > 0 && (
           <Col
             className="d-flex justify-content-end"
             style={{ marginRight: "100px", marginTop: "80px" }}

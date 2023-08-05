@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as formik from "formik";
 import * as Yup from "yup";
 import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
@@ -12,20 +12,22 @@ import postAdBanner3 from "../../assets/images/post-ad-banner-3.svg";
 // import sub_category from "../../assets/images/post-ad/sub-category.svg";
 // import description from "../../assets/images/post-ad/description.svg";
 // import map from "../../assets/images/post-ad/map.svg";
-import "./PostAd.css";
+import "../PostAd/PostAd.css";
 import ImageUploader from "../../components/ImageUploader/ImageUploader";
 import VideoUploader from "../../components/VideoUploader/VideoUploader";
-import ContactInformationForm from "./ContactInformationForm";
-import SocialMediaForm from "./SocialMediaForm";
-import ServicesOffered from "./ServicesOffered";
-import CompanyInformation from "./CompanyInformation";
-import FAQs from "./FAQs";
+import ContactInformationForm from "../PostAd/ContactInformationForm";
+import SocialMediaForm from "../PostAd/SocialMediaForm";
+import ServicesOffered from "../PostAd/ServicesOffered";
+import CompanyInformation from "../PostAd/CompanyInformation";
+import FAQs from "../PostAd/FAQs";
 import PdfUploader from "../../components/PdfUploader/PdfUploader";
 import ImagesModal from "../../components/ImageUploader/ImagesModal";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { handleCreateNewAd } from "../redux/Posts/AdsSlice";
+import { secure_instance } from "../../axios/axios-config";
+import { useParams } from "react-router-dom";
 
-function PostAd() {
+function EditAd() {
   const { Formik } = formik;
 
   const [selectedCountries, setSelectedCountries] = useState([]);
@@ -42,7 +44,12 @@ function PostAd() {
   const [videoToPreview, setVideoToPreview] = useState([]);
   const [videoToUpload, setVideoToUpload] = useState([]);
   const [showImagesModal, setShowImagesModal] = useState(false);
+  const [currentAd, setCurrentAd] = useState(null);
+
   const dispatch = useDispatch();
+  const params = useParams();
+
+  console.log("currentAd => ", currentAd);
 
   const handleSubmitAllForms = (values) => {
     // ...(uploadedImages && { imageUploader: { images: uploadedImages } }),
@@ -79,28 +86,12 @@ function PostAd() {
       sub_category: parseInt(values.companyInformation.sub_category, 10),
       related_sub_categories: 1,
       country: 1,
-      activation_countries: values.companyInformation.country,
+      activation_countries: values.companyInformation.country.map(
+        (country) => country.id
+      ),
       faqs: values.FAQ.faqs,
     };
 
-    // const newObj = {
-    //   ...values,
-    //   // imageUploader: {
-    //   //   images: imagesToUpload,
-    //   // },
-    //   // pdfUploader: {
-    //   //   pdfs: pdfsToUpload,
-    //   // },
-    //   // VideoUploader: {
-    //   //   videos: videoToUpload,
-    //   // },
-    //   media_urls: {
-    //     images: imagesToUpload,
-    //     video: videoToUpload,
-    //     pdf: pdfsToUpload,
-    //   },
-    //   // values.FAQs
-    // };
     console.log(
       "newObj-------------------------------------------------:",
       objToSubmit
@@ -112,8 +103,49 @@ function PostAd() {
   const Schema = Yup.object().shape({
     companyInformation: Yup.object().shape({
       commercial_name: Yup.string().required("Commercial Name is required"),
-      category: Yup.string().required("Category is required"),
-      sub_category: Yup.string().required("Sub-category is required"),
+      category: Yup.mixed().when({
+        is: (value) => value !== undefined, // Apply the validation when the field is present
+        then: () =>
+          Yup.lazy((value) => {
+            if (typeof value === "object") {
+              // If it's an object, define the object shape
+              return Yup.object({
+                // Add your object schema here...
+              });
+            } else if (typeof value === "number") {
+              // If it's a number, apply integer validation
+              return Yup.number().integer();
+            } else if (typeof value === "string") {
+              // If it's a string, apply string validation
+              return Yup.string();
+            }
+
+            // Return null or throw an error if none of the types match
+            throw new Error("Invalid field type");
+          }),
+      }),
+      // sub_category: Yup.string().required("Sub-category is required"),
+      sub_category: Yup.mixed().when({
+        is: (value) => value !== undefined, // Apply the validation when the field is present
+        then: () =>
+          Yup.lazy((value) => {
+            if (typeof value === "object") {
+              // If it's an object, define the object shape
+              return Yup.object({
+                // Add your object schema here...
+              });
+            } else if (typeof value === "number") {
+              // If it's a number, apply integer validation
+              return Yup.number().integer();
+            } else if (typeof value === "string") {
+              // If it's a string, apply string validation
+              return Yup.string();
+            }
+
+            // Return null or throw an error if none of the types match
+            throw new Error("Invalid field type");
+          }),
+      }),
       description: Yup.string()
         .max(2000, "Must be at most 2000 characters")
         .matches(
@@ -183,45 +215,33 @@ function PostAd() {
     companyInformation: {
       commercial_name: "",
       category: "",
-      sub_category: "",
+      sub_category: currentAd?.sub_category,
       description: "",
-      country: [], // Initialize without any selected countries
+      country: currentAd?.activation_countries, // Initialize without any selected countries
     },
     contactInformation: {
-      contact_number: "",
-      websiteUrl: "",
+      contact_number: currentAd?.number,
+      websiteUrl: currentAd?.website,
       country: [],
-      city: "",
-      street: "",
-      fullAddress: "",
+      city: currentAd?.city,
+      street: currentAd?.street,
+      fullAddress: currentAd?.full_address,
     },
     SocialMedia: {
-      facebookURL: "",
-      instagramURL: "",
-      youtubeURL: "",
-      tiktokURL: "",
-      twitterURL: "",
+      facebookURL: currentAd?.facebook,
+      instagramURL: currentAd?.instagram,
+      youtubeURL: currentAd?.youtube,
+      tiktokURL: currentAd?.tiktok,
+      twitterURL: currentAd?.twitter,
     },
+    // currentAd?.
     FAQ: {
       faqs: [],
     },
     servicesOffered: {
-      services: [],
+      services: currentAd?.offered_services,
     },
   };
-
-  // {
-  //   question: "predefined 1",
-  //   answer_input: "",
-  //   type: "text_field",
-  //   added: true,
-  // },
-  // {
-  //   question: "predefined 2",
-  //   answer_input: "",
-  //   type: "text_field",
-  //   added: true,
-  // },
 
   const validate = (values) => {
     const errors = {};
@@ -357,6 +377,28 @@ function PostAd() {
     });
   };
 
+  const getAdInfo = async () => {
+    try {
+      // setLoading(true);
+      const request = await secure_instance.request({
+        url: `/api/ads/${params.id}/`,
+        method: "Get",
+      });
+      console.log("request.data.data", request.data.data);
+      setCurrentAd(request.data.data);
+      // handleAlert();
+      // setPersonalInfo(request.data.data);
+      // setLoading(false);
+    } catch (error) {
+      // handleFailedAlert();
+      // setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getAdInfo();
+  }, []);
+
   return (
     <div style={{ position: "relative" }}>
       <TopBanner />
@@ -412,127 +454,129 @@ function PostAd() {
 
       <Container fluid style={{ marginTop: "40px", paddingLeft: "150px" }}>
         <Row>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={Schema}
-            validate={validate}
-            onSubmit={handleSubmitAllForms}
-          >
-            {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              setValues,
-            }) => (
-              <Form noValidate onSubmit={handleSubmit}>
-                <CompanyInformation
-                  values={values.companyInformation}
-                  errors={errors.companyInformation ?? errors}
-                  touched={touched.companyInformation ?? touched}
-                  selectedCountries={selectedCountries}
-                  setSelectedCountries={setSelectedCountries}
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
-                />
+          {currentAd !== null && (
+            <Formik
+              initialValues={initialValues}
+              validationSchema={Schema}
+              validate={validate}
+              onSubmit={handleSubmitAllForms}
+              enableReinitialize
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                setValues,
+              }) => (
+                <Form noValidate onSubmit={handleSubmit}>
+                  <CompanyInformation
+                    values={values.companyInformation}
+                    errors={errors.companyInformation ?? errors}
+                    touched={touched.companyInformation ?? touched}
+                    selectedCountries={selectedCountries}
+                    setSelectedCountries={setSelectedCountries}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                  />
 
-                <ImageUploader
-                  // parentImages={values.imageUploader.images}
-                  setShowImagesModal={setShowImagesModal}
-                  setparentImagesUploadedImages={handleImageUpdates}
-                  uploadedImages={imagesToPreview}
-                  imagesError={imagesError}
-                  setImagesError={setImagesError}
-                  // imagesToUpload={imagesToUpload}
-                  // setImagesToUpload={setImagesToUpload}
-                />
+                  <ImageUploader
+                    // parentImages={values.imageUploader.images}
+                    setShowImagesModal={setShowImagesModal}
+                    setparentImagesUploadedImages={handleImageUpdates}
+                    uploadedImages={imagesToPreview}
+                    imagesError={imagesError}
+                    setImagesError={setImagesError}
+                    // imagesToUpload={imagesToUpload}
+                    // setImagesToUpload={setImagesToUpload}
+                  />
 
-                <VideoUploader
-                  setparentVideoUploaded={handleVideoToPreview}
-                  videoToUpload={videoToUpload}
-                  setVideoToUpload={setVideoToUpload}
-                />
+                  <VideoUploader
+                    setparentVideoUploaded={handleVideoToPreview}
+                    videoToUpload={videoToUpload}
+                    setVideoToUpload={setVideoToUpload}
+                  />
 
-                <ContactInformationForm
-                  values={values.contactInformation}
-                  errors={errors.contactInformation ?? errors}
-                  touched={touched.contactInformation ?? touched}
-                  selectedCountries={selectedCountriesforContactInformation}
-                  setSelectedCountries={
-                    setSelectedCountriesforContactInformation
-                  }
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
-                />
+                  <ContactInformationForm
+                    values={values.contactInformation}
+                    errors={errors.contactInformation ?? errors}
+                    touched={touched.contactInformation ?? touched}
+                    selectedCountries={selectedCountriesforContactInformation}
+                    setSelectedCountries={
+                      setSelectedCountriesforContactInformation
+                    }
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                  />
 
-                <SocialMediaForm
-                  values={values.SocialMedia}
-                  errors={errors.SocialMedia ?? errors}
-                  touched={touched.SocialMedia ?? touched}
-                  handleChange={handleChange}
-                />
+                  <SocialMediaForm
+                    values={values.SocialMedia}
+                    errors={errors.SocialMedia ?? errors}
+                    touched={touched.SocialMedia ?? touched}
+                    handleChange={handleChange}
+                  />
 
-                <ServicesOffered
-                  values={values}
-                  // errors={errors.FAQ ?? errors}
-                  // touched={touched.FAQ ?? touched}
-                  handleChange={handleChange}
-                  handleAddServices={(currentService) =>
-                    handleAddServices(currentService, values, setValues)
-                  }
-                  handleRemoveService={(index) =>
-                    handleRemoveService(index, values, setValues)
-                  }
-                />
+                  <ServicesOffered
+                    values={values}
+                    // errors={errors.FAQ ?? errors}
+                    // touched={touched.FAQ ?? touched}
+                    handleChange={handleChange}
+                    handleAddServices={(currentService) =>
+                      handleAddServices(currentService, values, setValues)
+                    }
+                    handleRemoveService={(index) =>
+                      handleRemoveService(index, values, setValues)
+                    }
+                  />
 
-                <PdfUploader
-                  setparentImagesUploadedImages={handlePdfsUpdates}
-                  pdfsToUpload={pdfsToUpload}
-                  imagesError={pdfsError}
-                  setImagesError={setPdfsError}
-                />
+                  <PdfUploader
+                    setparentImagesUploadedImages={handlePdfsUpdates}
+                    pdfsToUpload={pdfsToUpload}
+                    imagesError={pdfsError}
+                    setImagesError={setPdfsError}
+                  />
 
-                <FAQs
-                  values={values}
-                  errors={errors.FAQ ?? errors}
-                  touched={touched.FAQ ?? touched}
-                  handleChange={handleChange}
-                  handleAddFieldsForFAQ={() =>
-                    handleAddFAQsFields(values, setValues)
-                  }
-                  handleAddFAQ={(index) =>
-                    handleAddFAQ(index, values, setValues)
-                  }
-                  handleRemoveFAQ={(index) =>
-                    handleRemoveFAQ(index, values, setValues)
-                  }
-                  handleEditFAQ={(index) =>
-                    handleEditFAQ(index, values, setValues)
-                  }
-                />
-
-                <div style={{ paddingBottom: "300px" }} />
-                {/* disabled={!isValid} */}
-                <Col
-                  className="d-flex justify-content-end"
-                  style={{ marginRight: "150px" }}
-                >
-                  <Button
-                    type="submit"
-                    onClick={handleClickSubmit}
-                    className="btn btn-success roboto-semi-bold-16px-information btn-lg"
-                    style={{ padding: "0 100px" }}
+                  <FAQs
+                    values={values}
+                    errors={errors.FAQ ?? errors}
+                    touched={touched.FAQ ?? touched}
+                    handleChange={handleChange}
+                    handleAddFieldsForFAQ={() =>
+                      handleAddFAQsFields(values, setValues)
+                    }
+                    handleAddFAQ={(index) =>
+                      handleAddFAQ(index, values, setValues)
+                    }
+                    handleRemoveFAQ={(index) =>
+                      handleRemoveFAQ(index, values, setValues)
+                    }
+                    handleEditFAQ={(index) =>
+                      handleEditFAQ(index, values, setValues)
+                    }
+                  />
+                  <div style={{ paddingBottom: "300px" }} />
+                  {/* disabled={!isValid} */}
+                  <Col
+                    className="d-flex justify-content-end"
+                    style={{ marginRight: "150px" }}
                   >
-                    Submit Ad
-                  </Button>
-                </Col>
+                    <Button
+                      type="submit"
+                      onClick={handleClickSubmit}
+                      className="btn btn-success roboto-semi-bold-16px-information btn-lg"
+                      style={{ padding: "0 100px" }}
+                    >
+                      Submit Ad
+                    </Button>
+                  </Col>
 
-                <div style={{ paddingBottom: "200px" }} />
-              </Form>
-            )}
-          </Formik>
+                  <div style={{ paddingBottom: "200px" }} />
+                </Form>
+              )}
+            </Formik>
+          )}
         </Row>
       </Container>
     </div>
@@ -540,4 +584,4 @@ function PostAd() {
   );
 }
 
-export default PostAd;
+export default EditAd;

@@ -104,7 +104,7 @@ const FAQs = [
 // ];
 
 // Original array of image links
-const imageLinks = [one, two, three, two, three, one];
+const imageLinks = [one, two, three, two, three];
 
 // Function to chunk the array into groups of three
 const chunkArray = (array, chunkSize) => {
@@ -116,7 +116,7 @@ const chunkArray = (array, chunkSize) => {
 };
 
 // Divide the image links into chunks of three
-const imageChunks = chunkArray(imageLinks, 3);
+const imageChunks = chunkArray(imageLinks, 2);
 
 // Create the slides array with dynamically generated keys
 const slidesModified = imageChunks.map((chunk, index) => {
@@ -170,6 +170,7 @@ function ViewAd() {
   // const navigate = useNavigate();
 
   const [currentTab, setCurrentTab] = useState(1);
+  const [currentAd, setCurrentAd] = useState(null);
   const params = useParams();
   console.log(params); // 👉️
   // const { slides, options, componentToRender } = props;
@@ -204,6 +205,23 @@ function ViewAd() {
   //   setScrollSnaps(emblaApi.scrollSnapList());
   // }, []);
 
+  const getAdInfo = async () => {
+    try {
+      // setLoading(true);
+      const request = await secure_instance.request({
+        url: `/api/ads/${params.adId}/`,
+        method: "Get",
+      });
+      setCurrentAd(request.data.data);
+      // handleAlert();
+      // setPersonalInfo(request.data.data);
+      // setLoading(false);
+    } catch (error) {
+      // handleFailedAlert();
+      // setLoading(false);
+    }
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -223,6 +241,10 @@ function ViewAd() {
     emblaApi.on("reInit", onSelect);
     emblaApi.on("select", onSelect);
   }, [emblaApi, onSelect]);
+
+  useEffect(() => {
+    getAdInfo();
+  }, []);
 
   return (
     <>

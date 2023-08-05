@@ -69,12 +69,16 @@ function CompanyInformation({
 }) {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
-  const [countriesList, setCountries] = useState([]);
+  const [countriesList, setCountries] = useState(
+    values.country.length > 0 ? values.country : []
+  );
 
   const countryOptions = countriesList.map((country) => ({
     value: country.id,
     label: country.name,
   }));
+
+  console.log({ values });
 
   // const countryOptions = countries.map((country) => ({
   //   value: country,
@@ -251,7 +255,9 @@ function CompanyInformation({
               >
                 {/* <option selected value hidden="true">Select sub_category</option> */}
                 <option selected value hidden="true">
-                  Select sub category
+                  {values.sub_category !== ""
+                    ? values.sub_category.name
+                    : "Select sub category"}
                 </option>
                 {subCategories.map((subCategory, index) => (
                   // eslint-disable-next-line react/no-array-index-key
@@ -379,6 +385,29 @@ function CompanyInformation({
                 }
                 classNamePrefix="select"
               />
+
+              <Form.Select
+                aria-label="Default select example"
+                style={{ height: "56px", border: "1px solid #797979" }}
+                name="companyInformation.country"
+                value={values.country || ""}
+                onChange={handleChange}
+                // onBlur={handleBlur}
+                isValid={touched.country && !errors.country}
+                isInvalid={touched.country && !!errors.country}
+                className={errors.country ? "border-danger" : ""}
+              >
+                <option selected value hidden="true">
+                  Select County
+                </option>
+                {countryOptions.map((county, index) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <option key={index} value={county.value}>
+                    {county.label}
+                  </option>
+                ))}
+              </Form.Select>
+
               {errors?.country && (
                 <div className="text-danger">{errors.country}</div>
               )}

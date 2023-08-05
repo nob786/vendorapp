@@ -59,6 +59,34 @@ function ImagesModal({
     reader.readAsDataURL(uploadedImage);
   };
 
+  // const handleSelectedImage = async (e) => {
+  // 	e.preventDefault();
+
+  // 	setLoadingImage(true);
+  // 	setSelectedImage(e.target.files[0]);
+
+  // const formData = new FormData(); // pass in the form
+  // formData.append("image", e.target.files[0]);
+
+  // try {
+  // 	const response = await secure_instance.request({
+  // 		url: postImageURL,
+  // 		method: "Post",
+  // 		data: formData,
+  // 		headers: {
+  // 			"Content-Type": `multipart/form-data; boundary=${formData._boundary}`
+  // 		}
+  // 		});
+
+  // 		setImageUrlToUpload(response.data.data);
+  // 	} catch (e) {
+  // 		// --------- WILL ROUTE ON SOME PAGE ON FAILURE ---------
+  // 		console.log("error", e);
+  // 	}
+
+  // 	e.target.value = "";
+  // };
+
   const removeImage = (index) => {
     console.log("index to be removed", index);
     const updatedImages = [...images];

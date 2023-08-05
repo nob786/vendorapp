@@ -28,7 +28,8 @@ import {
   getAuthenticatedUser,
   refreshToken,
 } from "../../views/redux/Auth/authSlice";
-import { getCookie } from "../../utilities/utils";
+import { deleteCookie, getCookie } from "../../utilities/utils";
+import { handleProfileSettingsCurrentView } from "../../views/redux/TabNavigation/TabNavigationSlice";
 
 function Header() {
   const dispatch = useDispatch();
@@ -97,8 +98,40 @@ function Header() {
     setNavbarToggler(!navbarToggler);
   };
 
+  const handleLogout = () => {
+    deleteCookie("refresh_token");
+    setTimeout(() => {
+      window.location.reload();
+      //   navigate("/");
+    }, 500);
+  };
+
+  const handleBack = () => {
+    if (window.location.pathname === "/profile-settings") {
+      // navigate("/profile-settings");
+      dispatch(handleProfileSettingsCurrentView("profileSettings"));
+      return;
+    }
+    navigate(-1);
+  };
+
   return (
     <Navbar bg="body-tertiary" expand="lg" className="navbar">
+      <div className="me-2" style={{ cursor: "pointer" }} onClick={handleBack}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 22 22"
+          fill="none"
+        >
+          <path
+            // eslint-disable-next-line max-len
+            d="M21.6666 9.66668H5.43992L12.8933 2.21334L10.9999 0.333344L0.333252 11L10.9999 21.6667L12.8799 19.7867L5.43992 12.3333H21.6666V9.66668Z"
+            fill="#A0C49D"
+          />
+        </svg>
+      </div>
       <Navbar.Brand onClick={() => navigate("/")}>
         <img src={Allevents} alt="Allevents" style={{ minWidth: "100%" }} />
       </Navbar.Brand>
@@ -275,14 +308,35 @@ function Header() {
               </Col>
             </Row>
           ) : (
-            <Button
-              variant="outline-success"
-              type="submit"
-              className="mb-2"
-              onClick={(e) => navigate("/post-ad")}
-            >
-              Post Ad
-            </Button>
+            <Row>
+              <Col lg={3}>
+                <Button
+                  type="button"
+                  className="btn-danger-custom text-danger roboto-semi-bold-16px-information"
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "700",
+                    // color: "red",
+                    padding: "0",
+                  }}
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              </Col>
+
+              <Col lg={2}>
+                <Button
+                  variant="outline-success"
+                  type="submit"
+                  className="mb-2 ms-3"
+                  onClick={(e) => navigate("/post-ad")}
+                  style={{ whiteSpace: "nowrap" }}
+                >
+                  Post Ad
+                </Button>
+              </Col>
+            </Row>
           )}
         </Form>
       </Navbar.Collapse>
