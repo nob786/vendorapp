@@ -68,10 +68,11 @@ const TabNavigation = () => {
               isActive(tab.path) && "tab-active"
             }`}
             onClick={() => handleClickTabNav(index, tab.path)}
+            style={{ cursor: "pointer" }}
           >
             {" "}
             <img src={tab.icon} alt={tab.icon} className="me-2" />
-            {tab.label}
+            <span className="tab-label">{tab.label}</span>
           </div>
         ))}
       </div>

@@ -538,7 +538,7 @@ function EditAd() {
 
       <div className="ad-banner d-flex align-items-center justify-content-between">
         <div style={{ marginLeft: "100px" }}>
-          <div className="roboto-bold-36px-h1">Post an Ad</div>
+          <div className="roboto-bold-36px-h1">Edit Ad</div>
           <div className="roboto-regular-18px-body3">
             Reach thousands of buyers on our platform
           </div>
@@ -722,7 +722,7 @@ function EditAd() {
                       className="btn btn-success roboto-semi-bold-16px-information btn-lg"
                       style={{ padding: "0 100px" }}
                     >
-                      Submit Ad
+                      Save Changes
                     </Button>
                   </Col>
 

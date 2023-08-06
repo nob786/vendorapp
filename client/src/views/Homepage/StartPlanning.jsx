@@ -1,6 +1,12 @@
 import React from "react";
 import {
-  Button, Col, Container, Form, FormControl, InputGroup, Row,
+  Button,
+  Col,
+  Container,
+  Form,
+  FormControl,
+  InputGroup,
+  Row,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import heroImg from "../../assets/images/harold.jpg";
@@ -28,16 +34,29 @@ function StartPlanning() {
     // <div>StartPlanning</div>
     <Container fluid style={{ height: "auto", padding: "0" }}>
       <Row className="h-100 col-12 g-0">
-        <Col md={5} className="d-flex" style={{ justifyContent: "right", paddingRight: "0" }}>
-          <img src={planEventsImg} alt="planEventsImg" style={{ maxWidth: "100%" }} />
+        <Col
+          md={5}
+          className="d-flex justify-content-left"
+          style={{ paddingRight: "0" }}
+        >
+          <img
+            src={planEventsImg}
+            alt="planEventsImg"
+            style={{ maxWidth: "100%" }}
+          />
         </Col>
-        <Col md={7} className="d-flex align-items-center justify-content-center">
+        <Col
+          md={7}
+          className="d-flex align-items-center justify-content-center"
+        >
           <div style={{ padding: "50px 0" }}>
             <div style={{ maxWidth: "461px" }}>
-              <div className="text-left roboto-bold-36px-h1">Start planning your events!</div>
+              <div className="text-left roboto-bold-36px-h1">
+                Start planning your events!
+              </div>
               <p className="text-left roboto-regular-16px-information mt-3">
-                Let’s plan together your unforgettable memories! We offer you all the
-                necessary tools for managing your events.
+                Let’s plan together your unforgettable memories! We offer you
+                all the necessary tools for managing your events.
               </p>
             </div>
             <div className="d-flex justify-content-left mt-3">

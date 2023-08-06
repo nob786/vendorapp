@@ -12,7 +12,7 @@ import * as formik from "formik";
 import * as Yup from "yup";
 import { Alert } from "@mui/material";
 import Header from "../../components/Navbar/Navbar";
-import user from "../../assets/images/profile-settings/user.svg";
+import userIcon from "../../assets/images/profile-settings/user.svg";
 import personIcon from "../../assets/images/profile-settings/person.svg";
 import mapIcon from "../../assets/images/post-ad/map.svg";
 import postalIcon from "../../assets/images/profile-settings/postal.svg";
@@ -25,6 +25,7 @@ import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
+import { useSelector } from "react-redux";
 
 function CompanyInformationSettings() {
   const { Formik } = formik;
@@ -33,6 +34,7 @@ function CompanyInformationSettings() {
   const [isAlert, setIsAlert] = useState(false);
   const [isFailedAlert, setIsFailedAlert] = useState(false);
   const [loading, setLoading] = useState(false);
+  const user = useSelector((state) => state.auth.user);
 
   const initialValues = {
     company_name: companyInformation.name,
@@ -115,7 +117,7 @@ function CompanyInformationSettings() {
     // console.log(values);
     try {
       const request = await secure_instance.request({
-        url: "/api/companies/1/",
+        url: `/api/companies/${user.userId}/`,
         method: "Get",
       });
       setCompanyInformation(request.data.data);
@@ -151,7 +153,7 @@ function CompanyInformationSettings() {
           }}
         >
           <div style={{ marginTop: "30px" }}>
-            <img src={user} alt="user" />
+            <img src={userIcon} alt="user" />
           </div>
         </div>
       </div>

@@ -117,21 +117,27 @@ function Header() {
 
   return (
     <Navbar bg="body-tertiary" expand="lg" className="navbar">
-      <div className="me-2" style={{ cursor: "pointer" }} onClick={handleBack}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="22"
-          height="22"
-          viewBox="0 0 22 22"
-          fill="none"
+      {window.location.pathname !== "/" && (
+        <div
+          className="me-2"
+          style={{ cursor: "pointer" }}
+          onClick={handleBack}
         >
-          <path
-            // eslint-disable-next-line max-len
-            d="M21.6666 9.66668H5.43992L12.8933 2.21334L10.9999 0.333344L0.333252 11L10.9999 21.6667L12.8799 19.7867L5.43992 12.3333H21.6666V9.66668Z"
-            fill="#A0C49D"
-          />
-        </svg>
-      </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 22 22"
+            fill="none"
+          >
+            <path
+              // eslint-disable-next-line max-len
+              d="M21.6666 9.66668H5.43992L12.8933 2.21334L10.9999 0.333344L0.333252 11L10.9999 21.6667L12.8799 19.7867L5.43992 12.3333H21.6666V9.66668Z"
+              fill="#A0C49D"
+            />
+          </svg>
+        </div>
+      )}
       <Navbar.Brand onClick={() => navigate("/")}>
         <img src={Allevents} alt="Allevents" style={{ minWidth: "100%" }} />
       </Navbar.Brand>

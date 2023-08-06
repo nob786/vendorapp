@@ -68,15 +68,15 @@ function EmblaCarousel(props) {
 
   const scrollPrev = useCallback(
     () => emblaApi && emblaApi.scrollPrev(),
-    [emblaApi],
+    [emblaApi]
   );
   const scrollNext = useCallback(
     () => emblaApi && emblaApi.scrollNext(),
-    [emblaApi],
+    [emblaApi]
   );
   const scrollTo = useCallback(
     (index) => emblaApi && emblaApi.scrollTo(index),
-    [emblaApi],
+    [emblaApi]
   );
 
   const onInit = useCallback((emblaApi) => {
@@ -106,21 +106,18 @@ function EmblaCarousel(props) {
       <div className="embla">
         <div className="embla__viewport" ref={emblaRef}>
           <div className="embla__container">
-
             {componentToRender === undefined
-              // <h3>Pass a custom component to render</h3>
-              ? slides.map((index) => (
-                <div className="embla__slide" key={index}>
-                  <img
-                    className="embla__slide__img"
-                    src={imageByIndex(index)}
-                    alt="Your alt text"
-                  />
-                </div>
-              ))
-              : slides.map((index) => (
-                componentToRender(index)
-              ))}
+              ? // <h3>Pass a custom component to render</h3>
+                slides.map((index) => (
+                  <div className="embla__slide" key={index}>
+                    <img
+                      className="embla__slide__img"
+                      src={imageByIndex(index)}
+                      alt="Your alt text"
+                    />
+                  </div>
+                ))
+              : slides.map((slide, index) => componentToRender(slide, index))}
           </div>
         </div>
         <PrevButton onClick={scrollPrev} enabled={prevBtnEnabled} />

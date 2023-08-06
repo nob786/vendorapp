@@ -286,7 +286,7 @@ function FAQs({
 
         <Col md={12} className="">
           <Button
-            type="submit"
+            type="button"
             onClick={handleAddFieldsForFAQ}
             className="btn btn-success roboto-semi-bold-16px-information mt-3"
           >
