@@ -11,25 +11,26 @@ import { secure_instance } from "../../axios/axios-config";
 function ImageUploader({
   setparentImagesUploadedImages,
   imagesError,
-  uploadedImages,
+  // uploadedImages,
   setImagesError,
   setShowImagesModal,
   imagesToUpload,
   setImagesToUpload,
+  editAd,
 }) {
   const [mainImage, setMainImage] = useState(null);
   const [images, setImages] = useState([]);
 
-  useEffect(() => {
-    if (uploadedImages[0] === null) {
-      setMainImage(null);
-      return;
-    }
-    if (mainImage === null) {
-      console.count("rendering");
-      setMainImage(uploadedImages[0]);
-    }
-  }, [setparentImagesUploadedImages, uploadedImages]);
+  // useEffect(() => {
+  //   if (uploadedImages[0] === null) {
+  //     setMainImage(null);
+  //     return;
+  //   }
+  //   if (mainImage === null) {
+  //     console.count("rendering");
+  //     setMainImage(uploadedImages[0]);
+  //   }
+  // }, [setparentImagesUploadedImages, uploadedImages]);
 
   const uploadFileToCloud = async (uploadedImage) => {
     const formData = new FormData(); // pass in the form
@@ -67,7 +68,7 @@ function ImageUploader({
     };
     console.log("uploadedImage", uploadedImage);
     uploadFileToCloud(uploadedImage);
-    setparentImagesUploadedImages(updatedImages);
+    // setparentImagesUploadedImages(updatedImages);
 
     // console.log("updatedImages inside image component", updatedImages);
     setImagesError(false);
@@ -85,8 +86,8 @@ function ImageUploader({
           url: urlToDelete,
         },
       });
-
-      if (request.status_code === 200) {
+      console.log("request", request);
+      if (request.status === 200) {
         const imageIndex = images.indexOf(image);
 
         const cloneImages = [...images];
@@ -96,6 +97,16 @@ function ImageUploader({
         }
 
         setImages(cloneImages);
+
+        const imageToUploadIndex = imagesToUpload.indexOf(image);
+
+        const cloneImagesToUpload = [...imagesToUpload];
+
+        if (imageToUploadIndex !== -1) {
+          cloneImagesToUpload.splice(index, 1);
+        }
+        console.log("cloneImagesToUpload", cloneImagesToUpload);
+        setImagesToUpload(cloneImagesToUpload);
       }
     } catch (err) {}
 
@@ -109,6 +120,15 @@ function ImageUploader({
 
     setImages(cloneImages);
   };
+
+  // console.log("imagesToUpload +=================", imagesToUpload);
+
+  useEffect(() => {
+    setImages(imagesToUpload);
+  }, [imagesToUpload]);
+
+  // const imagesToMap = editAd ? imagesToUpload : images;
+  const imagesToMap = images;
 
   return (
     <Container fluid style={{ marginTop: "30px" }}>
@@ -153,7 +173,7 @@ function ImageUploader({
         {/* render images here */}
         <Row className="h-100 col-12 g-0 flex-column-reverse flex-md-row">
           <div className="d-flex" style={{ flexWrap: "wrap" }}>
-            {images.map((image, index) => (
+            {imagesToMap?.map((image, index) => (
               <Col md={3} lg={3} key={index}>
                 {/* {console.log({ index })} */}
                 <div className="mb-5">
@@ -167,7 +187,7 @@ function ImageUploader({
                       }}
                     >
                       <img
-                        src={image.previewURL}
+                        src={image.previewURL ?? image}
                         alt={`Preview ${index + 1}`}
                         style={{
                           width: "141px",

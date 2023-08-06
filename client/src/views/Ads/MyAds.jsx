@@ -191,7 +191,7 @@ function MyAds() {
             vendorAds.map((product) => {
               const {
                 id,
-                category,
+                // category,
                 description,
                 sub_category,
                 created_at,
@@ -251,9 +251,9 @@ function MyAds() {
                                   maxWidth: "70%",
                                 }}
                               >
-                                {`${
+                                {/* {`${
                                   description && description.slice(0, 200)
-                                }...`}
+                                }...`} */}
                               </Card.Text>
                             </div>
 
@@ -271,7 +271,7 @@ function MyAds() {
                                     alt="MapIcon"
                                     className="me-2"
                                   />
-                                  {country}
+                                  {country.name}
                                 </div>
                                 <div>
                                   <img

@@ -26,6 +26,25 @@ export const handleCreateNewAd = createAsyncThunk(
   }
 );
 
+export const handleEditAd = createAsyncThunk(
+  "Ads/edit",
+  async (data, { rejectWithValue }) => {
+    const dataToEdit = data.data;
+    try {
+      const response = await secure_instance.request({
+        url: `/api/ads/${data.adID}/`,
+        method: "Patch",
+        data: dataToEdit,
+      });
+      return response.data; // Assuming your loginAPI returns data with access_token, user_id, and role_id
+    } catch (err) {
+      // Use `err.response.data` as `action.payload` for a `rejected` action,
+      // by explicitly returning it using the `rejectWithValue()` utility
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 export const listVendorAds = createAsyncThunk(
   "Ads/list",
   async (data, { rejectWithValue }) => {
@@ -66,6 +85,19 @@ export const AdsSlice = createSlice({
         console.log("action.payload", action.payload);
       })
       .addCase(handleCreateNewAd.rejected, (state, action) => {
+        // console.log(action);
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(handleEditAd.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(handleEditAd.fulfilled, (state, action) => {
+        state.loading = false;
+        console.log("action.payload", action.payload);
+      })
+      .addCase(handleEditAd.rejected, (state, action) => {
         // console.log(action);
         state.loading = false;
         state.error = action.payload;

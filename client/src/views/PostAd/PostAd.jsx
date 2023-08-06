@@ -83,8 +83,10 @@ function PostAd() {
       ...(relatedSubCategoryId !== null && {
         related_sub_categories: relatedSubCategoryId,
       }),
-      country: 1,
-      activation_countries: values.companyInformation.country,
+      country: parseInt(values.contactInformation.country, 10),
+      activation_countries: Array.isArray(values.companyInformation.country)
+        ? values.companyInformation.country
+        : [values.companyInformation.country],
       faqs: values.FAQ.faqs,
     };
 
@@ -116,7 +118,7 @@ function PostAd() {
   };
   const Schema = Yup.object().shape({
     companyInformation: Yup.object().shape({
-      commercial_name: Yup.string().required("Commercial Name is required"),
+      // commercial_name: Yup.string().required("Commercial Name is required"),
       category: Yup.string().required("Category is required"),
       sub_category: Yup.string().required("Sub-category is required"),
       description: Yup.string()
@@ -227,7 +229,7 @@ function PostAd() {
 
   const initialValues = {
     companyInformation: {
-      commercial_name: "",
+      // commercial_name: "",
       category: "",
       sub_category: "",
       description: "",
@@ -272,7 +274,7 @@ function PostAd() {
   const validate = (values) => {
     const errors = {};
 
-    const isAnyValueNotNull = imagesToPreview.some((value) => value !== null);
+    const isAnyValueNotNull = imagesToUpload.some((value) => value !== null);
 
     if (!isAnyValueNotNull) {
       setImagesError(true);
@@ -507,7 +509,8 @@ function PostAd() {
                 />
 
                 <VideoUploader
-                  setparentVideoUploaded={handleVideoToPreview}
+                  // setparentVideoUploaded={handleVideoToPreview}
+                  videoToPreview={videoToPreview}
                   videoToUpload={videoToUpload}
                   setVideoToUpload={setVideoToUpload}
                 />

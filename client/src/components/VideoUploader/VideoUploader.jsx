@@ -1,24 +1,33 @@
 import { faAdd, faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
 import { secure_instance } from "../../axios/axios-config";
 
-function VideoUploader({ setparentVideoUploaded, setVideoToUpload }) {
+function VideoUploader({ videoToPreview, setVideoToUpload }) {
   const [video, setVideo] = useState(null);
 
   const uploadFileToCloud = async (uploadedVideo) => {
-    const videoToUpload = {
-      file_name: uploadedVideo.name,
-      content_type: uploadedVideo.type,
-      upload_type: "video",
-    };
-    const request = await secure_instance.request({
-      url: "/api/ads/upload-url/",
-      method: "Post",
-      data: videoToUpload,
-    });
-    setVideoToUpload([request.data.data.upload_url]);
+    // const videoToUpload = {
+    //   file_name: uploadedVideo.name,
+    //   content_type: uploadedVideo.type,
+    //   upload_type: "video",
+    // };
+    const formData = new FormData(); // pass in the form
+    formData.append("file", uploadedVideo);
+    formData.append("content_type", uploadedVideo.type);
+
+    try {
+      const request = await secure_instance.request({
+        url: "/api/ads/upload-url/",
+        method: "Post",
+        data: formData,
+      });
+      setVideoToUpload([request.data.data.file_url]);
+    } catch (e) {
+      // --------- WILL ROUTE ON SOME PAGE ON FAILURE ---------
+      console.log("error", e);
+    }
   };
 
   const handleVideoUpload = (event) => {
@@ -33,7 +42,7 @@ function VideoUploader({ setparentVideoUploaded, setVideoToUpload }) {
           previewURL: reader.result,
         });
       };
-      setparentVideoUploaded(uploadedVideo);
+      // setparentVideoUploaded(uploadedVideo);
       uploadFileToCloud(uploadedVideo);
 
       console.log("uploadedVideo", uploadedVideo);
@@ -47,6 +56,15 @@ function VideoUploader({ setparentVideoUploaded, setVideoToUpload }) {
   const removeVideo = () => {
     setVideo(null);
   };
+
+  useEffect(() => {
+    if (videoToPreview.length > 0) {
+      setVideo(videoToPreview);
+    }
+  }, [videoToPreview]);
+
+  console.log("video---->>", video);
+  console.log("videoToPreview---->>", videoToPreview);
 
   return (
     <Container fluid style={{ marginTop: "40px" }}>
@@ -103,7 +121,7 @@ function VideoUploader({ setparentVideoUploaded, setVideoToUpload }) {
           >
             <video
               style={{ width: "145px", height: "122px", objectFit: "cover" }}
-              src={video.previewURL}
+              src={video.previewURL ?? video}
               controls
             />
             <button

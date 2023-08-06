@@ -74,7 +74,11 @@ function CompanyInformation({
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [isMultipleCountries, setIsMultipleCountries] = useState(false);
-  const [relatedSubCategory, setRelatedSubCategory] = useState(null);
+  const [relatedSubCategory, setRelatedSubCategory] = useState(
+    values?.related_sub_categories
+  );
+
+  console.log("relatedSubCategory----------------", relatedSubCategory);
   const [modalShow, setModalShow] = React.useState(false);
   const [countriesList, setCountries] = useState(
     values.country.length > 0 ? values.country : []
@@ -224,7 +228,7 @@ function CompanyInformation({
           Company Information
         </div>
         <div className="">
-          <Col md={6} lg={4}>
+          {/* <Col md={6} lg={4}>
             <Form.Group className="form-group mb-3" controlId="form3Example3">
               <Form.Label
                 className="roboto-medium-20px-body1 d-flex align-items-center"
@@ -253,7 +257,7 @@ function CompanyInformation({
                 {errors.commercial_name}
               </Form.Control.Feedback>
             </Form.Group>
-          </Col>
+          </Col> */}
           <Col md={6} lg={4}>
             <Form.Group className="form-group mb-3" controlId="form3Example4">
               <Form.Label
@@ -289,7 +293,9 @@ function CompanyInformation({
                 className={errors.category ? "border-danger" : ""}
               >
                 <option selected value hidden="true">
-                  Select Category
+                  {values.category !== ""
+                    ? values.category.name
+                    : "Select Category"}
                 </option>
                 {categories?.map((category, index) => (
                   // eslint-disable-next-line react/no-array-index-key
@@ -363,7 +369,7 @@ function CompanyInformation({
                 className="roboto-regular-18px-information"
                 style={{ fontWeight: "600" }}
               >
-                {`${relatedSubCategory?.name} is added as sub category`}
+                {`${relatedSubCategory?.name} is added as related sub category`}
               </div>
               <FontAwesomeIcon
                 icon={faClose}
@@ -520,6 +526,7 @@ function CompanyInformation({
               )}
             </Form.Group>
           </Col>
+          {console.log("values.country", values.country)}
         </div>
       </Row>
     </Container>

@@ -201,7 +201,28 @@ function ContactInformationForm({
               />
               Country
             </Form.Label>
-            <Select
+            <Form.Select
+              aria-label="Default select example"
+              style={{ height: "56px", border: "1px solid #797979" }}
+              name="contactInformation.country"
+              value={values.country || ""}
+              onChange={handleChange}
+              // onBlur={handleBlur}
+              isValid={touched.country && !errors.country}
+              isInvalid={touched.country && !!errors.country}
+              className={errors.country ? "border-danger" : ""}
+            >
+              <option selected value hidden="true">
+                Select County
+              </option>
+              {countryOptions.map((county, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <option key={index} value={county.value}>
+                  {county.label}
+                </option>
+              ))}
+            </Form.Select>
+            {/* <Select
               options={countryOptions}
               isMulti
               name="contactInformation.country"
@@ -216,7 +237,7 @@ function ContactInformationForm({
                   : "country-field border-custom"
               }
               classNamePrefix="select"
-            />
+            /> */}
             {errors?.country && (
               <div className="text-danger">{errors.country}</div>
             )}

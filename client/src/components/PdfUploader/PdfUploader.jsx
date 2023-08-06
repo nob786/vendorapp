@@ -7,6 +7,7 @@ import { Button, Col, Container, Row } from "react-bootstrap";
 import InfoIcon from "../../assets/images/gg_info.svg";
 import "../ImageUploader/ImageUploader.css";
 import { secure_instance } from "../../axios/axios-config";
+import { useEffect } from "react";
 
 function PdfUploader({
   setparentImagesUploadedImages,
@@ -14,27 +15,32 @@ function PdfUploader({
   setImagesError,
   pdfsToUpload,
 }) {
-  const [pdfs, setPdfs] = useState(Array(5).fill(null));
+  const [pdfs, setPdfs] = useState([]);
 
   // const handleImagesUpload = (event, image) => {
   //   console.log({ pdfs });
   // };
 
   const uploadFileToCloud = async (uploadedPdf) => {
-    const pdfToUpload = {
-      file_name: uploadedPdf.name,
-      content_type: uploadedPdf.type,
-      upload_type: "pdf",
-    };
-    const request = await secure_instance.request({
-      url: "/api/ads/upload-url/",
-      method: "Post",
-      data: pdfToUpload,
-    });
-    setparentImagesUploadedImages([
-      ...pdfsToUpload,
-      request.data.data.upload_url,
-    ]);
+    const formData = new FormData(); // pass in the form
+    formData.append("file", uploadedPdf);
+    formData.append("content_type", uploadedPdf.type);
+
+    try {
+      const request = await secure_instance.request({
+        url: "/api/ads/upload-url/",
+        method: "Post",
+        data: formData,
+      });
+      setparentImagesUploadedImages([
+        ...pdfsToUpload,
+        request.data.data.file_url,
+      ]);
+    } catch (e) {
+      // setImageUrlToUpload(response.data.data);
+      // --------- WILL ROUTE ON SOME PAGE ON FAILURE ---------
+      console.log("error", e);
+    }
   };
 
   const handleImageUpload = (event, index) => {
@@ -64,6 +70,12 @@ function PdfUploader({
     setPdfs(updatedImages);
     setparentImagesUploadedImages(updatedImages);
   };
+
+  useEffect(() => {
+    if (pdfsToUpload.length > 0) {
+      setPdfs(pdfsToUpload);
+    }
+  }, [pdfsToUpload]);
 
   return (
     <Container fluid style={{ marginTop: "30px" }}>
@@ -105,15 +117,6 @@ function PdfUploader({
           </li>
         </ul>
 
-        {/* <Button
-          type="button"
-          className="btn btn-success roboto-semi-bold-16px-information"
-          style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem", height: "44px" }}
-          onClick={handleImagesUpload}
-        >
-          Upload Images
-        </Button> */}
-
         <div className="d-flex align-items-center">
           <img src={InfoIcon} alt={InfoIcon} />
           <span
@@ -123,96 +126,95 @@ function PdfUploader({
             Double click to set main image
           </span>
         </div>
-        <div
-          className="d-flex align-items-center justify-content-between"
-          style={{ flexWrap: "wrap" }}
-        >
-          {pdfs.map((pdf, index) => (
-            <Col md={3} lg={2} key={index}>
-              <div className="mb-5">
-                {pdf !== null ? (
-                  <div
-                    style={{
-                      position: "relative",
-                      border: "2px dotted #386C34",
-                      width: "145px",
-                      height: "126px",
-                    }}
-                  >
-                    {/* <img
+
+        <Row className="h-100 col-12 g-0 flex-column-reverse flex-md-row">
+          <div className="d-flex" style={{ flexWrap: "wrap" }}>
+            {pdfs.map((pdf, index) => (
+              <Col md={3} lg={3} key={index}>
+                <div className="mb-5">
+                  {pdf !== null && (
+                    <div
+                      style={{
+                        position: "relative",
+                        border: "2px dotted #386C34",
+                        width: "145px",
+                        height: "126px",
+                      }}
+                    >
+                      {/* <img
                       src={image.previewURL}
                       alt={`Preview ${index + 1}`}
                       style={{ width: "141px", height: "122px", objectFit: "cover" }}
                     /> */}
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: "100%",
-                        height: "100%",
-                      }}
-                    >
-                      PDF Icon
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      >
+                        PDF Icon
+                      </div>
+                      <button
+                        type="button"
+                        style={{ position: "absolute", top: "0", right: "0" }}
+                        className="upload-img-close-btn"
+                        onClick={() => removeImage(index)}
+                      >
+                        <FontAwesomeIcon
+                          icon={faClose}
+                          style={{
+                            position: "absolute",
+                            top: "2px",
+                            right: "5px",
+                            color: "#FFF",
+                          }}
+                        />
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      style={{ position: "absolute", top: "0", right: "0" }}
-                      className="upload-img-close-btn"
-                      onClick={() => removeImage(index)}
-                    >
-                      <FontAwesomeIcon
-                        icon={faClose}
-                        style={{
-                          position: "absolute",
-                          top: "2px",
-                          right: "5px",
-                          color: "#FFF",
-                        }}
-                      />
-                    </button>
-                  </div>
-                ) : (
-                  <div
-                    style={{
-                      border: "2px dashed #A0C49D",
-                      width: "141px",
-                      height: "122px",
-                    }}
-                  >
-                    <label
-                      htmlFor={`pdf-input-${index}`}
-                      className="d-flex align-items-center justify-content-center"
-                      style={{
-                        width: "141px",
-                        height: "122px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <FontAwesomeIcon
-                        icon={faAdd}
-                        style={{
-                          color: "#A0C49D",
-                          width: "40px",
-                          height: "40px",
-                          marginRight: "10px",
-                          marginBottom: "8px",
-                        }}
-                      />
-                    </label>
-                    <input
-                      id={`pdf-input-${index}`}
-                      type="file"
-                      accept="application/pdf"
-                      onChange={(event) => handleImageUpload(event, index)}
-                      style={{ display: "none" }}
-                    />
-                  </div>
-                )}
-              </div>
-            </Col>
-          ))}
-        </div>
+                  )}
+                </div>
+              </Col>
+            ))}
+            <div
+              style={{
+                border: "2px dashed #A0C49D",
+                width: "141px",
+                height: "122px",
+              }}
+            >
+              <label
+                htmlFor={`pdf-input`}
+                className="d-flex align-items-center justify-content-center"
+                style={{
+                  width: "141px",
+                  height: "122px",
+                  cursor: "pointer",
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faAdd}
+                  style={{
+                    color: "#A0C49D",
+                    width: "40px",
+                    height: "40px",
+                    marginRight: "10px",
+                    marginBottom: "8px",
+                  }}
+                />
+              </label>
+              <input
+                id={`pdf-input`}
+                type="file"
+                accept="application/pdf"
+                onChange={(event) => handleImageUpload(event)}
+                style={{ display: "none" }}
+              />
+            </div>
+          </div>
+        </Row>
       </div>
     </Container>
   );

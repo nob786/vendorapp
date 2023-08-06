@@ -23,7 +23,7 @@ import FAQs from "../PostAd/FAQs";
 import PdfUploader from "../../components/PdfUploader/PdfUploader";
 import ImagesModal from "../../components/ImageUploader/ImagesModal";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
-import { handleCreateNewAd } from "../redux/Posts/AdsSlice";
+import { handleCreateNewAd, handleEditAd } from "../redux/Posts/AdsSlice";
 import { secure_instance } from "../../axios/axios-config";
 import { useParams } from "react-router-dom";
 
@@ -36,7 +36,8 @@ function EditAd() {
     setSelectedCountriesforContactInformation,
   ] = useState([]);
   // const [uploadedImages, setUploadedImages] = useState(Array(5).fill(null));
-  const [imagesToPreview, setImagesToPreview] = useState(Array(5).fill(null));
+  const [currentAd, setCurrentAd] = useState(null);
+  // const [imagesToPreview, setImagesToPreview] = useState(Array(5).fill(null));
   const [imagesToUpload, setImagesToUpload] = useState([]);
   const [imagesError, setImagesError] = useState(false);
   const [pdfsToUpload, setPdfsToUpload] = useState([]);
@@ -44,12 +45,16 @@ function EditAd() {
   const [videoToPreview, setVideoToPreview] = useState([]);
   const [videoToUpload, setVideoToUpload] = useState([]);
   const [showImagesModal, setShowImagesModal] = useState(false);
-  const [currentAd, setCurrentAd] = useState(null);
+  const [relatedSubCategoryId, setRelatedSubCategoryId] = useState(null);
+
+  const [localInitialValues, setLocalInitialValues] = useState(null);
 
   const dispatch = useDispatch();
   const params = useParams();
 
   console.log("currentAd => ", currentAd);
+  console.log("imagesToUpload =======================> ", imagesToUpload);
+  console.log("videoToUpload => ", videoToUpload);
 
   const handleSubmitAllForms = (values) => {
     // ...(uploadedImages && { imageUploader: { images: uploadedImages } }),
@@ -57,13 +62,17 @@ function EditAd() {
       return;
     }
 
-    const addSubCategoryToFaqs = values.FAQ.faqs.map((faq) => {
-      faq,
-        (faq.sub_category = parseInt(
-          values.companyInformation.sub_category,
-          10
-        ));
-    });
+    console.log(
+      "values>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<",
+      values
+    );
+
+    const addSubCategoryToFaqs = values.FAQ.faqs.map((faq) => ({
+      ...faq, // Copy the existing properties of the FAQ object
+      sub_category: parseInt(values.companyInformation.sub_category.id, 10), // Add the new 'sub_category' property
+    }));
+
+    console.log({ addSubCategoryToFaqs });
 
     const objToSubmit = {
       media_urls: {
@@ -83,26 +92,30 @@ function EditAd() {
       twitter: values.SocialMedia.twitterURL,
       // others: values.SocialMedia.othersURL,
       offered_services: values.servicesOffered.services,
-      sub_category: parseInt(values.companyInformation.sub_category, 10),
-      related_sub_categories: 1,
-      country: 1,
-      activation_countries: values.companyInformation.country.map(
-        (country) => country.id
-      ),
-      faqs: values.FAQ.faqs,
+      sub_category: values.companyInformation.sub_category.id
+        ? parseInt(values.companyInformation.sub_category.id, 10)
+        : parseInt(values.companyInformation.sub_category, 10),
+
+      related_sub_categories: relatedSubCategoryId,
+      country: parseInt(values.contactInformation.country, 10),
+      activation_countries: values.companyInformation.country,
+      faqs: addSubCategoryToFaqs,
     };
+    // activation_countries: values.companyInformation.country.map(
+    //   (country) => country.id
+    // ),
 
     console.log(
       "newObj-------------------------------------------------:",
       objToSubmit
     );
-    dispatch(handleCreateNewAd(objToSubmit));
+    dispatch(handleEditAd({ adID: currentAd.id, data: objToSubmit }));
     // console.log("Form 2 data:", formData2);
     // }
   };
   const Schema = Yup.object().shape({
     companyInformation: Yup.object().shape({
-      commercial_name: Yup.string().required("Commercial Name is required"),
+      // commercial_name: Yup.string().required("Commercial Name is required"),
       category: Yup.mixed().when({
         is: (value) => value !== undefined, // Apply the validation when the field is present
         then: () =>
@@ -153,7 +166,7 @@ function EditAd() {
           'Only letters, digits, ".,;:\'/?!@&*()^+-|" signs, and spaces are allowed'
         ),
       // .required("Required"),
-      country: Yup.array().min(1, "country is required"),
+      country: Yup.mixed().required("This field is required"),
     }),
     contactInformation: Yup.object().shape({
       websiteUrl: Yup.string()
@@ -211,42 +224,49 @@ function EditAd() {
     }),
   });
 
-  const initialValues = {
-    companyInformation: {
-      commercial_name: "",
-      category: "",
-      sub_category: currentAd?.sub_category,
-      description: "",
-      country: currentAd?.activation_countries, // Initialize without any selected countries
-    },
-    contactInformation: {
-      contact_number: currentAd?.number,
-      websiteUrl: currentAd?.website,
-      country: [],
-      city: currentAd?.city,
-      street: currentAd?.street,
-      fullAddress: currentAd?.full_address,
-    },
-    SocialMedia: {
-      facebookURL: currentAd?.facebook,
-      instagramURL: currentAd?.instagram,
-      youtubeURL: currentAd?.youtube,
-      tiktokURL: currentAd?.tiktok,
-      twitterURL: currentAd?.twitter,
-    },
-    // currentAd?.
-    FAQ: {
-      faqs: [],
-    },
-    servicesOffered: {
-      services: currentAd?.offered_services,
-    },
-  };
+  // const initialValues = {
+  //   companyInformation: {
+  //     // commercial_name: "",
+  //     category: currentAd?.sub_category.category,
+  //     sub_category: currentAd?.sub_category,
+  //     related_sub_categories: currentAd?.related_sub_categories,
+  //     description: "",
+  //     // country: currentAd?.activation_countries[0].id, // Initialize without any selected countries
+  //     country: currentAd?.activation_countries.map((country) => country.id),
+  //   },
+  //   // media_urls: {
+  //   //   images: imagesToUpload,
+  //   //   video: videoToUpload,
+  //   //   pdf: pdfsToUpload,
+  //   // },
+  //   contactInformation: {
+  //     contact_number: currentAd?.number,
+  //     websiteUrl: currentAd?.website,
+  //     country: [],
+  //     city: currentAd?.city,
+  //     street: currentAd?.street,
+  //     fullAddress: currentAd?.full_address,
+  //   },
+  //   SocialMedia: {
+  //     facebookURL: currentAd?.facebook,
+  //     instagramURL: currentAd?.instagram,
+  //     youtubeURL: currentAd?.youtube,
+  //     tiktokURL: currentAd?.tiktok,
+  //     twitterURL: currentAd?.twitter,
+  //   },
+  //   // currentAd?.
+  //   FAQ: {
+  //     faqs: currentAd?.ad_faqs,
+  //   },
+  //   servicesOffered: {
+  //     services: currentAd?.offered_services,
+  //   },
+  // };
 
   const validate = (values) => {
     const errors = {};
 
-    const isAnyValueNotNull = imagesToPreview.some((value) => value !== null);
+    const isAnyValueNotNull = imagesToUpload.some((value) => value !== null);
 
     if (!isAnyValueNotNull) {
       setImagesError(true);
@@ -278,16 +298,16 @@ function EditAd() {
   };
 
   const handleImageUpdates = (images) => {
-    setImagesToPreview(images);
+    // setImagesToPreview(images);
   };
 
   const handlePdfsUpdates = (images) => {
     setPdfsToUpload(images);
   };
 
-  const handleVideoToPreview = (videos) => {
-    setVideoToPreview(videos);
-  };
+  // const handleVideoToPreview = (videos) => {
+  //   setVideoToPreview(videos);
+  // };
 
   const handleClickSubmit = () => {
     console.log("submit clickedddddddddddd");
@@ -385,6 +405,47 @@ function EditAd() {
         method: "Get",
       });
       console.log("request.data.data", request.data.data);
+      setLocalInitialValues({
+        companyInformation: {
+          // commercial_name: "",
+          category: request.data.data?.sub_category.category,
+          sub_category: request.data.data?.sub_category,
+          related_sub_categories: request.data.data?.related_sub_categories,
+          description: "",
+          // country: request.data.data?.activation_countries[0].id, // Initialize without any selected countries
+          country: request.data.data?.activation_countries.map(
+            (country) => country.id
+          ),
+        },
+        // media_urls: {
+        //   images: imagesToUpload,
+        //   video: videoToUpload,
+        //   pdf: pdfsToUpload,
+        // },
+        contactInformation: {
+          contact_number: request.data.data?.number,
+          websiteUrl: request.data.data?.website,
+          country: request.data.data?.country.id,
+          city: request.data.data?.city,
+          street: request.data.data?.street,
+          fullAddress: request.data.data?.full_address,
+        },
+        SocialMedia: {
+          facebookURL: request.data.data?.facebook,
+          instagramURL: request.data.data?.instagram,
+          youtubeURL: request.data.data?.youtube,
+          tiktokURL: request.data.data?.tiktok,
+          twitterURL: request.data.data?.twitter,
+        },
+        // request.data.data?.
+        FAQ: {
+          faqs: request.data.data?.ad_faqs,
+        },
+        servicesOffered: {
+          services: request.data.data?.offered_services,
+        },
+      });
+
       setCurrentAd(request.data.data);
       // handleAlert();
       // setPersonalInfo(request.data.data);
@@ -395,16 +456,75 @@ function EditAd() {
     }
   };
 
+  console.log("localInitialValues===============", localInitialValues);
+
+  // useEffect(() => {
+  //   setLocalInitialValues({
+  //     companyInformation: {
+  //       // commercial_name: "",
+  //       category: currentAd?.sub_category.category,
+  //       sub_category: currentAd?.sub_category,
+  //       related_sub_categories: currentAd?.related_sub_categories,
+  //       description: "",
+  //       // country: currentAd?.activation_countries[0].id, // Initialize without any selected countries
+  //       country: currentAd?.activation_countries.map((country) => country.id),
+  //     },
+  //     // media_urls: {
+  //     //   images: imagesToUpload,
+  //     //   video: videoToUpload,
+  //     //   pdf: pdfsToUpload,
+  //     // },
+  //     contactInformation: {
+  //       contact_number: currentAd?.number,
+  //       websiteUrl: currentAd?.website,
+  //       country: [],
+  //       city: currentAd?.city,
+  //       street: currentAd?.street,
+  //       fullAddress: currentAd?.full_address,
+  //     },
+  //     SocialMedia: {
+  //       facebookURL: currentAd?.facebook,
+  //       instagramURL: currentAd?.instagram,
+  //       youtubeURL: currentAd?.youtube,
+  //       tiktokURL: currentAd?.tiktok,
+  //       twitterURL: currentAd?.twitter,
+  //     },
+  //     // currentAd?.
+  //     FAQ: {
+  //       faqs: currentAd?.ad_faqs,
+  //     },
+  //     servicesOffered: {
+  //       services: currentAd?.offered_services,
+  //     },
+  //   });
+  // }, [currentAd]);
+
   useEffect(() => {
     getAdInfo();
   }, []);
+
+  useEffect(() => {
+    if (currentAd?.ad_media[0].media_urls.images.length > 0) {
+      setImagesToUpload(currentAd?.ad_media[0]?.media_urls?.images);
+    }
+    if (currentAd?.ad_media[0].media_urls.video.length > 0) {
+      setVideoToPreview(currentAd?.ad_media[0]?.media_urls?.video);
+    }
+    if (currentAd?.ad_media[0].media_urls.pdf.length > 0) {
+      setPdfsToUpload(currentAd?.ad_media[0]?.media_urls?.pdf);
+    }
+    console.log("helooooooooooooooooo", currentAd);
+    if (currentAd?.related_sub_categories?.id) {
+      setRelatedSubCategoryId(currentAd?.related_sub_categories.id);
+    }
+  }, [currentAd]);
 
   return (
     <div style={{ position: "relative" }}>
       <TopBanner />
       <Header />
       <TabNavigation />
-      <ImagesModal
+      {/* <ImagesModal
         showModal={showImagesModal}
         handleClose={() => setShowImagesModal(false)}
         setShowImagesModal={setShowImagesModal}
@@ -414,7 +534,7 @@ function EditAd() {
         setImagesError={setImagesError}
         imagesToUpload={imagesToUpload}
         setImagesToUpload={setImagesToUpload}
-      />
+      /> */}
 
       <div className="ad-banner d-flex align-items-center justify-content-between">
         <div style={{ marginLeft: "100px" }}>
@@ -454,9 +574,9 @@ function EditAd() {
 
       <Container fluid style={{ marginTop: "40px", paddingLeft: "150px" }}>
         <Row>
-          {currentAd !== null && (
+          {currentAd !== null && localInitialValues !== null && (
             <Formik
-              initialValues={initialValues}
+              initialValues={localInitialValues}
               validationSchema={Schema}
               validate={validate}
               onSubmit={handleSubmitAllForms}
@@ -472,7 +592,7 @@ function EditAd() {
                 setValues,
               }) => (
                 <Form noValidate onSubmit={handleSubmit}>
-                  <CompanyInformation
+                  {/* <CompanyInformation
                     values={values.companyInformation}
                     errors={errors.companyInformation ?? errors}
                     touched={touched.companyInformation ?? touched}
@@ -480,21 +600,55 @@ function EditAd() {
                     setSelectedCountries={setSelectedCountries}
                     handleChange={handleChange}
                     handleBlur={handleBlur}
+                  /> */}
+                  <CompanyInformation
+                    values={values.companyInformation}
+                    errors={errors.companyInformation ?? errors}
+                    touched={touched.companyInformation ?? touched}
+                    selectedCountries={selectedCountries}
+                    setSelectedCountries={setSelectedCountries}
+                    relatedSubCategoryId={relatedSubCategoryId}
+                    setRelatedSubCategoryId={setRelatedSubCategoryId}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
                   />
 
                   <ImageUploader
+                    // parentImages={values.imageUploader.images}
+                    setShowImagesModal={setShowImagesModal}
+                    simagesToPreviewetparentImagesUploadedImages={
+                      handleImageUpdates
+                    }
+                    // uploadedImages={imagesToPreview}
+                    imagesError={imagesError}
+                    setImagesError={setImagesError}
+                    // imagesToUpload={imagesToUpload}
+                    // setImagesToUpload={setImagesToUpload}
+                    // setShowImagesModal={setShowImagesModal}
+                    // setparentImagesUploadedImages={handleImageUpdates}
+                    // uploadedImages={imagesToPreview}
+                    // imagesError={imagesError}
+                    // setImagesError={setImagesError}
+                    imagesToUpload={imagesToUpload}
+                    setImagesToUpload={setImagesToUpload}
+                    editAd
+                  />
+
+                  {/* <ImageUploader
                     // parentImages={values.imageUploader.images}
                     setShowImagesModal={setShowImagesModal}
                     setparentImagesUploadedImages={handleImageUpdates}
                     uploadedImages={imagesToPreview}
                     imagesError={imagesError}
                     setImagesError={setImagesError}
+                    editAd
                     // imagesToUpload={imagesToUpload}
                     // setImagesToUpload={setImagesToUpload}
-                  />
+                  /> */}
 
                   <VideoUploader
-                    setparentVideoUploaded={handleVideoToPreview}
+                    // setparentVideoUploaded={handleVideoToPreview}
+                    videoToPreview={videoToPreview}
                     videoToUpload={videoToUpload}
                     setVideoToUpload={setVideoToUpload}
                   />
