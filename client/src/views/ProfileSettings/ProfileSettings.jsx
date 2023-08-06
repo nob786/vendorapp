@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/fontawesome-free-solid";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
@@ -18,8 +17,8 @@ import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { handleProfileSettingsCurrentView } from "../redux/TabNavigation/TabNavigationSlice";
 
 function ProfileSettings() {
-  // const [currentView, setCurrentView] = useState("profileSettings");
   const dispatch = useDispatch();
+
   return (
     <>
       <Header />

@@ -61,8 +61,10 @@
   justify-content: right;
   padding-right: 6px;
   height: 440px;
+  /* width: 100%; */
   /* align-items: right; */
   /* height: 100%; */
+  max-width: 100%;
   /* object-fit: fill; */
 }
 

@@ -5,6 +5,10 @@ import { getCookie, setCookie } from "../../../utilities/utils";
 
 // Create an initial state for the auth slice
 const initialState = {
+  loading: false,
+  error: null,
+  AdPostSuccessAlert: false,
+  AdPostErrorAlert: false,
   vendorAds: [],
 };
 
@@ -73,6 +77,12 @@ export const AdsSlice = createSlice({
     handleUpdateAds: (state, action) => {
       state.vendorAds = action.payload;
     },
+    handleUpdateAdPostSuccessAlerting: (state, action) => {
+      state.AdPostSuccessAlert = action.payload;
+    },
+    handleUpdateAdPostErrorAlerting: (state, action) => {
+      state.AdPostErrorAlert = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -82,12 +92,14 @@ export const AdsSlice = createSlice({
       })
       .addCase(handleCreateNewAd.fulfilled, (state, action) => {
         state.loading = false;
+        state.AdPostSuccessAlert = true;
         console.log("action.payload", action.payload);
       })
       .addCase(handleCreateNewAd.rejected, (state, action) => {
         // console.log(action);
         state.loading = false;
-        state.error = action.payload;
+        state.AdPostErrorAlert = action.payload;
+        // state.error = action.payload;
       })
       .addCase(handleEditAd.pending, (state) => {
         state.loading = true;
@@ -119,7 +131,12 @@ export const AdsSlice = createSlice({
   },
 });
 
-export const { handleResgisterationStatus, handleUpdateAds } = AdsSlice.actions;
+export const {
+  handleResgisterationStatus,
+  handleUpdateAds,
+  handleUpdateAdPostSuccessAlerting,
+  handleUpdateAdPostErrorAlerting,
+} = AdsSlice.actions;
 
 // Export the reducer and actions
 export default AdsSlice.reducer;

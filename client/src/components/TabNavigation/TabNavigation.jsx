@@ -1,13 +1,15 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import home from "../../assets/images/home.svg";
 import list from "../../assets/images/list.svg";
 import pieChart from "../../assets/images/pie-chart.svg";
 import plusCircle from "../../assets/images/plus-circle.svg";
 import settings from "../../assets/images/settings.svg";
 import "./TabNavigation.css";
-import { useDispatch, useSelector } from "react-redux";
 import { handleClickTab } from "../../views/redux/TabNavigation/TabNavigationSlice";
-import { useNavigate } from "react-router-dom";
 
 const tabs = [
   {
@@ -41,10 +43,6 @@ const TabNavigation = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const currentActiveNavigationTab = useSelector(
-  //   (state) => state.tabNavigation.currentActiveNavigationTab
-  // );
-
   const isActive = (path) => {
     if (window.location.pathname === path) {
       return true;
@@ -76,33 +74,6 @@ const TabNavigation = () => {
             {tab.label}
           </div>
         ))}
-        {/* <div className="d-flex align-items-center tab-active">
-          {" "}
-          <img src={plusCircle} alt="plusCircle" className="me-2" />
-          Post an Ad
-        </div>
-        <div
-          className={`d-flex align-items-center ${isActive(1) && "tab-active"}`}
-        >
-          {" "}
-          <img src={pieChart} alt="pieChart" className="me-2" />
-          Packages
-        </div>
-        <div className="d-flex align-items-center">
-          {" "}
-          <img src={home} alt="home" className="me-2" />
-          Home
-        </div>
-        <div className="d-flex align-items-center">
-          {" "}
-          <img src={list} alt="list" className="me-2" />
-          My Ads
-        </div>
-        <div className="d-flex align-items-center">
-          {" "}
-          <img src={settings} alt="settings" className="me-2" />
-          Settings
-        </div> */}
       </div>
     </div>
   );

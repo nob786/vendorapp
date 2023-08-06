@@ -278,6 +278,7 @@ function MyAds() {
                                     src={editIcon}
                                     alt="editIcon"
                                     className="me-3"
+                                    onClick={() => navigate(`/edit-ad/${id}`)}
                                   />
                                   <img
                                     src={gotoIcon}

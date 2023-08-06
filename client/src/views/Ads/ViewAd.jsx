@@ -103,30 +103,6 @@ const FAQs = [
 //   // Add more slides as needed...
 // ];
 
-// Original array of image links
-const imageLinks = [one, two, three, two, three];
-
-// Function to chunk the array into groups of three
-const chunkArray = (array, chunkSize) => {
-  const chunks = [];
-  for (let i = 0; i < array.length; i += chunkSize) {
-    chunks.push(array.slice(i, i + chunkSize));
-  }
-  return chunks;
-};
-
-// Divide the image links into chunks of three
-const imageChunks = chunkArray(imageLinks, 3);
-
-// Create the slides array with dynamically generated keys
-const slidesModified = imageChunks.map((chunk, index) => {
-  const slide = {};
-  chunk.forEach((link, imageIndex) => {
-    slide[`image${index * 3 + imageIndex + 1}`] = link;
-  });
-  return slide;
-});
-
 export function PrevButton(props) {
   const { enabled, onClick } = props;
 
@@ -187,6 +163,30 @@ function ViewAd() {
   // const [selectedIndex, setSelectedIndex] = useState(0);
   // const [scrollSnaps, setScrollSnaps] = useState([]);
   // const [emblaApi] = useEmblaCarousel(options)
+
+  // Original array of image links
+  const imageLinks = currentAd?.ad_media[0].media_urls.images;
+
+  // Divide the image links into chunks of three
+  // Function to chunk the array into groups of three
+  const chunkArray = (array, chunkSize) => {
+    const chunks = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+      chunks.push(array.slice(i, i + chunkSize));
+    }
+    return chunks;
+  };
+
+  const imageChunks = imageLinks?.length > 0 ? chunkArray(imageLinks, 3) : [];
+
+  // Create the slides array with dynamically generated keys
+  const slidesModified = imageChunks?.map((chunk, index) => {
+    const slide = {};
+    chunk.forEach((link, imageIndex) => {
+      slide[`image${index * 3 + imageIndex + 1}`] = link;
+    });
+    return slide;
+  });
 
   const scrollPrev = useCallback(
     () => emblaApi && emblaApi.scrollPrev(),
@@ -262,7 +262,9 @@ function ViewAd() {
 
             <div>
               <img src={MapIcon} alt="MapIcon" className="me-2" />
-              <span className="roboto-regular-16px-information">Country</span>
+              <span className="roboto-regular-16px-information">
+                {currentAd?.country.name}
+              </span>
             </div>
           </div>
           <Col lg={8}>
@@ -273,19 +275,25 @@ function ViewAd() {
                     <div className="embla__container__view__ad">
                       {slidesModified.map((slide, index) => (
                         <div key={index} className="carousel-slide">
+                          {console.log({ slide })}
                           <Row>
                             <Col
                               sm={6}
                               md={6}
-                              lg={6}
-                              xl={6}
+                              lg={
+                                slide[`image${index * 3 + 2}`] ||
+                                slide[`image${index * 3 + 3}`]
+                                  ? 6
+                                  : 12
+                              }
+                              xl={
+                                slide[`image${index * 3 + 2}`] ||
+                                slide[`image${index * 3 + 3}`]
+                                  ? 6
+                                  : 12
+                              }
                               className="main-image-container"
                             >
-                              {/* <img
-                                src={slide.image1}
-                                alt="image1"
-                                className="main-image"
-                              /> */}
                               <img
                                 src={slide[`image${index * 3 + 1}`]}
                                 alt={`image${index * 3 + 1}`}
@@ -300,26 +308,20 @@ function ViewAd() {
                               xl={6}
                               className="image-stack"
                             >
-                              <img
-                                src={slide[`image${index * 3 + 2}`]}
-                                alt={`image${index * 3 + 2}`}
-                                className="stacked-image"
-                              />
-                              <img
-                                src={slide[`image${index * 3 + 3}`]}
-                                alt={`image${index * 3 + 3}`}
-                                className="stacked-image"
-                              />
-                              {/* <img
-                                src={slide.image2}
-                                alt="Image2"
-                                className="stacked-image"
-                              />
-                              <img
-                                src={slide.image3}
-                                alt="Image3"
-                                className="stacked-image"
-                              /> */}
+                              {slide[`image${index * 3 + 2}`] && (
+                                <img
+                                  src={slide[`image${index * 3 + 2}`]}
+                                  alt={`image${index * 3 + 2}`}
+                                  className="stacked-image"
+                                />
+                              )}
+                              {slide[`image${index * 3 + 3}`] && (
+                                <img
+                                  src={slide[`image${index * 3 + 3}`]}
+                                  alt={`image${index * 3 + 3}`}
+                                  className="stacked-image"
+                                />
+                              )}
                             </Col>
                           </Row>
                         </div>
@@ -366,8 +368,17 @@ function ViewAd() {
                   </div>
 
                   <div>
-                    <img src={InstaIcon} alt="deleteIcon" className="me-3" />
-                    <img src={FbIcon} alt="deleteIcon" />
+                    <img
+                      src={InstaIcon}
+                      alt="deleteIcon"
+                      className="me-3"
+                      style={{ cursor: "pointer" }}
+                    />
+                    <img
+                      src={FbIcon}
+                      alt="deleteIcon"
+                      style={{ cursor: "pointer" }}
+                    />
                   </div>
                 </div>
               </div>
@@ -438,71 +449,73 @@ function ViewAd() {
             </div>
           </Col>
         </Row>
-        <Row className="mt-5">
-          <Col lg={7}>
-            <div className="d-flex flex-column">
-              <div className="d-flex roboto-semi-bold-24px-h3">
-                Offered services
-              </div>
-
-              <Row className="mt-3">
-                {offeredServices.map((service, index) => (
-                  <Col key={index} lg={4}>
-                    <ul className="custom-lists roboto-regular-16px-information">
-                      <li>{service}</li>
-                    </ul>
-                  </Col>
-                ))}
-              </Row>
-            </div>
-          </Col>
-        </Row>
-        <Row className="mt-5">
-          <Col lg={7}>
-            <div className="d-flex flex-column">
-              <div className="d-flex roboto-semi-bold-24px-h3">
-                Frequently Asked Questions
-              </div>
-
-              <div>
-                <div
-                  className="d-flex roboto-regular-18px-body3 mt-4"
-                  style={{ fontWeight: "700" }}
-                >
-                  Which of the following are included in the price?
+        {currentAd?.offered_services.length > 0 && (
+          <Row className="mt-5">
+            <Col lg={7}>
+              <div className="d-flex flex-column">
+                <div className="d-flex roboto-semi-bold-24px-h3">
+                  Offered services
                 </div>
 
                 <Row className="mt-3">
-                  {FAQs.map((service, index) => (
+                  {currentAd.offered_services.map((service, index) => (
                     <Col key={index} lg={4}>
-                      <ul className="custom-lists-tick-icon roboto-regular-16px-information">
+                      <ul className="custom-lists roboto-regular-16px-information">
                         <li>{service}</li>
                       </ul>
                     </Col>
                   ))}
                 </Row>
-
-                <div style={{ border: "1px solid #D9D9D9", width: "100%" }} />
               </div>
-              <div>
-                <div
-                  className="d-flex roboto-regular-18px-body3 mt-4"
-                  style={{ fontWeight: "700" }}
-                >
-                  What is the price of your popular wedding packege?
-                </div>
-                <div
-                  className="roboto-regular-18px-body3 mb-2"
-                  style={{ fontWeight: "700" }}
-                >
-                  $20,440
+            </Col>
+          </Row>
+        )}
+
+        {currentAd?.ad_faqs.length > 0 && (
+          <Row className="mt-5">
+            <Col lg={7}>
+              <div className="d-flex flex-column">
+                <div className="d-flex roboto-semi-bold-24px-h3">
+                  Frequently Asked Questions
                 </div>
 
-                <div style={{ border: "1px solid #D9D9D9", width: "100%" }} />
+                {currentAd?.ad_faqs.map((faq, index) => (
+                  <div>
+                    <div
+                      className="d-flex roboto-regular-18px-body3 mt-4"
+                      style={{ fontWeight: "700" }}
+                    >
+                      {faq.question}
+                    </div>
+                    <Row className="mt-3">
+                      <Col key={index} lg={4}>
+                        {/* ----------- FOR THE CHECKBOX TYPE ANSWERS, USE THIS LI UL ELEMENT----------- */}
+                        {/* <li>{faq.question}</li> */}
+                        {/* <ul className="custom-lists-tick-icon roboto-regular-16px-information">
+                        <li>{faq.question}</li>
+                      </ul> */}
+                        <div
+                          className="roboto-regular-18px-body3 mb-2"
+                          style={{ fontWeight: "700" }}
+                        >
+                          {faq.answer_input}
+                        </div>
+                      </Col>
+                    </Row>
+
+                    <div
+                      style={{
+                        border: "1px solid #D9D9D9",
+                        width: "100%",
+                        marginTop: "10px",
+                      }}
+                    />
+                  </div>
+                ))}
               </div>
-            </div>
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+        )}
       </Container>
 
       <Footer />

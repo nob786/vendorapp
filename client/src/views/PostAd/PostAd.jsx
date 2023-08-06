@@ -1,8 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as formik from "formik";
 import * as Yup from "yup";
-import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Modal,
+  Row,
+  Spinner,
+} from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import Header from "../../components/Navbar/Navbar";
 import TopBanner from "../../components/TopBanner";
 import postAdBanner1 from "../../assets/images/post-ad-banner-1.svg";
@@ -23,7 +31,12 @@ import FAQs from "./FAQs";
 import PdfUploader from "../../components/PdfUploader/PdfUploader";
 import ImagesModal from "../../components/ImageUploader/ImagesModal";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
-import { handleCreateNewAd } from "../redux/Posts/AdsSlice";
+import {
+  handleCreateNewAd,
+  handleUpdateAdPostErrorAlerting,
+  handleUpdateAdPostSuccessAlerting,
+} from "../redux/Posts/AdsSlice";
+import { Alert } from "@mui/material";
 
 function PostAd() {
   const { Formik } = formik;
@@ -44,6 +57,12 @@ function PostAd() {
   const [showImagesModal, setShowImagesModal] = useState(false);
   const [relatedSubCategoryId, setRelatedSubCategoryId] = useState(null);
   const dispatch = useDispatch();
+
+  const loading = useSelector((state) => state.Ads.loading);
+  const AdPostSuccessAlert = useSelector(
+    (state) => state.Ads.AdPostSuccessAlert
+  );
+  const AdPostErrorAlert = useSelector((state) => state.Ads.AdPostErrorAlert);
 
   console.log({ relatedSubCategoryId });
 
@@ -407,11 +426,65 @@ function PostAd() {
     });
   };
 
+  useEffect(() => {
+    if (AdPostSuccessAlert) {
+      setTimeout(() => {
+        // setIsAlert(false);
+        dispatch(handleUpdateAdPostSuccessAlerting(false));
+      }, 4000);
+    }
+  }, [AdPostSuccessAlert]);
+
+  useEffect(() => {
+    if (AdPostErrorAlert) {
+      setTimeout(() => {
+        // setIsAlert(false);
+        dispatch(handleUpdateAdPostErrorAlerting(false));
+      }, 4000);
+    }
+  }, [AdPostErrorAlert]);
+
+  console.log("AdPostErrorAlert", AdPostErrorAlert);
+
   return (
     <div style={{ position: "relative" }}>
       <TopBanner />
       <Header />
       <TabNavigation />
+
+      <Alert
+        severity="success"
+        variant="filled"
+        style={{
+          position: "fixed",
+          top: AdPostSuccessAlert ? "80px" : "-80px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          transition: "ease 200ms",
+          opacity: AdPostSuccessAlert ? 1 : 0,
+          // width: "150px",
+        }}
+      >
+        Submitted successfully
+      </Alert>
+
+      <Alert
+        severity="error"
+        variant="filled"
+        style={{
+          position: "fixed",
+          top: AdPostErrorAlert ? "80px" : "-80px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          transition: "ease 200ms",
+          opacity: AdPostErrorAlert ? 1 : 0,
+          // width: "150px",
+        }}
+      >
+        {AdPostErrorAlert?.website?.length > 0
+          ? AdPostErrorAlert?.website
+          : "Something went wrong"}
+      </Alert>
       {/* <ImagesModal
         showModal={showImagesModal}
         handleClose={() => setShowImagesModal(false)}
@@ -581,11 +654,17 @@ function PostAd() {
                 >
                   <Button
                     type="submit"
+                    disabled={loading}
                     onClick={handleClickSubmit}
                     className="btn btn-success roboto-semi-bold-16px-information btn-lg"
                     style={{ padding: "0 100px" }}
                   >
-                    Submit Ad
+                    {loading ? (
+                      // "Loading…"
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Submit Ad"
+                    )}
                   </Button>
                 </Col>
 

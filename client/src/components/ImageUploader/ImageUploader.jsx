@@ -129,6 +129,7 @@ function ImageUploader({
 
   // const imagesToMap = editAd ? imagesToUpload : images;
   const imagesToMap = images;
+  console.log("imagesToMap", imagesToMap);
 
   return (
     <Container fluid style={{ marginTop: "30px" }}>
