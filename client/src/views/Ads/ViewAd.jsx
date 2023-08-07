@@ -165,7 +165,7 @@ function ViewAd() {
   // const [emblaApi] = useEmblaCarousel(options)
 
   // Original array of image links
-  const imageLinks = currentAd?.ad_media[0].media_urls.images;
+  const imageLinks = currentAd?.ad_media[0]?.media_urls.images;
 
   // Divide the image links into chunks of three
   // Function to chunk the array into groups of three

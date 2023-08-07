@@ -19,7 +19,7 @@ function PremiumVenues() {
       <Card style={{ padding: "10px", border: "none" }}>
         <Card.Img
           variant="top"
-          src={slide.ad_media[0].media_urls.images[0]}
+          src={slide?.ad_media[0]?.media_urls.images[0]}
           style={{ minHeight: "243px" }}
         />
         <Card.Body>
