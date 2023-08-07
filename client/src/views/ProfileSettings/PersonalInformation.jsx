@@ -13,7 +13,7 @@ import * as Yup from "yup";
 import { useSelector } from "react-redux";
 import { Alert } from "@mui/material";
 import Header from "../../components/Navbar/Navbar";
-import user from "../../assets/images/profile-settings/user.svg";
+import userIcon from "../../assets/images/profile-settings/user.svg";
 import personIcon from "../../assets/images/profile-settings/person.svg";
 import contactIcon from "../../assets/images/post-ad/contact.svg";
 
@@ -30,7 +30,7 @@ function PersonalInformation() {
   const [isAlert, setIsAlert] = useState(false);
   const [isFailedAlert, setIsFailedAlert] = useState(false);
   const [loading, setLoading] = useState(false);
-  // const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state.auth.user);
 
   const initialValues = {
     person_firstName: personalInfo.first_name,
@@ -77,7 +77,7 @@ function PersonalInformation() {
     try {
       setLoading(true);
       const request = await secure_instance.request({
-        url: "/api/users/me/",
+        url: `/api/users/${user.userId}/`,
         method: "Patch",
         data: {
           first_name: values.person_firstName,
@@ -122,7 +122,7 @@ function PersonalInformation() {
           }}
         >
           <div style={{ marginTop: "30px" }}>
-            <img src={user} alt="user" />
+            <img src={userIcon} alt="user" />
           </div>
         </div>
       </div>

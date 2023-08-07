@@ -296,6 +296,7 @@ function Login() {
       firm_number: values.firm_number,
       bank_name: values.bank_name,
       bank_iban: values.bank_iban,
+      country: parseInt(values.county, 10),
     };
 
     dispatch(handleRegister(data));

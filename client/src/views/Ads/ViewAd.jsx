@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable no-shadow */
 /* eslint-disable camelcase */
 import React, { useCallback, useEffect, useState } from "react";
@@ -17,9 +19,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/fontawesome-free-solid";
 import useEmblaCarousel from "embla-carousel-react";
 import Header from "../../components/Navbar/Navbar";
-import InstaIcon from "../../assets/images/post-ad/insta-outlined.svg";
-import FbIcon from "../../assets/images/post-ad/fb-outlined.svg";
-import MapIcon from "../../assets/images/post-ad/map-filled.svg";
+// import FbIcon from "../../assets/images/post-ad/fb-outlined.svg";
+// import InstaIcon from "../../assets/images/post-ad/insta-outlined.svg";
+import FbIcon from "../../assets/images/post-ad/facebook.svg";
+import InstaIcon from "../../assets/images/post-ad/insta.svg";
+import youtubeIcon from "../../assets/images/post-ad/youtube.svg";
+import tiktokIcon from "../../assets/images/post-ad/tiktok.svg";
+import twitterIcon from "../../assets/images/post-ad/twitter.svg";
+import otherIcon from "../../assets/images/post-ad/sub-category.svg";
+import MapIcon from "../../assets/images/post-ad/map-outlined.svg";
 import one from "../../assets/images/post-ad/1.svg";
 import two from "../../assets/images/post-ad/2.svg";
 import three from "../../assets/images/post-ad/3.svg";
@@ -148,6 +156,7 @@ function ViewAd() {
   const [currentTab, setCurrentTab] = useState(1);
   const [currentAd, setCurrentAd] = useState(null);
   const params = useParams();
+  const navigate = useNavigate();
   console.log(params); // 👉️
   // const { slides, options, componentToRender } = props;
   const options = { slidesToScroll: "auto", containScroll: "trimSnaps" };
@@ -362,25 +371,93 @@ function ViewAd() {
                   </span>
                 </div>
 
-                <div className="d-flex align-items-center justify-content-between mt-2">
-                  <div className="roboto-regular-16px-information">
-                    Follow us on
-                  </div>
+                {(currentAd?.facebook !== "" ||
+                  currentAd?.instagram !== "" ||
+                  currentAd?.youtube !== "" ||
+                  currentAd?.tiktok !== "" ||
+                  currentAd?.twitter !== "" ||
+                  currentAd?.others !== null) && (
+                  <div className="d-flex align-items-center justify-content-between mt-2">
+                    <div className="roboto-regular-16px-information">
+                      Follow us on
+                    </div>
 
-                  <div>
-                    <img
-                      src={InstaIcon}
-                      alt="deleteIcon"
-                      className="me-3"
-                      style={{ cursor: "pointer" }}
-                    />
-                    <img
-                      src={FbIcon}
-                      alt="deleteIcon"
-                      style={{ cursor: "pointer" }}
-                    />
+                    <div>
+                      {currentAd?.facebook !== "" && (
+                        <img
+                          src={FbIcon}
+                          alt="FbIcon"
+                          className="me-1"
+                          style={{ cursor: "pointer" }}
+                          onClick={() =>
+                            window.open(`/${currentAd?.facebook}`, "_blank")
+                          }
+                          // onClick={() => navigate(`/${currentAd?.facebook}`)}
+                        />
+                      )}
+                      {currentAd?.instagram !== "" && (
+                        <img
+                          src={InstaIcon}
+                          alt="InstaIcon"
+                          className="me-1"
+                          style={{ cursor: "pointer" }}
+                          // onClick={() => navigate(`/${currentAd?.instagram}`)}
+                          onClick={() =>
+                            window.open(`/${currentAd?.instagram}`, "_blank")
+                          }
+                        />
+                      )}
+                      {currentAd?.youtube !== "" && (
+                        <img
+                          src={youtubeIcon}
+                          className="me-1"
+                          alt="youtubeIcon"
+                          style={{ cursor: "pointer" }}
+                          // onClick={() => navigate(`/${currentAd?.youtube}`)}
+                          onClick={() =>
+                            window.open(`/${currentAd?.youtube}`, "_blank")
+                          }
+                        />
+                      )}
+                      {currentAd?.tiktok !== "" && (
+                        <img
+                          src={tiktokIcon}
+                          className="me-1"
+                          alt="tiktokIcon"
+                          style={{ cursor: "pointer" }}
+                          // onClick={() => navigate(`/${currentAd?.tiktok}`)}
+                          onClick={() =>
+                            window.open(`/${currentAd?.tiktok}`, "_blank")
+                          }
+                        />
+                      )}
+                      {currentAd?.twitter !== "" && (
+                        <img
+                          src={twitterIcon}
+                          className="me-1"
+                          alt="twitterIcon"
+                          style={{ cursor: "pointer" }}
+                          // onClick={() => navigate(`/${currentAd?.twitter}`)}
+                          onClick={() =>
+                            window.open(`/${currentAd?.twitter}`, "_blank")
+                          }
+                        />
+                      )}
+                      {currentAd?.others !== null && (
+                        <img
+                          src={otherIcon}
+                          className="me-1"
+                          alt="otherIcon"
+                          style={{ cursor: "pointer" }}
+                          // onClick={() => navigate(`/${currentAd?.others}`)}
+                          onClick={() =>
+                            window.open(`/${currentAd?.others}`, "_blank")
+                          }
+                        />
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               <div className="d-flex">
@@ -399,7 +476,7 @@ function ViewAd() {
         </Row>
 
         <Row className="mt-5">
-          <Col lg={7}>
+          <Col lg={8}>
             <div
               className="d-flex align-items-center"
               style={{
@@ -429,26 +506,23 @@ function ViewAd() {
           </Col>
         </Row>
 
-        <Row className="mt-4">
-          <Col lg={7}>
-            <div className="d-flex flex-column">
-              <div className="d-flex roboto-semi-bold-24px-h3">About</div>
+        {currentAd?.description !== null && (
+          <Row className="mt-4">
+            <Col lg={8}>
+              <div className="d-flex flex-column">
+                <div className="d-flex roboto-semi-bold-24px-h3">About</div>
 
-              <div className="d-flex roboto-regular-16px-information mt-4">
-                Mauris id mollis natoque dictum enim et porta etiam. Velit
-                mauris adipiscing cras tempus. At egestas lorem semper luctus.
-                In non in diam elit nunc enim diam bibendum. Ullamcorper
-                lobortis augue vestibulum urna erat. Dolor curabitur viverra
-                iaculis magnis tincidunt. Massa accumsan nibh duis diam sodales
-                et egestas magnis. Neque tellus odio urna malesuada feugiat vel
-                lobortis. Enim habitasse imperdiet ullamcorper magna morbi
-                tincidunt. Nibh maecenas et nisl sed risus. Eros porta sit
-                cursus et lacus sit sit accumsan. Tortor pellentesque consequat
-                sit pellentesque urna. Eleifend arcu enim pretium gravida.
+                <div
+                  className="roboto-regular-16px-information mt-4"
+                  style={{ overflowWrap: "break-word" }}
+                >
+                  {currentAd?.description}
+                </div>
               </div>
-            </div>
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+        )}
+
         {currentAd?.offered_services.length > 0 && (
           <Row className="mt-5">
             <Col lg={7}>

@@ -37,6 +37,7 @@ import {
   handleUpdateAdPostSuccessAlerting,
 } from "../redux/Posts/AdsSlice";
 import { Alert } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function PostAd() {
   const { Formik } = formik;
@@ -57,6 +58,7 @@ function PostAd() {
   const [showImagesModal, setShowImagesModal] = useState(false);
   const [relatedSubCategoryId, setRelatedSubCategoryId] = useState(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const loading = useSelector((state) => state.Ads.loading);
   const AdPostSuccessAlert = useSelector(
@@ -80,13 +82,15 @@ function PostAd() {
         ));
     });
 
+    console.log("values ON SUBMITT", values);
+
     const objToSubmit = {
       media_urls: {
         images: imagesToUpload,
         video: videoToUpload,
         pdf: pdfsToUpload,
       },
-      description: values.contactInformation.description,
+      description: values.companyInformation.description,
       website: values.contactInformation.websiteUrl,
       city: values.contactInformation.city,
       street: values.contactInformation.street,
@@ -132,7 +136,8 @@ function PostAd() {
       "newObj-------------------------------------------------:",
       objToSubmit
     );
-    dispatch(handleCreateNewAd(objToSubmit));
+    dispatch(handleCreateNewAd({ data: objToSubmit, navigate }));
+
     // console.log("Form 2 data:", formData2);
     // }
   };
@@ -260,6 +265,12 @@ function PostAd() {
           /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
           "Invalid characters"
         ),
+      otherURL: Yup.string()
+        .max(40, "Must be 40 characters or less")
+        .matches(
+          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+          "Invalid characters"
+        ),
     }),
   });
 
@@ -285,6 +296,7 @@ function PostAd() {
       youtubeURL: "",
       tiktokURL: "",
       twitterURL: "",
+      otherURL: "",
     },
     FAQ: {
       faqs: [],

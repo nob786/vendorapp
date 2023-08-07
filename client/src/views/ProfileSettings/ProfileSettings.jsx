@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/fontawesome-free-solid";
 import { Card, Col, Container, Row } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Header from "../../components/Navbar/Navbar";
-import user from "../../assets/images/profile-settings/user.svg";
+import userIcon from "../../assets/images/profile-settings/user.svg";
 
 import personalInfo from "../../assets/images/profile-settings/personal-info.svg";
 import companyInfo from "../../assets/images/profile-settings/company-info.svg";
@@ -15,9 +15,17 @@ import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { handleProfileSettingsCurrentView } from "../redux/TabNavigation/TabNavigationSlice";
+import { getAuthenticatedUser } from "../redux/Auth/authSlice";
 
 function ProfileSettings() {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    if (user.userCompanyId === null) {
+      dispatch(getAuthenticatedUser());
+    }
+  }, []);
 
   return (
     <>
@@ -40,7 +48,7 @@ function ProfileSettings() {
           }}
         >
           <div style={{ marginTop: "30px" }}>
-            <img src={user} alt="user" />
+            <img src={userIcon} alt="user" />
           </div>
         </div>
       </div>

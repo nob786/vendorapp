@@ -30,6 +30,13 @@ import { useSelector } from "react-redux";
 function CompanyInformationSettings() {
   const { Formik } = formik;
 
+  const [countriesList, setCountries] = useState([]);
+
+  const countryOptions = countriesList.map((country) => ({
+    value: country.id,
+    label: country.name,
+  }));
+
   const [companyInformation, setCompanyInformation] = useState("");
   const [isAlert, setIsAlert] = useState(false);
   const [isFailedAlert, setIsFailedAlert] = useState(false);
@@ -39,7 +46,6 @@ function CompanyInformationSettings() {
   const initialValues = {
     company_name: companyInformation.name,
     country: companyInformation.country,
-    county: companyInformation.county,
     postal_code: companyInformation.postal_code,
     fiscal_code: companyInformation.fiscal_code,
     firm_number: companyInformation.firm_number,
@@ -57,7 +63,6 @@ function CompanyInformationSettings() {
       .max(25, "String must be at most 25 characters")
       .matches(/^[A-Za-z\s]*$/, "Only letters and spaces are allowed"),
     country: "",
-    county: "",
     // municipality: Yup.string()
     //   .max(25, "String must be at most 25 characters")
     //   .matches(/^[A-Za-z\s]*$/, "Only letters and spaces are allowed"),
@@ -101,7 +106,7 @@ function CompanyInformationSettings() {
     try {
       setLoading(true);
       await secure_instance.request({
-        url: "/api/companies/1/",
+        url: `/api/companies/${user.userCompanyId}/`,
         method: "Patch",
         data: values,
       });
@@ -117,7 +122,7 @@ function CompanyInformationSettings() {
     // console.log(values);
     try {
       const request = await secure_instance.request({
-        url: `/api/companies/${user.userId}/`,
+        url: `/api/companies/${user.userCompanyId}/`,
         method: "Get",
       });
       setCompanyInformation(request.data.data);
@@ -125,6 +130,19 @@ function CompanyInformationSettings() {
       handleFailedAlert();
     }
   };
+
+  const listCountries = async () => {
+    const request = await secure_instance.request({
+      url: "/api/ads/country/",
+      method: "Get",
+    });
+    // console.log(request.data);
+    setCountries(request.data.data);
+  };
+
+  useEffect(() => {
+    listCountries();
+  }, []);
 
   useEffect(() => {
     console.log("whaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
@@ -241,10 +259,10 @@ function CompanyInformationSettings() {
                     <Col lg={4}>
                       <Form.Group
                         className="form-group mb-3"
-                        controlId="form3Example4"
+                        controlId="form3Example6"
                       >
                         <Form.Label
-                          className="roboto-medium-20px-body1 d-flex align-items-center"
+                          className="roboto-medium-20px-body1"
                           style={{ marginBottom: "20px" }}
                         >
                           <img
@@ -256,68 +274,39 @@ function CompanyInformationSettings() {
                         </Form.Label>
                         <Form.Select
                           aria-label="Default select example"
-                          style={{ height: "56px", borderColor: "#797979" }}
-                          name="reasonToLeave"
-                          value={values.reasonToLeave || ""}
+                          style={{
+                            height: "56px",
+                            border: "1px solid #797979",
+                          }}
+                          name="country"
+                          value={values.country || ""}
                           onChange={handleChange}
-                          isInvalid={
-                            touched.reasonToLeave && !!errors.reasonToLeave
-                          }
-                          className={
-                            errors.reasonToLeave ? "border-danger" : ""
-                          }
+                          // onBlur={handleBlur}
+                          isValid={touched.country && !errors.country}
+                          isInvalid={touched.country && !!errors.country}
+                          className={errors.country ? "border-danger" : ""}
                         >
                           <option selected value hidden="true">
-                            Select
+                            Select County
                           </option>
-                          {/* {reasons.map((reason, index) => (
-                            <option key={index} value={reason}>{reason}</option>
-                          ))} */}
+                          {countryOptions.map((county, index) => (
+                            // eslint-disable-next-line react/no-array-index-key
+                            <option
+                              key={index}
+                              value={parseInt(county.value, 10)}
+                            >
+                              {county.label}
+                            </option>
+                          ))}
                         </Form.Select>
+                        {errors?.country && (
+                          <div className="text-danger">{errors.country}</div>
+                        )}
                       </Form.Group>
                     </Col>
                   </Row>
 
                   <Row className="mb-5">
-                    <Col lg={4}>
-                      <Form.Group
-                        className="form-group mb-3"
-                        controlId="form3Example4"
-                      >
-                        <Form.Label
-                          className="roboto-medium-20px-body1 d-flex align-items-center"
-                          style={{ marginBottom: "20px" }}
-                        >
-                          <img
-                            src={mapIcon}
-                            alt="commercialName"
-                            style={{ marginRight: "16px" }}
-                          />
-                          County
-                        </Form.Label>
-                        <Form.Select
-                          aria-label="Default select example"
-                          style={{ height: "56px", borderColor: "#797979" }}
-                          name="reasonToLeave"
-                          value={values.reasonToLeave || ""}
-                          onChange={handleChange}
-                          isInvalid={
-                            touched.reasonToLeave && !!errors.reasonToLeave
-                          }
-                          className={
-                            errors.reasonToLeave ? "border-danger" : ""
-                          }
-                        >
-                          <option selected value hidden="true">
-                            Select
-                          </option>
-                          {/* {reasons.map((reason, index) => (
-                            <option key={index} value={reason}>{reason}</option>
-                          ))} */}
-                        </Form.Select>
-                      </Form.Group>
-                    </Col>
-
                     <Col lg={4}>
                       <Form.Group
                         className="form-group mb-3"
@@ -351,33 +340,6 @@ function CompanyInformationSettings() {
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Col>
-
-                    {/* <Col lg={4}>
-                      <Form.Group className="form-group mb-3" controlId="form3Example4">
-                        <Form.Label    className="roboto-medium-20px-body1 d-flex align-items-center"
-                        style={{ marginBottom: "20px" }}
-                      >
-                        <img src={oldPasswordIcon} alt="commercialName" style={{ marginRight: "16px" }} />
-                        Municipality</Form.Label>
-                        <Form.Control
-                          style={{ height: "56px" }}
-                          className="lg-input-small-text"
-                          name="municipality"
-                          type="text"
-                          size="lg"
-                          placeholder="Enter"
-                          value={values.municipality}
-                          onChange={handleChange}
-                          // isValid={touched.municipality && !errors.municipality}
-                          isInvalid={!!errors.municipality}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.municipality}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                    </Col> */}
-                  </Row>
-                  <Row className="mb-5">
                     <Col lg={4}>
                       <Form.Group
                         className="form-group mb-3"
@@ -411,7 +373,8 @@ function CompanyInformationSettings() {
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Col>
-
+                  </Row>
+                  <Row className="mb-5">
                     <Col lg={4}>
                       <Form.Group
                         className="form-group mb-3"
@@ -445,8 +408,6 @@ function CompanyInformationSettings() {
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Col>
-                  </Row>
-                  <Row className="mb-5">
                     <Col lg={4}>
                       <Form.Group
                         className="form-group mb-3"
@@ -480,7 +441,8 @@ function CompanyInformationSettings() {
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Col>
-
+                  </Row>
+                  <Row className="mb-5">
                     <Col lg={4}>
                       <Form.Group
                         className="form-group mb-3"

@@ -25,7 +25,7 @@ import ImagesModal from "../../components/ImageUploader/ImagesModal";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { handleCreateNewAd, handleEditAd } from "../redux/Posts/AdsSlice";
 import { secure_instance } from "../../axios/axios-config";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function EditAd() {
   const { Formik } = formik;
@@ -51,6 +51,7 @@ function EditAd() {
 
   const dispatch = useDispatch();
   const params = useParams();
+  const navigate = useNavigate();
 
   console.log("currentAd => ", currentAd);
   console.log("imagesToUpload =======================> ", imagesToUpload);
@@ -80,6 +81,7 @@ function EditAd() {
         video: videoToUpload,
         pdf: pdfsToUpload,
       },
+      description: values.companyInformation.description,
       website: values.contactInformation.websiteUrl,
       city: values.contactInformation.city,
       street: values.contactInformation.street,
@@ -109,7 +111,7 @@ function EditAd() {
       "newObj-------------------------------------------------:",
       objToSubmit
     );
-    dispatch(handleEditAd({ adID: currentAd.id, data: objToSubmit }));
+    dispatch(handleEditAd({ data: objToSubmit, navigate, adID: currentAd.id }));
     // console.log("Form 2 data:", formData2);
     // }
   };
@@ -208,19 +210,40 @@ function EditAd() {
     SocialMedia: Yup.object().shape({
       facebookURL: Yup.string()
         .max(40, "Must be 40 characters or less")
-        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+        .matches(
+          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+          "Invalid characters"
+        ),
       instagramURL: Yup.string()
         .max(40, "Must be 40 characters or less")
-        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+        .matches(
+          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+          "Invalid characters"
+        ),
       youtubeURL: Yup.string()
         .max(40, "Must be 40 characters or less")
-        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+        .matches(
+          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+          "Invalid characters"
+        ),
       tiktokURL: Yup.string()
         .max(40, "Must be 40 characters or less")
-        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+        .matches(
+          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+          "Invalid characters"
+        ),
       twitterURL: Yup.string()
         .max(40, "Must be 40 characters or less")
-        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+        .matches(
+          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+          "Invalid characters"
+        ),
+      otherURL: Yup.string()
+        .max(40, "Must be 40 characters or less")
+        .matches(
+          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+          "Invalid characters"
+        ),
     }),
   });
 
@@ -436,6 +459,7 @@ function EditAd() {
           youtubeURL: request.data.data?.youtube,
           tiktokURL: request.data.data?.tiktok,
           twitterURL: request.data.data?.twitter,
+          otherURL: request.data.data?.others,
         },
         // request.data.data?.
         FAQ: {

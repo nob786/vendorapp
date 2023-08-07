@@ -14,13 +14,17 @@ const initialState = {
 
 export const handleCreateNewAd = createAsyncThunk(
   "Ads/create",
-  async (data, { rejectWithValue }) => {
+  async ({ data, navigate }, { rejectWithValue }) => {
+    // const dataToSubmit = objToSubmit
     try {
       const response = await secure_instance.request({
         url: "/api/ads/",
         method: "Post",
         data,
       });
+      setTimeout(() => {
+        navigate("/my-ads");
+      }, 1000);
       return response.data; // Assuming your loginAPI returns data with access_token, user_id, and role_id
     } catch (err) {
       // Use `err.response.data` as `action.payload` for a `rejected` action,
@@ -32,14 +36,17 @@ export const handleCreateNewAd = createAsyncThunk(
 
 export const handleEditAd = createAsyncThunk(
   "Ads/edit",
-  async (data, { rejectWithValue }) => {
-    const dataToEdit = data.data;
+  async ({ data, navigate, adID }, { rejectWithValue }) => {
+    // const dataToEdit = data;
     try {
       const response = await secure_instance.request({
-        url: `/api/ads/${data.adID}/`,
+        url: `/api/ads/${adID}/`,
         method: "Patch",
-        data: dataToEdit,
+        data: data,
       });
+      setTimeout(() => {
+        navigate("/my-ads");
+      }, 1000);
       return response.data; // Assuming your loginAPI returns data with access_token, user_id, and role_id
     } catch (err) {
       // Use `err.response.data` as `action.payload` for a `rejected` action,
@@ -93,6 +100,7 @@ export const AdsSlice = createSlice({
       .addCase(handleCreateNewAd.fulfilled, (state, action) => {
         state.loading = false;
         state.AdPostSuccessAlert = true;
+        // navigate("/post-ad");
         console.log("action.payload", action.payload);
       })
       .addCase(handleCreateNewAd.rejected, (state, action) => {

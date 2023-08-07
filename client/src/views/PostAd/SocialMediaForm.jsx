@@ -172,6 +172,36 @@ function SocialMediaForm({ values, errors, handleChange }) {
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
+        <Col lg={4}>
+          <Form.Group className="mb-4" controlId="twitterURL">
+            <Form.Label
+              className="roboto-medium-20px-body1 d-flex align-items-center"
+              style={{ marginBottom: "20px" }}
+            >
+              <img
+                src={twitterIcon}
+                alt="commercialName"
+                style={{ marginRight: "16px" }}
+              />
+              Other Link
+            </Form.Label>
+            <Form.Control
+              style={{ height: "56px" }}
+              className="lg-input-small-text"
+              name="SocialMedia.otherURL"
+              type="text"
+              size="lg"
+              placeholder="Enter other URL"
+              value={values.otherURL}
+              onChange={handleChange}
+              // isValid={touched.otherURL && !errors.otherURL}
+              isInvalid={!!errors.otherURL}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.otherURL}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
       </Row>
     </Container>
   );

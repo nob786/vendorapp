@@ -9,6 +9,7 @@ const initialState = {
     accessToken: null,
     userId: null,
     role: null,
+    userCompanyId: null,
   },
   isRegistered: false,
   isLoggedInState: false,
@@ -167,6 +168,7 @@ export const authSlice = createSlice({
         const { data } = action.payload;
         state.user.userId = data.id;
         state.user.role = data.role_type;
+        state.user.userCompanyId = data.user_company.id;
         // state.loading = false;
         // state.error = action.error.message;
         // state.user.accessToken = access;
