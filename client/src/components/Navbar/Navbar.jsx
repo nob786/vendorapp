@@ -339,7 +339,7 @@ function Header() {
                   onClick={(e) => navigate("/post-ad")}
                   style={{ whiteSpace: "nowrap" }}
                 >
-                  Post Ad
+                  Dashboard
                 </Button>
               </Col>
             </Row>

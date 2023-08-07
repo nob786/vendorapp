@@ -204,7 +204,7 @@ function MyAds() {
                     <Row className="g-0">
                       <Col sm={3} style={{ padding: "20px" }}>
                         <Card.Img
-                          src={ad_media[0]?.media_urls?.images[0]}
+                          src={ad_media ?? ad_media[0]?.media_urls?.images[0]}
                           alt="AdTemp"
                           style={{ objectFit: "cover" }}
                         />

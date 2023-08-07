@@ -23,12 +23,16 @@ import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
+import { deleteCookie } from "../../utilities/utils";
+import { useNavigate } from "react-router-dom";
 
 function ChangePassword() {
   const { Formik } = formik;
   const [isAlert, setIsAlert] = useState(false);
   const [isFailedAlert, setIsFailedAlert] = useState(false);
+  const [isFailedAlertMessage, setIsFailedAlertMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const initialValues = {
     old_password: "",
@@ -58,7 +62,7 @@ function ChangePassword() {
     setIsFailedAlert(true);
     setTimeout(() => {
       setIsFailedAlert(false);
-    }, 3000);
+    }, 5000);
   };
 
   const handleResetPassword = async (values) => {
@@ -72,9 +76,15 @@ function ChangePassword() {
           new_password: values.new_password,
         },
       });
-      handleAlert();
       setLoading(false);
+      handleAlert();
+      deleteCookie("refresh_token");
+      // navigate("/");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1500);
     } catch (error) {
+      setIsFailedAlertMessage(error.response.data.message);
       handleFailedAlert();
       setLoading(false);
     }
@@ -137,7 +147,9 @@ function ChangePassword() {
           // width: "150px",
         }}
       >
-        Something went wrong
+        {isFailedAlertMessage !== null
+          ? isFailedAlertMessage
+          : "Something went wrong"}
       </Alert>
 
       <Container

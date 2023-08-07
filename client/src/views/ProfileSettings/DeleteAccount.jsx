@@ -34,12 +34,13 @@ function DeleteAccount() {
 
   const [isFailedAlert, setIsFailedAlert] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isFailedAlertMessage, setIsFailedAlertMessage] = useState(null);
   const user = useSelector((state) => state.auth.user);
 
   const initialValues = {
     password: "",
     confirm_password: "",
-    reasonToLeave: "",
+    delete_reason: "",
     // old_password: "",
   };
 
@@ -50,29 +51,38 @@ function DeleteAccount() {
     confirm_password: Yup.string()
       .required("Passwords must match")
       .oneOf([Yup.ref("password")], "Passwords must match"),
+    delete_reason: Yup.string().required("Reason to leave is required"),
   });
 
   const handleFailedAlert = () => {
     setIsFailedAlert(true);
     setTimeout(() => {
       setIsFailedAlert(false);
-    }, 3000);
+    }, 4000);
   };
 
-  const handleDeleteAccount = async (vales) => {
-    console.log(vales);
+  const handleDeleteAccount = async (values) => {
+    console.log(values);
     try {
       setLoading(true);
-      const request = await secure_instance.request({
-        url: `/api/users/${user.userId}/`,
-        method: "Patch",
+      await secure_instance.request({
+        url: `/api/users/delete/`,
+        method: "Post",
+        data: {
+          password: values.password,
+          delete_reason: values.delete_reason,
+        },
       });
       setLoading(false);
       deleteCookie("refresh_token");
       setTimeout(() => {
-        navigate("/");
-      }, 1500);
+        window.location.href = "/";
+      }, 1000);
     } catch (error) {
+      console.log(error);
+      if (error.response.data.status_code === 400) {
+        setIsFailedAlertMessage("Password incorrect");
+      }
       handleFailedAlert();
       setLoading(false);
     }
@@ -118,7 +128,9 @@ function DeleteAccount() {
           // width: "150px",
         }}
       >
-        Something went wrong
+        {isFailedAlertMessage !== null
+          ? isFailedAlertMessage
+          : "Something went wrong"}
       </Alert>
 
       <Container
@@ -231,17 +243,20 @@ function DeleteAccount() {
                       <Form.Control
                         style={{ height: "56px" }}
                         className="hide-validation-icon lg-input-small-text"
-                        name="reasonToLeave"
+                        name="delete_reason"
                         type="text"
                         size="lg"
                         placeholder="Let us know what made you leave"
-                        value={values.reasonToLeave}
+                        value={values.delete_reason}
                         onChange={handleChange}
                         // isValid={
-                        //   touched.reasonToLeave && !errors.reasonToLeave
+                        //   touched.delete_reason && !errors.delete_reason
                         // }
-                        isInvalid={!!errors.reasonToLeave}
+                        isInvalid={!!errors.delete_reason}
                       />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.delete_reason}
+                      </Form.Control.Feedback>
                       {/* <Form.Select
                         aria-label="Default select example"
                         style={{ height: "56px" }}
