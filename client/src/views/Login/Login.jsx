@@ -140,7 +140,7 @@ function Login() {
     company_name: Yup.string()
       .required()
       .max(25, "Company name must be up to 25 characters"),
-    county: Yup.string().required(),
+    // county: Yup.string().required(),
     address: Yup.string()
       .required("Address is required")
       .matches(

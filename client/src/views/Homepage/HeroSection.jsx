@@ -9,8 +9,8 @@ import {
   Row,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-// import heroImg1 from "../../assets/images/harold.jpg";
-import heroImg1 from "../../assets/images/heroImg.svg";
+import heroImg1 from "../../assets/images/harold.jpg";
+// import heroImg1 from "../../assets/images/heroImg.svg";
 import useWindowDimensions from "../../utilities/hooks/useWindowDimension";
 
 function HeroSection() {

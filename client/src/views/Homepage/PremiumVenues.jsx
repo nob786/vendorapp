@@ -93,27 +93,32 @@ function PremiumVenues() {
   }, []);
 
   return (
-    <Container fluid style={{ padding: "100px 0", backgroundColor: "#F5F5F5" }}>
-      <Container>
-        <div className="roboto-bold-36px-h1" style={{ marginLeft: "26px" }}>
-          Find our Premium Venues
-        </div>
-        <EmblaCarousel
-          slides={publicAds}
-          options={OPTIONS}
-          componentToRender={componentToRender}
-        />
-        <div className="d-flex justify-content-center mt-5">
-          <Button
-            variant="success"
-            type="submit"
-            className="roboto-semi-bold-16px-information"
-          >
-            See all Venues
-          </Button>
-        </div>
+    publicAds.length > 0 && (
+      <Container
+        fluid
+        style={{ padding: "100px 0", backgroundColor: "#F5F5F5" }}
+      >
+        <Container>
+          <div className="roboto-bold-36px-h1" style={{ marginLeft: "26px" }}>
+            Find our Premium Venues
+          </div>
+          <EmblaCarousel
+            slides={publicAds}
+            options={OPTIONS}
+            componentToRender={componentToRender}
+          />
+          <div className="d-flex justify-content-center mt-5">
+            <Button
+              variant="success"
+              type="submit"
+              className="roboto-semi-bold-16px-information"
+            >
+              See all Venues
+            </Button>
+          </div>
+        </Container>
       </Container>
-    </Container>
+    )
   );
 }
 
