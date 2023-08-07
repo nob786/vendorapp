@@ -5,6 +5,7 @@ import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import EmblaCarousel from "../../components/Carousel/Carousel";
 import imageByIndex from "../../components/Carousel/ImagesByIndex";
 import { instance } from "../../axios/axios-config";
+import placeholderIcon from "../../assets/images/placeholder.jpg";
 
 function PremiumVendors() {
   const OPTIONS = { slidesToScroll: "auto", containScroll: "trimSnaps" };
@@ -19,8 +20,12 @@ function PremiumVendors() {
       <Card style={{ padding: "10px", border: "none" }}>
         <Card.Img
           variant="top"
-          src={slide?.ad_media ?? slide?.ad_media[0]?.media_urls.images[0]}
-          style={{ minHeight: "243px" }}
+          src={
+            slide.ad_media[0].media_urls.images !== undefined
+              ? slide?.ad_media[0]?.media_urls.images[0]
+              : placeholderIcon
+          }
+          style={{ minHeight: "100%", height: "243px", objectFit: "cover" }}
         />
         <Card.Body>
           <div

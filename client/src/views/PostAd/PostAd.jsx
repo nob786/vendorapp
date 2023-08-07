@@ -86,6 +86,7 @@ function PostAd() {
         video: videoToUpload,
         pdf: pdfsToUpload,
       },
+      description: values.contactInformation.description,
       website: values.contactInformation.websiteUrl,
       city: values.contactInformation.city,
       street: values.contactInformation.street,
@@ -137,7 +138,7 @@ function PostAd() {
   };
   const Schema = Yup.object().shape({
     companyInformation: Yup.object().shape({
-      // commercial_name: Yup.string().required("Commercial Name is required"),
+      commercial_name: Yup.string().required("Commercial Name is required"),
       category: Yup.string().required("Category is required"),
       sub_category: Yup.string().required("Sub-category is required"),
       description: Yup.string()
@@ -194,8 +195,9 @@ function PostAd() {
       websiteUrl: Yup.string()
         .max(30, "Must be at most 30 characters")
         .matches(
-          /^[a-zA-Z0-9.\-+_]+$/,
-          'Only letters, digits, ".", "-", "+", and "_" signs are allowed'
+          // eslint-disable-next-line max-len
+          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+          "Invalid characters"
         ),
       county: Yup.array().min(1, "country is required"),
       city: Yup.string()
@@ -230,25 +232,40 @@ function PostAd() {
     SocialMedia: Yup.object().shape({
       facebookURL: Yup.string()
         .max(40, "Must be 40 characters or less")
-        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+        .matches(
+          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+          "Invalid characters"
+        ),
       instagramURL: Yup.string()
         .max(40, "Must be 40 characters or less")
-        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+        .matches(
+          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+          "Invalid characters"
+        ),
       youtubeURL: Yup.string()
         .max(40, "Must be 40 characters or less")
-        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+        .matches(
+          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+          "Invalid characters"
+        ),
       tiktokURL: Yup.string()
         .max(40, "Must be 40 characters or less")
-        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+        .matches(
+          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+          "Invalid characters"
+        ),
       twitterURL: Yup.string()
         .max(40, "Must be 40 characters or less")
-        .matches(/^[a-zA-Z0-9!@*&();'":|,.<>?/\\]+$/, "Invalid characters"),
+        .matches(
+          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+          "Invalid characters"
+        ),
     }),
   });
 
   const initialValues = {
     companyInformation: {
-      // commercial_name: "",
+      commercial_name: "",
       category: "",
       sub_category: "",
       description: "",

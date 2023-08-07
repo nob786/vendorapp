@@ -14,7 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../../components/Navbar/Navbar";
-import AdTemp from "../../assets/images/post-ad/ad-temp.svg";
+import placeholderIcon from "../../assets/images/placeholder.jpg";
 import TimeIcon from "../../assets/images/post-ad/carbon_time.svg";
 import MapIcon from "../../assets/images/post-ad/map-outlined.svg";
 import deleteIcon from "../../assets/images/post-ad/delete.svg";
@@ -204,9 +204,13 @@ function MyAds() {
                     <Row className="g-0">
                       <Col sm={3} style={{ padding: "20px" }}>
                         <Card.Img
-                          src={ad_media ?? ad_media[0]?.media_urls?.images[0]}
+                          src={
+                            ad_media[0].media_urls.images !== undefined
+                              ? ad_media[0]?.media_urls?.images[0]
+                              : placeholderIcon
+                          }
                           alt="AdTemp"
-                          style={{ objectFit: "cover" }}
+                          style={{ height: "100%", objectFit: "cover" }}
                         />
                       </Col>
                       <Col

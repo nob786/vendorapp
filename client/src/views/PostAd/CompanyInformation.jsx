@@ -228,7 +228,7 @@ function CompanyInformation({
           Company Information
         </div>
         <div className="">
-          {/* <Col md={6} lg={4}>
+          <Col md={6} lg={4}>
             <Form.Group className="form-group mb-3" controlId="form3Example3">
               <Form.Label
                 className="roboto-medium-20px-body1 d-flex align-items-center"
@@ -257,7 +257,7 @@ function CompanyInformation({
                 {errors.commercial_name}
               </Form.Control.Feedback>
             </Form.Group>
-          </Col> */}
+          </Col>
           <Col md={6} lg={4}>
             <Form.Group className="form-group mb-3" controlId="form3Example4">
               <Form.Label
