@@ -294,7 +294,7 @@ function ContactInformationForm({
               name="contactInformation.street"
               type="text"
               size="lg"
-              placeholder="Enter websiteUrl"
+              placeholder="Enter Street"
               value={values.street}
               onChange={handleChange}
               isValid={touched.street && !errors.street}
@@ -326,7 +326,7 @@ function ContactInformationForm({
               name="contactInformation.fullAddress"
               type="text"
               size="lg"
-              placeholder="Enter websiteUrl"
+              placeholder="Enter Full Address"
               value={values.fullAddress}
               onChange={handleChange}
               isValid={touched.fullAddress && !errors.fullAddress}
