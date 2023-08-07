@@ -266,8 +266,8 @@ function ViewAd() {
         className=""
       >
         <Row>
-          <div className="d-flex align-items-center justify-content-between mb-2">
-            <div className="roboto-bold-36px-h1">Vendor Name</div>
+          <div className="d-flex align-items-center justify-content-between mb-2 mx-3">
+            <div className="roboto-bold-36px-h1">{currentAd?.name}</div>
 
             <div>
               <img src={MapIcon} alt="MapIcon" className="me-2" />

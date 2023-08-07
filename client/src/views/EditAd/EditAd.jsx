@@ -82,6 +82,7 @@ function EditAd() {
         pdf: pdfsToUpload,
       },
       description: values.companyInformation.description,
+      name: values.companyInformation.commercial_name,
       website: values.contactInformation.websiteUrl,
       city: values.contactInformation.city,
       street: values.contactInformation.street,
@@ -117,7 +118,7 @@ function EditAd() {
   };
   const Schema = Yup.object().shape({
     companyInformation: Yup.object().shape({
-      // commercial_name: Yup.string().required("Commercial Name is required"),
+      commercial_name: Yup.string().required("Commercial Name is required"),
       category: Yup.mixed().when({
         is: (value) => value !== undefined, // Apply the validation when the field is present
         then: () =>
@@ -430,11 +431,11 @@ function EditAd() {
       console.log("request.data.data", request.data.data);
       setLocalInitialValues({
         companyInformation: {
-          // commercial_name: "",
+          commercial_name: request.data.data?.name,
           category: request.data.data?.sub_category.category,
           sub_category: request.data.data?.sub_category,
           related_sub_categories: request.data.data?.related_sub_categories,
-          description: "",
+          description: request.data.data?.description,
           // country: request.data.data?.activation_countries[0].id, // Initialize without any selected countries
           country: request.data.data?.activation_countries.map(
             (country) => country.id

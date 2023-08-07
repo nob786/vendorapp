@@ -90,6 +90,7 @@ function PostAd() {
         video: videoToUpload,
         pdf: pdfsToUpload,
       },
+      name: values.companyInformation.commercial_name,
       description: values.companyInformation.description,
       website: values.contactInformation.websiteUrl,
       city: values.contactInformation.city,
