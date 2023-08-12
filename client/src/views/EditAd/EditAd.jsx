@@ -332,15 +332,15 @@ function EditAd() {
 
     const isAnyValueNotNull = imagesToUpload.some((value) => value !== null);
 
-    if (imagesToUpload.length === 0) {
+    if (imagesToUpload.length === 0 && !imagesError) {
       // setImagesError(true);
       dispatch(setImagesError(true));
       // console.log("ScrollCustom");
-    } else if (imagesError) {
+    }
+    if (imagesError) {
       dispatch(setImagesError(false));
       // setImagesError(false);
     }
-
     if (
       !values.companyInformation.country ||
       values.companyInformation.country.length === 0
