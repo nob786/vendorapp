@@ -10,6 +10,7 @@ const initialState = {
     userId: null,
     role: null,
     userCompanyId: null,
+    userImage: null,
   },
   isRegistered: false,
   isLoggedInState: false,
@@ -124,6 +125,7 @@ export const authSlice = createSlice({
         state.user.accessToken = access;
         state.user.userId = user.id;
         state.user.role = user.role_type;
+        state.user.userImage = user.user_company.image;
         state.isLoggedInState = true;
       })
       .addCase(handleLogin.rejected, (state, action) => {
@@ -169,6 +171,7 @@ export const authSlice = createSlice({
         state.user.userId = data.id;
         state.user.role = data.role_type;
         state.user.userCompanyId = data.user_company.id;
+        state.user.userImage = data.user_company.image;
         // state.loading = false;
         // state.error = action.error.message;
         // state.user.accessToken = access;

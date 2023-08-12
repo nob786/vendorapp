@@ -11,6 +11,7 @@ import {
 import * as formik from "formik";
 import * as Yup from "yup";
 import { Alert } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import Header from "../../components/Navbar/Navbar";
 import userIcon from "../../assets/images/profile-settings/user.svg";
 import personIcon from "../../assets/images/profile-settings/person.svg";
@@ -25,10 +26,12 @@ import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
-import { useSelector } from "react-redux";
+import { handleProfileSettingsCurrentView } from "../redux/TabNavigation/TabNavigationSlice";
+import { setCompanyInformation } from "../redux/Settings/SettingsSlice";
 
 function CompanyInformationSettings() {
   const { Formik } = formik;
+  const dispatch = useDispatch();
 
   const [countriesList, setCountries] = useState([]);
 
@@ -37,29 +40,33 @@ function CompanyInformationSettings() {
     label: country.name,
   }));
 
-  const [companyInformation, setCompanyInformation] = useState("");
+  // const [companyInformation, setCompanyInformation] = useState("");
   const [isAlert, setIsAlert] = useState(false);
   const [isFailedAlert, setIsFailedAlert] = useState(false);
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.auth.user);
+  const companyInformation = useSelector(
+    (state) => state.settings.companyInformation
+  );
 
   const initialValues = {
-    company_name: companyInformation.name,
+    name: companyInformation.name,
     country: companyInformation.country,
     postal_code: companyInformation.postal_code,
     fiscal_code: companyInformation.fiscal_code,
     firm_number: companyInformation.firm_number,
     bank_name: companyInformation.bank_name,
     bank_iban: companyInformation.bank_iban,
-    // municipality: companyInformation.municipality,
-    // commune: companyInformation.commune,
+    municipality: companyInformation.municipality,
+    city: companyInformation.city,
+    address: companyInformation.address,
   };
 
   // console.log(first);
 
   const Schema = Yup.object().shape({
     // person_name: Yup.string().matches(/^[A-Za-z\s]{1,25}$/, "Invalid input"),
-    company_name: Yup.string()
+    name: Yup.string()
       .max(25, "String must be at most 25 characters")
       .matches(/^[A-Za-z\s]*$/, "Only letters and spaces are allowed"),
     country: "",
@@ -120,15 +127,16 @@ function CompanyInformationSettings() {
 
   const getCompanyInfo = async () => {
     // console.log(values);
-    try {
-      const request = await secure_instance.request({
-        url: `/api/companies/${user.userCompanyId}/`,
-        method: "Get",
-      });
-      setCompanyInformation(request.data.data);
-    } catch (error) {
-      handleFailedAlert();
-    }
+    dispatch(setCompanyInformation({ id: user.userCompanyId }));
+    // try {
+    //   const request = await secure_instance.request({
+    //     url: `/api/companies/${user.userCompanyId}/`,
+    //     method: "Get",
+    //   });
+    //   setCompanyInformation(request.data.data);
+    // } catch (error) {
+    //   handleFailedAlert();
+    // }
   };
 
   const listCountries = async () => {
@@ -176,6 +184,19 @@ function CompanyInformationSettings() {
         </div>
       </div>
 
+      <Col className="justify-content-center" style={{ marginLeft: "54px" }}>
+        <Button
+          type="submit"
+          disabled={loading}
+          onClick={() =>
+            dispatch(handleProfileSettingsCurrentView("profileSettings"))
+          }
+          className="btn btn-success roboto-semi-bold-16px-information btn-lg mt-4"
+        >
+          Back
+        </Button>
+      </Col>
+
       <Alert
         severity="success"
         variant="filled"
@@ -210,7 +231,7 @@ function CompanyInformationSettings() {
 
       <Container
         fluid
-        style={{ marginTop: "100px", marginBottom: "200px" }}
+        style={{ marginTop: "70px", marginBottom: "200px" }}
         className=""
       >
         <Row className="justify-content-center">
@@ -241,17 +262,17 @@ function CompanyInformationSettings() {
                         <Form.Control
                           style={{ height: "56px" }}
                           className="lg-input-small-text"
-                          name="company_name"
+                          name="name"
                           type="text"
                           size="lg"
                           placeholder="Enter Name"
-                          value={values.company_name}
+                          value={values.name}
                           onChange={handleChange}
-                          // isValid={touched.company_name && !errors.company_name}
-                          isInvalid={!!errors.company_name}
+                          // isValid={touched.name && !errors.name}
+                          isInvalid={!!errors.name}
                         />
                         <Form.Control.Feedback type="invalid">
-                          {errors.company_name}
+                          {errors.name}
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Col>
@@ -302,6 +323,75 @@ function CompanyInformationSettings() {
                         {errors?.country && (
                           <div className="text-danger">{errors.country}</div>
                         )}
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+                  <Row className="mb-5">
+                    <Col lg={4}>
+                      <Form.Group
+                        className="form-group mb-3"
+                        controlId="form3Example4"
+                      >
+                        <Form.Label
+                          className="roboto-medium-20px-body1 d-flex align-items-center"
+                          style={{ marginBottom: "20px" }}
+                        >
+                          <img
+                            src={postalIcon}
+                            alt="commercialName"
+                            style={{ marginRight: "16px" }}
+                          />
+                          City/Commune
+                        </Form.Label>
+                        <Form.Control
+                          style={{ height: "56px" }}
+                          className="lg-input-small-text"
+                          name="city"
+                          type="text"
+                          size="lg"
+                          placeholder="Enter"
+                          value={values.city}
+                          onChange={handleChange}
+                          // isValid={touched.city && !errors.city}
+                          isInvalid={!!errors.city}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.city}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Col>
+                    <Col lg={4}>
+                      <Form.Group
+                        className="form-group mb-3"
+                        controlId="form3Example4"
+                      >
+                        <Form.Label
+                          className="roboto-medium-20px-body1 d-flex align-items-center"
+                          style={{ marginBottom: "20px" }}
+                        >
+                          <img
+                            src={fiscalIcon}
+                            alt="commercialName"
+                            style={{ marginRight: "16px" }}
+                          />
+                          Address
+                        </Form.Label>
+                        <Form.Control
+                          style={{ height: "56px" }}
+                          className="lg-input-small-text"
+                          name="address"
+                          type="text"
+                          size="lg"
+                          placeholder="Enter"
+                          value={values.address}
+                          onChange={handleChange}
+                          // isValid={touched.address && !errors.address}
+                          isInvalid={!!errors.address}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.address}
+                        </Form.Control.Feedback>
                       </Form.Group>
                     </Col>
                   </Row>

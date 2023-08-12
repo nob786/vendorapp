@@ -38,6 +38,9 @@ import {
 } from "../redux/Posts/AdsSlice";
 import { Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import UnsavedChangesPrompt from "../../utilities/hooks/UnsavedChanged";
+import { ScrollToError } from "../../utilities/ScrollToError";
+import { ScrollCustom } from "../../utilities/ScrollCustom";
 
 function PostAd() {
   const { Formik } = formik;
@@ -56,7 +59,9 @@ function PostAd() {
   const [videoToPreview, setVideoToPreview] = useState([]);
   const [videoToUpload, setVideoToUpload] = useState([]);
   const [showImagesModal, setShowImagesModal] = useState(false);
+  const [uploadingData, setUploadingData] = useState(false);
   const [relatedSubCategoryId, setRelatedSubCategoryId] = useState(null);
+  const [isMultipleCountries, setIsMultipleCountries] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -70,7 +75,10 @@ function PostAd() {
 
   const handleSubmitAllForms = (values) => {
     // ...(uploadedImages && { imageUploader: { images: uploadedImages } }),
+    console.log("inside handleSubmitAllForms");
     if (imagesError) {
+      const el = document.querySelector(".images-container");
+      (el?.parentElement ?? el)?.scrollIntoView();
       return;
     }
 
@@ -109,9 +117,13 @@ function PostAd() {
         related_sub_categories: relatedSubCategoryId,
       }),
       country: parseInt(values.contactInformation.country, 10),
-      activation_countries: Array.isArray(values.companyInformation.country)
-        ? values.companyInformation.country
-        : [values.companyInformation.country],
+      ...(values.companyInformation.country.length > 0
+        ? { activation_countries: values.companyInformation.country }
+        : {
+            activation_countries: [
+              parseInt(values.contactInformation.country, 10),
+            ],
+          }),
       faqs: values.FAQ.faqs,
     };
 
@@ -216,8 +228,8 @@ function PostAd() {
       street: Yup.string()
         .max(35, "Must be at most 25 characters")
         .matches(
-          /^[a-zA-Z\s-]+$/,
-          'Only letters, spaces, and "-" sign are allowed'
+          /^[A-Za-z0-9, .]+$/,
+          'Only letters, spaces, and ". ," sign are allowed'
         )
         .required("Required"),
       contact_number: Yup.string()
@@ -327,12 +339,11 @@ function PostAd() {
 
     if (!isAnyValueNotNull) {
       setImagesError(true);
+      // console.log("ScrollCustom");
     }
 
-    if (
-      !values.companyInformation.country ||
-      values.companyInformation.country.length === 0
-    ) {
+    // only validate country if related sub category is selected
+    if (isMultipleCountries && values.companyInformation.country.length === 0) {
       errors.companyInformation = {
         ...errors.companyInformation,
         country: "Please select at least one country.",
@@ -351,6 +362,13 @@ function PostAd() {
 
     // Add more validation rules as needed
 
+    // if(errors.companyInformation.country){
+
+    // }
+
+    console.log("errorserrors", errors);
+    // alert(errors.companyInformation.country);
+
     return errors;
   };
 
@@ -366,8 +384,12 @@ function PostAd() {
     setVideoToPreview(videos);
   };
 
-  const handleClickSubmit = () => {
-    console.log("submit clickedddddddddddd");
+  const handleClickSubmit = (values) => {
+    if (values.companyInformation.country.length === 0) {
+      const el = document.querySelector(".border-danger");
+      (el?.parentElement ?? el)?.scrollIntoView();
+    }
+    console.log("submit clickedddddddddddd", values);
   };
 
   console.log("imagesToUpload", imagesToUpload);
@@ -456,6 +478,37 @@ function PostAd() {
     });
   };
 
+  const hasUnsavedChanges = (values) => {
+    console.log("values", values);
+    // Implement your logic to check for unsaved changes here
+    // For example, you can check if any field's value is different from its initial value
+    // Return true if there are unsaved changes, otherwise false
+    // return Object.keys(values).some(
+    //   (field) => values[field] !== initialValues[field]
+    // );
+    // return (
+    //   selectedCountries.length !== initialValues.activation_countries.length ||
+    //   imagesToUpload.length !== initialValues.imagesToUpload.length ||
+    //   selectedCountries.some((country, index) => country !== initialValues.selectedCountries[index]) ||
+    //   imagesToUpload.some((image, index) => image !== initialValues.imagesToUpload[index]) ||
+    //   Object.keys(values).some((field) => values[field] !== initialValues[field])
+    // );
+
+    // ------------------------------------ USE THIS ONE FOR EDIT AD ------------------------------------
+    // selectedCountries.some((country, index) => country !== initialValues.selectedCountries[index]) ||
+    // imagesToUpload.some(
+    //   (image, index) => image !== initialValues.imagesToUpload[index]
+    // )
+
+    return (
+      selectedCountries.length !== "" ||
+      imagesToUpload.length > 0 ||
+      Object.keys(values).some(
+        (field) => values[field] !== initialValues[field]
+      )
+    );
+  };
+
   useEffect(() => {
     if (AdPostSuccessAlert) {
       setTimeout(() => {
@@ -481,7 +534,6 @@ function PostAd() {
       <TopBanner />
       <Header />
       <TabNavigation />
-
       <Alert
         severity="success"
         variant="filled"
@@ -497,7 +549,6 @@ function PostAd() {
       >
         Submitted successfully
       </Alert>
-
       <Alert
         severity="error"
         variant="filled"
@@ -526,7 +577,6 @@ function PostAd() {
         imagesToUpload={imagesToUpload}
         setImagesToUpload={setImagesToUpload}
       /> */}
-
       <div className="ad-banner d-flex align-items-center justify-content-between">
         <div style={{ marginLeft: "100px" }}>
           <div className="roboto-bold-36px-h1">Post an Ad</div>
@@ -562,7 +612,6 @@ function PostAd() {
           </div>
         </div>
       </div>
-
       <Container fluid style={{ marginTop: "40px", paddingLeft: "150px" }}>
         <Row>
           <Formik
@@ -581,6 +630,10 @@ function PostAd() {
               setValues,
             }) => (
               <Form noValidate onSubmit={handleSubmit}>
+                <ScrollToError />
+                <UnsavedChangesPrompt
+                  hasUnsavedChanges={() => hasUnsavedChanges(values)}
+                />
                 <CompanyInformation
                   values={values.companyInformation}
                   errors={errors.companyInformation ?? errors}
@@ -589,13 +642,15 @@ function PostAd() {
                   setSelectedCountries={setSelectedCountries}
                   relatedSubCategoryId={relatedSubCategoryId}
                   setRelatedSubCategoryId={setRelatedSubCategoryId}
+                  isMultipleCountries={isMultipleCountries}
+                  setIsMultipleCountries={setIsMultipleCountries}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
                 />
 
                 <ImageUploader
                   // parentImages={values.imageUploader.images}
-                  setShowImagesModal={setShowImagesModal}
+                  // setShowImagesModal={setShowImagesModal}
                   setparentImagesUploadedImages={handleImageUpdates}
                   uploadedImages={imagesToPreview}
                   imagesError={imagesError}
@@ -607,6 +662,7 @@ function PostAd() {
                   // uploadedImages={imagesToPreview}
                   // imagesError={imagesError}
                   // setImagesError={setImagesError}
+                  setUploadingData={setUploadingData}
                   imagesToUpload={imagesToUpload}
                   setImagesToUpload={setImagesToUpload}
                 />
@@ -684,8 +740,8 @@ function PostAd() {
                 >
                   <Button
                     type="submit"
-                    disabled={loading}
-                    onClick={handleClickSubmit}
+                    disabled={loading || uploadingData}
+                    onClick={() => handleClickSubmit(values)}
                     className="btn btn-success roboto-semi-bold-16px-information btn-lg"
                     style={{ padding: "0 100px" }}
                   >

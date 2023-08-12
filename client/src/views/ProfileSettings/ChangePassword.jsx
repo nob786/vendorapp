@@ -25,6 +25,8 @@ import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
 import { deleteCookie } from "../../utilities/utils";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { handleProfileSettingsCurrentView } from "../redux/TabNavigation/TabNavigationSlice";
 
 function ChangePassword() {
   const { Formik } = formik;
@@ -33,6 +35,7 @@ function ChangePassword() {
   const [isFailedAlertMessage, setIsFailedAlertMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const initialValues = {
     old_password: "",
@@ -118,6 +121,19 @@ function ChangePassword() {
         </div>
       </div>
 
+      <Col className="justify-content-center" style={{ marginLeft: "54px" }}>
+        <Button
+          type="submit"
+          disabled={loading}
+          onClick={() =>
+            dispatch(handleProfileSettingsCurrentView("profileSettings"))
+          }
+          className="btn btn-success roboto-semi-bold-16px-information btn-lg mt-4"
+        >
+          Back
+        </Button>
+      </Col>
+
       <Alert
         severity="success"
         variant="filled"
@@ -154,7 +170,7 @@ function ChangePassword() {
 
       <Container
         fluid
-        style={{ marginTop: "100px", marginBottom: "200px" }}
+        style={{ marginTop: "70px", marginBottom: "200px" }}
         className=""
       >
         <Row className="justify-content-center">

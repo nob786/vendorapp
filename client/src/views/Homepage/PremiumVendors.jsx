@@ -25,7 +25,7 @@ function PremiumVendors() {
               ? slide?.ad_media[0]?.media_urls.images[0]
               : placeholderIcon
           }
-          style={{ minHeight: "100%", height: "243px", objectFit: "cover" }}
+          style={{ height: "100%", minHeight: "186px", objectFit: "cover" }}
         />
         <Card.Body>
           <div

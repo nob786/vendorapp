@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import * as formik from "formik";
 import * as Yup from "yup";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Navbar/Navbar";
@@ -25,12 +25,14 @@ import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
 import { deleteCookie } from "../../utilities/utils";
+import { handleProfileSettingsCurrentView } from "../redux/TabNavigation/TabNavigationSlice";
 
 const reasons = ["I want to", "I am not satisfied"];
 
 function DeleteAccount() {
   const { Formik } = formik;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [isFailedAlert, setIsFailedAlert] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -115,6 +117,19 @@ function DeleteAccount() {
         </div>
       </div>
 
+      <Col className="justify-content-center" style={{ marginLeft: "54px" }}>
+        <Button
+          type="submit"
+          disabled={loading}
+          onClick={() =>
+            dispatch(handleProfileSettingsCurrentView("profileSettings"))
+          }
+          className="btn btn-success roboto-semi-bold-16px-information btn-lg mt-4"
+        >
+          Back
+        </Button>
+      </Col>
+
       <Alert
         severity="error"
         variant="filled"
@@ -135,7 +150,7 @@ function DeleteAccount() {
 
       <Container
         fluid
-        style={{ marginTop: "100px", marginBottom: "200px" }}
+        style={{ marginTop: "70px", marginBottom: "200px" }}
         className=""
       >
         <Row className="justify-content-center">

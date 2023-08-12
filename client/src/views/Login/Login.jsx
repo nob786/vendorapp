@@ -106,6 +106,7 @@ function Login() {
   const step2InitialValues = {
     company_name: "",
     county: "",
+    city: "",
     address: "",
     postal_code: "",
     fiscal_code: "",
@@ -132,8 +133,8 @@ function Login() {
     password_check: Yup.string()
       .required("Passwords must match")
       .oneOf([Yup.ref("password")], "Passwords must match"),
-    contact_person_first_name: Yup.string().required(),
-    contact_person_last_name: Yup.string().required(),
+    contact_person_first_name: Yup.string().required("First name is Required"),
+    contact_person_last_name: Yup.string().required("Last name is Required"),
   });
 
   const step2Schema = Yup.object().shape({
@@ -177,11 +178,15 @@ function Login() {
   const isRegisterView = useSelector((state) => state.register.isRegisterView);
   const activeStep = useSelector((state) => state.stepper.activeStep);
 
-  console.log("error >>>>>>>>>>>>>>>>>>>>", error);
+  // console.log("error >>>>>>>>>>>>>>>>>>>>", error);
 
-  const [phone, setPhone] = useState("");
+  // const [phone, setPhone] = useState("");
   const [forgotPassword, setForgotPassword] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const [tempCredentials, setTempCredentials] = useState({
+    email: "",
+    password: "",
+  });
   const [countries, setCountries] = useState([]);
   const countryOptions = countries.map((country) => ({
     value: country.id,
@@ -275,14 +280,14 @@ function Login() {
   };
 
   const handleRegisterationSubmit = (values, { resetForm }) => {
-    values.phone = `+${phone}`;
+    // values.phone = `+${phone}`;
 
     const data = {
       user: {
         email: values.email,
         first_name: values.contact_person_first_name,
         last_name: values.contact_person_last_name,
-        phone: values.phone,
+        phone: values.phone_number,
         password: values.password,
         role: "vendor_user",
         // newsletter: values.newsletter,
@@ -297,7 +302,13 @@ function Login() {
       bank_name: values.bank_name,
       bank_iban: values.bank_iban,
       country: parseInt(values.county, 10),
+      city: values.city,
     };
+
+    setTempCredentials({
+      email: values.email,
+      password: values.password,
+    });
 
     dispatch(handleRegister(data));
     // resetForm();
@@ -324,9 +335,13 @@ function Login() {
 
   useEffect(() => {
     if (isRegistered) {
-      handleLoginClick();
+      dispatch(
+        handleLogin({
+          email: tempCredentials.email,
+          password: tempCredentials.password,
+        })
+      );
       dispatch(handleResgisterationStatus());
-      dispatch(setActiveStep(0));
     }
   }, [isRegistered]);
 
@@ -417,7 +432,22 @@ function Login() {
               </Form.Group>
 
               <Form.Group className="form-group mb-3" controlId="form3Example6">
-                <PhoneInput
+                <Form.Control
+                  style={{ height: "56px" }}
+                  className="lg-input-small-text"
+                  name="phone_number"
+                  type="text"
+                  size="lg"
+                  placeholder="Enter Contact Number"
+                  value={values.phone_number}
+                  onChange={handleChange}
+                  isValid={touched.phone_number && !errors.phone_number}
+                  isInvalid={!!errors.phone_number}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.phone_number}
+                </Form.Control.Feedback>
+                {/* <PhoneInput
                   country="eg"
                   enableSearch
                   value={phone}
@@ -426,7 +456,7 @@ function Login() {
                   // onChange={handleChange}
                   // eslint-disable-next-line no-shadow
                   onChange={(phone) => setPhone(phone)}
-                />
+                /> */}
               </Form.Group>
 
               <Form.Group className="form-group mb-3" controlId="form3Example7">
@@ -491,6 +521,18 @@ function Login() {
                   </p>
                 </div> */}
             </div>
+            <div className="row" style={{ textAlign: "center" }}>
+              <p className="roboto-regular-16px-information mt-3 pt-1 mb-0 ">
+                Already have an account?{" "}
+                <a
+                  href="#!"
+                  style={{ color: "#0558FF", textDecoration: "none" }}
+                  onClick={handleLoginClick}
+                >
+                  Login
+                </a>
+              </p>
+            </div>
           </Form>
         )}
       </Formik>
@@ -552,6 +594,24 @@ function Login() {
                   {errors.county}
                 </div>
                 {/* </Form.Control.Feedback> */}
+              </Form.Group>
+
+              <Form.Group className="form-group mb-3" controlId="form3Example5">
+                <Form.Control
+                  style={{ height: "56px" }}
+                  className="lg-input-small-text"
+                  name="city"
+                  type="text"
+                  size="lg"
+                  placeholder="Enter City/Commune"
+                  value={values.city || ""}
+                  onChange={handleChange}
+                  isValid={touched.city && !errors.city}
+                  isInvalid={!!errors.city}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.city}
+                </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group className="form-group mb-3" controlId="form3Example5">

@@ -5,6 +5,7 @@ import stepperReducer from "../views/redux/Stepper/StepperSlice";
 import authSlice from "../views/redux/Auth/authSlice";
 import TabNavigationReducer from "../views/redux/TabNavigation/TabNavigationSlice";
 import AdsReducer from "../views/redux/Posts/AdsSlice";
+import settingsReducer from "../views/redux/Settings/SettingsSlice";
 // import AdsSlice from "../views/redux/Posts/AdsSlice";
 
 const rootReducer = combineReducers({
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   stepper: stepperReducer,
   tabNavigation: TabNavigationReducer,
   Ads: AdsReducer,
+  settings: settingsReducer,
 });
 
 export default rootReducer;

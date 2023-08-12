@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import * as formik from "formik";
 import * as Yup from "yup";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Alert } from "@mui/material";
 import Header from "../../components/Navbar/Navbar";
 import userIcon from "../../assets/images/profile-settings/user.svg";
@@ -22,9 +22,11 @@ import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
+import { handleProfileSettingsCurrentView } from "../redux/TabNavigation/TabNavigationSlice";
 
 function PersonalInformation() {
   const { Formik } = formik;
+  const dispatch = useDispatch();
 
   const [personalInfo, setPersonalInfo] = useState("");
   const [isAlert, setIsAlert] = useState(false);
@@ -45,9 +47,11 @@ function PersonalInformation() {
     person_lastName: Yup.string()
       .matches(/^[A-Za-z\s]{1,25}$/, "Invalid input")
       .required("Required"),
-    person_number: Yup.string()
-      .matches(/^\+?[0-9]{1,15}$/, "Invalid phone number")
-      .required("Required"),
+    person_number: Yup.string().matches(
+      /^\+?[0-9]{1,15}$/,
+      "Invalid phone number"
+    ),
+    // .required("Required"),
   });
 
   const getPersonalInfo = async () => {
@@ -127,6 +131,21 @@ function PersonalInformation() {
         </div>
       </div>
 
+      {/* <Row > */}
+      <Col className="justify-content-center" style={{ marginLeft: "54px" }}>
+        <Button
+          type="submit"
+          disabled={loading}
+          onClick={() =>
+            dispatch(handleProfileSettingsCurrentView("profileSettings"))
+          }
+          className="btn btn-success roboto-semi-bold-16px-information btn-lg mt-4"
+        >
+          Back
+        </Button>
+      </Col>
+      {/* </Row> */}
+
       <Alert
         severity="success"
         variant="filled"
@@ -161,7 +180,7 @@ function PersonalInformation() {
 
       <Container
         fluid
-        style={{ marginTop: "100px", marginBottom: "200px" }}
+        style={{ marginTop: "70px", marginBottom: "200px" }}
         className=""
       >
         <Row className="justify-content-center">
@@ -258,7 +277,7 @@ function PersonalInformation() {
                       type="submit"
                       disabled={loading}
                       // onClick={handleClickSubmit}
-                      style={{ marginTop: "8rem", width: "30%" }}
+                      style={{ marginTop: "5rem", width: "30%" }}
                       className="btn btn-success roboto-semi-bold-16px-information btn-lg"
                     >
                       {loading ? (

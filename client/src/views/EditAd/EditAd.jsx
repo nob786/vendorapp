@@ -26,6 +26,7 @@ import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { handleCreateNewAd, handleEditAd } from "../redux/Posts/AdsSlice";
 import { secure_instance } from "../../axios/axios-config";
 import { useNavigate, useParams } from "react-router-dom";
+import UnsavedChangesPrompt from "../../utilities/hooks/UnsavedChanged";
 
 function EditAd() {
   const { Formik } = formik;
@@ -81,6 +82,7 @@ function EditAd() {
         video: videoToUpload,
         pdf: pdfsToUpload,
       },
+      company: currentAd.company.id,
       description: values.companyInformation.description,
       name: values.companyInformation.commercial_name,
       website: values.contactInformation.websiteUrl,
@@ -247,6 +249,11 @@ function EditAd() {
         ),
     }),
   });
+
+  console.log(
+    "imagesToUpload imagesToUpload imagesToUpload imagesToUpload",
+    imagesToUpload
+  );
 
   // const initialValues = {
   //   companyInformation: {
@@ -421,6 +428,10 @@ function EditAd() {
     });
   };
 
+  console.log(
+    "selectedCountries----------------------------------",
+    selectedCountries
+  );
   const getAdInfo = async () => {
     try {
       // setLoading(true);
@@ -429,6 +440,9 @@ function EditAd() {
         method: "Get",
       });
       console.log("request.data.data", request.data.data);
+      setSelectedCountries(
+        request.data.data.activation_countries.map((country) => country.id)
+      );
       setLocalInitialValues({
         companyInformation: {
           commercial_name: request.data.data?.name,
@@ -437,9 +451,11 @@ function EditAd() {
           related_sub_categories: request.data.data?.related_sub_categories,
           description: request.data.data?.description,
           // country: request.data.data?.activation_countries[0].id, // Initialize without any selected countries
-          country: request.data.data?.activation_countries.map(
-            (country) => country.id
-          ),
+          ...(request.data.data?.activation_countries.length > 0 && {
+            country: request.data.data?.activation_countries.map(
+              (country) => country.id
+            ),
+          }),
         },
         // media_urls: {
         //   images: imagesToUpload,
@@ -460,7 +476,8 @@ function EditAd() {
           youtubeURL: request.data.data?.youtube,
           tiktokURL: request.data.data?.tiktok,
           twitterURL: request.data.data?.twitter,
-          otherURL: request.data.data?.others,
+          otherURL:
+            request.data.data?.others === null ? "" : request.data.data?.others,
         },
         // request.data.data?.
         FAQ: {
@@ -479,6 +496,16 @@ function EditAd() {
       // handleFailedAlert();
       // setLoading(false);
     }
+  };
+
+  const hasUnsavedChanges = (values) => {
+    return (
+      selectedCountries.length !== "" ||
+      imagesToUpload.length > 0 ||
+      Object.keys(values).some(
+        (field) => values[field] !== localInitialValues[field]
+      )
+    );
   };
 
   console.log("localInitialValues===============", localInitialValues);
@@ -529,13 +556,13 @@ function EditAd() {
   }, []);
 
   useEffect(() => {
-    if (currentAd?.ad_media[0].media_urls.images.length > 0) {
+    if (currentAd?.ad_media[0].media_urls?.images?.length > 0) {
       setImagesToUpload(currentAd?.ad_media[0]?.media_urls?.images);
     }
-    if (currentAd?.ad_media[0].media_urls.video.length > 0) {
+    if (currentAd?.ad_media[0].media_urls?.video?.length > 0) {
       setVideoToPreview(currentAd?.ad_media[0]?.media_urls?.video);
     }
-    if (currentAd?.ad_media[0].media_urls.pdf.length > 0) {
+    if (currentAd?.ad_media[0].media_urls?.pdf?.length > 0) {
       setPdfsToUpload(currentAd?.ad_media[0]?.media_urls?.pdf);
     }
     console.log("helooooooooooooooooo", currentAd);
@@ -617,6 +644,9 @@ function EditAd() {
                 setValues,
               }) => (
                 <Form noValidate onSubmit={handleSubmit}>
+                  <UnsavedChangesPrompt
+                    hasUnsavedChanges={() => hasUnsavedChanges(values)}
+                  />
                   {/* <CompanyInformation
                     values={values.companyInformation}
                     errors={errors.companyInformation ?? errors}
@@ -636,6 +666,7 @@ function EditAd() {
                     setRelatedSubCategoryId={setRelatedSubCategoryId}
                     handleChange={handleChange}
                     handleBlur={handleBlur}
+                    isEditView
                   />
 
                   <ImageUploader

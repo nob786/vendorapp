@@ -286,7 +286,7 @@ function ContactInformationForm({
                 alt="commercialName"
                 style={{ marginRight: "16px" }}
               />
-              Street
+              Street/Number
             </Form.Label>
             <Form.Control
               style={{ height: "56px" }}

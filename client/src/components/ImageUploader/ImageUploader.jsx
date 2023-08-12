@@ -134,7 +134,7 @@ function ImageUploader({
   return (
     <Container fluid style={{ marginTop: "30px" }}>
       <div
-        className="roboto-medium-20px-body1"
+        className="roboto-medium-20px-body1 images-container"
         style={{ marginBottom: "25px" }}
       >
         Upload Images

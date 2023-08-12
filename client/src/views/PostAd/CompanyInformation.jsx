@@ -70,16 +70,26 @@ function CompanyInformation({
   relatedSubCategoryId,
   handleChange,
   handleBlur,
+  isEditView,
+  isMultipleCountries,
+  setIsMultipleCountries,
 }) {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
-  const [isMultipleCountries, setIsMultipleCountries] = useState(false);
   const [relatedSubCategory, setRelatedSubCategory] = useState(
     values?.related_sub_categories
   );
 
   console.log("relatedSubCategory----------------", relatedSubCategory);
   const [modalShow, setModalShow] = React.useState(false);
+  const [isCountriesToEdit, setIsCountriesToEdit] = useState(false);
+
+  useEffect(() => {
+    if (isEditView && values.country.length > 0) {
+      setIsCountriesToEdit(true);
+    }
+  }, []);
+
   const [countriesList, setCountries] = useState(
     values.country.length > 0 ? values.country : []
   );
@@ -90,7 +100,7 @@ function CompanyInformation({
     label: country.name,
   }));
 
-  console.log({ values });
+  console.log("countryOptions", countryOptions);
 
   // const countryOptions = countries.map((country) => ({
   //   value: country,
@@ -98,9 +108,21 @@ function CompanyInformation({
   // }));
 
   const handleCountryChange = (selectedOptions) => {
-    const countryNames = selectedOptions.map((option) => option.value);
+    console.log("selectedOptions", selectedOptions);
+    const isAllSelected = selectedOptions.find(
+      (option) => option.value === 200 && option.label === "All counties"
+    );
+
+    console.log("isAllSelected", isAllSelected);
+
+    let countryNames;
+    if (isAllSelected) {
+      countryNames = countryOptions.map((option) => option.value);
+    } else {
+      countryNames = selectedOptions.map((option) => option.value);
+    }
+    console.log("countryNames", countryNames);
     setSelectedCountries(countryNames);
-    // handleChange("companyInformation.country")(countryNames);
     handleChange({
       target: {
         name: "companyInformation.country",
@@ -143,13 +165,16 @@ function CompanyInformation({
       url: `/api/ads/sub_category/${id}/activation-countries-exists/`,
       method: "Get",
     });
-
+    setIsCountriesToEdit(false);
+    setSelectedCountries([]);
+    console.log("request.data.data", request.data.data.activation_country);
     if (request.data.data.activation_country) {
       setIsMultipleCountries(true);
     } else {
       setIsMultipleCountries(false);
     }
-
+    // EDIT AD DOES NOT REACH HERE---------------------------------------------------
+    console.log("========---------------------");
     const requestRelatedSub = await secure_instance.request({
       url: `/api/ads/sub_category/${id}/public-related/`,
       method: "Get",
@@ -197,7 +222,10 @@ function CompanyInformation({
     <Container fluid style={{ marginTop: "40px" }}>
       <Modal
         show={modalShow}
-        onHide={() => setModalShow(false)}
+        onHide={() => {
+          setRelatedSubCategoryId(null);
+          setModalShow(false);
+        }}
         size="md"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -208,7 +236,14 @@ function CompanyInformation({
           <h4>{`Do you want to add it?`}</h4>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={() => setModalShow(false)}>No</Button>
+          <Button
+            onClick={() => {
+              setRelatedSubCategoryId(null);
+              setModalShow(false);
+            }}
+          >
+            No
+          </Button>
           <Button
             variant="success"
             onClick={() => {
@@ -467,22 +502,25 @@ function CompanyInformation({
               />
             </Form.Group> */}
 
-            <Form.Group className="form-group mb-3" controlId="form3Example6">
-              <Form.Label
-                className="roboto-medium-20px-body1 d-flex align-items-center"
-                style={{ marginBottom: "20px" }}
-              >
-                <img
-                  src={mapIcon}
-                  alt="categoryIcon"
-                  style={{ marginRight: "16px" }}
-                />
-                Country
-              </Form.Label>
+            {(isMultipleCountries || isCountriesToEdit) && (
+              <Form.Group className="form-group mb-3" controlId="form3Example6">
+                <Form.Label
+                  className="roboto-medium-20px-body1 d-flex align-items-center"
+                  style={{ marginBottom: "20px" }}
+                >
+                  <img
+                    src={mapIcon}
+                    alt="categoryIcon"
+                    style={{ marginRight: "16px" }}
+                  />
+                  Country
+                </Form.Label>
 
-              {isMultipleCountries ? (
                 <Select
-                  options={countryOptions}
+                  options={[
+                    { value: 200, label: "All counties" },
+                    ...countryOptions,
+                  ]}
                   isMulti
                   name="companyInformation.country"
                   styles={{ height: "56px" }}
@@ -498,33 +536,11 @@ function CompanyInformation({
                   }
                   classNamePrefix="select"
                 />
-              ) : (
-                <Form.Select
-                  aria-label="Default select example"
-                  style={{ height: "56px", border: "1px solid #797979" }}
-                  name="companyInformation.country"
-                  value={values.country || ""}
-                  onChange={handleChange}
-                  // onBlur={handleBlur}
-                  isValid={touched.country && !errors.country}
-                  isInvalid={touched.country && !!errors.country}
-                  className={errors.country ? "border-danger" : ""}
-                >
-                  <option selected value hidden="true">
-                    Select County
-                  </option>
-                  {countryOptions.map((county, index) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <option key={index} value={county.value}>
-                      {county.label}
-                    </option>
-                  ))}
-                </Form.Select>
-              )}
-              {errors?.country && (
-                <div className="text-danger">{errors.country}</div>
-              )}
-            </Form.Group>
+                {errors?.country && (
+                  <div className="text-danger">{errors.country}</div>
+                )}
+              </Form.Group>
+            )}
           </Col>
           {console.log("values.country", values.country)}
         </div>
