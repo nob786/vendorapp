@@ -119,8 +119,8 @@ function Header() {
     <Navbar bg="body-tertiary" expand="lg" className="navbar">
       {window.location.pathname !== "/" && (
         <div
-          className="me-2"
-          style={{ cursor: "pointer" }}
+          className="d-flex"
+          style={{ cursor: "pointer", width: "5vw" }}
           onClick={handleBack}
         >
           <svg

@@ -16,8 +16,14 @@ function PremiumVendors() {
 
   const componentToRender = (slide, index) => (
     <div className="embla__slide" key={index}>
-      {console.log({ slide })}
-      <Card style={{ padding: "10px", border: "none" }}>
+      <Card
+        style={{
+          padding: "10px",
+          border: "none",
+          minHeight: "319px",
+          maxHeight: "319px",
+        }}
+      >
         <Card.Img
           variant="top"
           src={
@@ -51,7 +57,7 @@ function PremiumVendors() {
 
           <Card.Title
             style={{ margin: "0" }}
-            className="roboto-medium-20px-body1"
+            className="roboto-medium-20px-body1 card-title-custom"
           >
             {slide.name}
           </Card.Title>

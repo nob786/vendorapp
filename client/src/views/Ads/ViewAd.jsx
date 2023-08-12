@@ -322,6 +322,11 @@ function ViewAd() {
                                   src={slide[`image${index * 3 + 2}`]}
                                   alt={`image${index * 3 + 2}`}
                                   className="stacked-image"
+                                  style={{
+                                    minHeight: slide[`image${index * 3 + 3}`]
+                                      ? "100%"
+                                      : "464px",
+                                  }}
                                 />
                               )}
                               {slide[`image${index * 3 + 3}`] && (

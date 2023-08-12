@@ -352,10 +352,6 @@ function PostAd() {
       dispatch(setImagesError(true));
       // console.log("ScrollCustom");
     }
-    if (imagesError) {
-      dispatch(setImagesError(false));
-      // setImagesError(false);
-    }
 
     // only validate country if related sub category is selected
     if (isMultipleCountries && values.companyInformation.country.length === 0) {
