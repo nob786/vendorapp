@@ -4,22 +4,32 @@ import { faAdd, faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
+import { PhotoProvider, PhotoView } from "react-photo-view";
+import { useDispatch, useSelector } from "react-redux";
 import InfoIcon from "../../assets/images/gg_info.svg";
 import "./ImageUploader.css";
 import { secure_instance } from "../../axios/axios-config";
+import {
+  setImagesToUpload,
+  uploadImagesToCloud,
+} from "../../views/redux/Posts/AdsSlice";
+import "react-photo-view/dist/react-photo-view.css";
 
 function ImageUploader({
-  setparentImagesUploadedImages,
+  // setparentImagesUploadedImages,
   imagesError,
   // uploadedImages,
-  setImagesError,
-  setShowImagesModal,
-  imagesToUpload,
-  setImagesToUpload,
-  editAd,
+  // setImagesError,
+  // setShowImagesModal,
+  // imagesToUpload,
+  // setImagesToUpload,
+  // editAd,
 }) {
   const [mainImage, setMainImage] = useState(null);
   const [images, setImages] = useState([]);
+  const imagesToUpload = useSelector((state) => state.Ads.media_urls.images);
+
+  const dispatch = useDispatch();
 
   // useEffect(() => {
   //   if (uploadedImages[0] === null) {
@@ -32,25 +42,25 @@ function ImageUploader({
   //   }
   // }, [setparentImagesUploadedImages, uploadedImages]);
 
-  const uploadFileToCloud = async (uploadedImage) => {
-    const formData = new FormData(); // pass in the form
-    formData.append("file", uploadedImage);
-    formData.append("content_type", uploadedImage.type);
+  // const uploadFileToCloud = async (uploadedImage) => {
+  //   const formData = new FormData(); // pass in the form
+  //   formData.append("file", uploadedImage);
+  //   formData.append("content_type", uploadedImage.type);
 
-    try {
-      const request = await secure_instance.request({
-        url: "/api/ads/upload-url/",
-        method: "Post",
-        data: formData,
-      });
+  //   try {
+  //     const request = await secure_instance.request({
+  //       url: "/api/ads/upload-url/",
+  //       method: "Post",
+  //       data: formData,
+  //     });
 
-      setImagesToUpload([...imagesToUpload, request.data.data.file_url]);
-      // setImageUrlToUpload(response.data.data);
-    } catch (e) {
-      // --------- WILL ROUTE ON SOME PAGE ON FAILURE ---------
-      console.log("error", e);
-    }
-  };
+  //     setImagesToUpload([...imagesToUpload, request.data.data.file_url]);
+  //     // setImageUrlToUpload(response.data.data);
+  //   } catch (e) {
+  //     // --------- WILL ROUTE ON SOME PAGE ON FAILURE ---------
+  //     console.log("error", e);
+  //   }
+  // };
 
   const handleImageUpload = (event, index) => {
     event.preventDefault();
@@ -67,12 +77,12 @@ function ImageUploader({
       setImages(updatedImages);
     };
     console.log("uploadedImage", uploadedImage);
-    uploadFileToCloud(uploadedImage);
+    // setImagesError(false);
+    reader.readAsDataURL(uploadedImage);
+    dispatch(uploadImagesToCloud(uploadedImage));
     // setparentImagesUploadedImages(updatedImages);
 
     // console.log("updatedImages inside image component", updatedImages);
-    setImagesError(false);
-    reader.readAsDataURL(uploadedImage);
   };
 
   const removeImage = async (image, index) => {
@@ -87,6 +97,7 @@ function ImageUploader({
         },
       });
       console.log("request", request);
+      // ----------------do this inside redux
       if (request.status === 200) {
         const imageIndex = images.indexOf(image);
 
@@ -106,7 +117,7 @@ function ImageUploader({
           cloneImagesToUpload.splice(index, 1);
         }
         console.log("cloneImagesToUpload", cloneImagesToUpload);
-        setImagesToUpload(cloneImagesToUpload);
+        dispatch(setImagesToUpload(cloneImagesToUpload));
       }
     } catch (err) {}
 
@@ -171,88 +182,95 @@ function ImageUploader({
           </li>
         </ul>
 
+        {console.log("image-----------", imagesToMap[0])}
+
         {/* render images here */}
         <Row className="h-100 col-12 g-0 flex-column-reverse flex-md-row">
-          <div className="d-flex" style={{ flexWrap: "wrap" }}>
-            {imagesToMap?.map((image, index) => (
-              <Col md={3} lg={3} key={index}>
-                {/* {console.log({ index })} */}
-                <div className="mb-5">
-                  {image !== null && (
-                    <div
-                      style={{
-                        position: "relative",
-                        border: "2px dotted #386C34",
-                        width: "145px",
-                        height: "126px",
-                      }}
-                    >
-                      <img
-                        src={image.previewURL ?? image}
-                        alt={`Preview ${index + 1}`}
+          <PhotoProvider>
+            <div className="d-flex" style={{ flexWrap: "wrap" }}>
+              {console.log("imagesToMap", imagesToMap)}
+              {imagesToMap?.map((image, index) => (
+                <Col md={3} lg={3} key={index}>
+                  {/* {console.log({ index })} */}
+                  <div className="mb-5">
+                    {image !== null && (
+                      <div
                         style={{
-                          width: "141px",
-                          height: "122px",
-                          objectFit: "cover",
+                          position: "relative",
+                          border: "2px dotted #386C34",
+                          width: "145px",
+                          height: "126px",
                         }}
-                      />
-                      <button
-                        type="button"
-                        style={{ position: "absolute", top: "0", right: "0" }}
-                        className="upload-img-close-btn"
-                        onClick={() => removeImage(image, index)}
                       >
-                        <FontAwesomeIcon
-                          icon={faClose}
-                          style={{
-                            position: "absolute",
-                            top: "2px",
-                            right: "5px",
-                            color: "#FFF",
-                          }}
-                        />
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </Col>
-            ))}
-            <div
-              style={{
-                border: "2px dashed #A0C49D",
-                width: "141px",
-                height: "122px",
-              }}
-            >
-              <label
-                htmlFor={`file-input`}
-                className="d-flex align-items-center justify-content-center"
+                        <PhotoView src={image}>
+                          <img
+                            src={image.previewURL ?? image}
+                            alt={`Preview ${index + 1}`}
+                            style={{
+                              width: "141px",
+                              height: "122px",
+                              objectFit: "cover",
+                            }}
+                          />
+                        </PhotoView>
+                        <button
+                          type="button"
+                          style={{ position: "absolute", top: "0", right: "0" }}
+                          className="upload-img-close-btn"
+                          onClick={() => removeImage(image, index)}
+                        >
+                          <FontAwesomeIcon
+                            icon={faClose}
+                            style={{
+                              position: "absolute",
+                              top: "2px",
+                              right: "5px",
+                              color: "#FFF",
+                            }}
+                          />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </Col>
+              ))}
+              <div
                 style={{
+                  border: "2px dashed #A0C49D",
                   width: "141px",
                   height: "122px",
-                  cursor: "pointer",
                 }}
               >
-                <FontAwesomeIcon
-                  icon={faAdd}
+                <label
+                  htmlFor="file-input"
+                  className="d-flex align-items-center justify-content-center"
                   style={{
-                    color: "#A0C49D",
-                    width: "40px",
-                    height: "40px",
-                    marginRight: "10px",
-                    marginBottom: "8px",
+                    width: "141px",
+                    height: "122px",
+                    cursor: "pointer",
                   }}
+                >
+                  <FontAwesomeIcon
+                    icon={faAdd}
+                    style={{
+                      color: "#A0C49D",
+                      width: "40px",
+                      height: "40px",
+                      marginRight: "10px",
+                      marginBottom: "8px",
+                    }}
+                  />
+                </label>
+                <input
+                  id="file-input"
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => handleImageUpload(event)}
+                  style={{ display: "none", border: "1px solid red" }}
                 />
-              </label>
-              <input
-                id={`file-input`}
-                type="file"
-                accept="image/*"
-                onChange={(event) => handleImageUpload(event)}
-                style={{ display: "none", border: "1px solid red" }}
-              />
+              </div>
             </div>
-          </div>
+          </PhotoProvider>
         </Row>
 
         <div className="d-flex align-items-center">

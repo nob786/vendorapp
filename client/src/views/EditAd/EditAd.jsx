@@ -1,8 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as formik from "formik";
 import * as Yup from "yup";
-import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Modal,
+  Row,
+  Spinner,
+} from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { Alert } from "@mui/material";
 import Header from "../../components/Navbar/Navbar";
 import TopBanner from "../../components/TopBanner";
 import postAdBanner1 from "../../assets/images/post-ad-banner-1.svg";
@@ -23,9 +33,15 @@ import FAQs from "../PostAd/FAQs";
 import PdfUploader from "../../components/PdfUploader/PdfUploader";
 import ImagesModal from "../../components/ImageUploader/ImagesModal";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
-import { handleCreateNewAd, handleEditAd } from "../redux/Posts/AdsSlice";
+import {
+  handleCreateNewAd,
+  handleEditAd,
+  handleUpdateAdPostErrorAlerting,
+  setImagesError,
+  setImagesToUpload,
+  setMediaError,
+} from "../redux/Posts/AdsSlice";
 import { secure_instance } from "../../axios/axios-config";
-import { useNavigate, useParams } from "react-router-dom";
 import UnsavedChangesPrompt from "../../utilities/hooks/UnsavedChanged";
 
 function EditAd() {
@@ -39,16 +55,26 @@ function EditAd() {
   // const [uploadedImages, setUploadedImages] = useState(Array(5).fill(null));
   const [currentAd, setCurrentAd] = useState(null);
   // const [imagesToPreview, setImagesToPreview] = useState(Array(5).fill(null));
-  const [imagesToUpload, setImagesToUpload] = useState([]);
-  const [imagesError, setImagesError] = useState(false);
+  // const [imagesToUpload, setImagesToUpload] = useState([]);
+  // const [imagesError, setImagesError] = useState(false);
   const [pdfsToUpload, setPdfsToUpload] = useState([]);
   const [pdfsError, setPdfsError] = useState(false);
-  const [videoToPreview, setVideoToPreview] = useState([]);
+  // const [videoToPreview, setVideoToPreview] = useState([]);
   const [videoToUpload, setVideoToUpload] = useState([]);
   const [showImagesModal, setShowImagesModal] = useState(false);
   const [relatedSubCategoryId, setRelatedSubCategoryId] = useState(null);
 
   const [localInitialValues, setLocalInitialValues] = useState(null);
+
+  const loading = useSelector((state) => state.Ads.loading);
+  const AdPostSuccessAlert = useSelector(
+    (state) => state.Ads.AdPostSuccessAlert
+  );
+  const AdPostErrorAlert = useSelector((state) => state.Ads.AdPostErrorAlert);
+  const imagesToUpload = useSelector((state) => state.Ads.media_urls.images);
+  const imagesError = useSelector((state) => state.Ads.imagesError);
+  const isMediaUploading = useSelector((state) => state.Ads.isMediaUploading);
+  const mediaError = useSelector((state) => state.Ads.mediaError);
 
   const dispatch = useDispatch();
   const params = useParams();
@@ -70,8 +96,11 @@ function EditAd() {
     );
 
     const addSubCategoryToFaqs = values.FAQ.faqs.map((faq) => ({
-      ...faq, // Copy the existing properties of the FAQ object
-      sub_category: parseInt(values.companyInformation.sub_category.id, 10), // Add the new 'sub_category' property
+      sub_category: parseInt(values.companyInformation.sub_category.id, 10),
+      question: faq.question,
+      answer_input: faq.answer_input,
+      answer_checkbox: faq.answer_checkbox,
+      type: faq.type,
     }));
 
     console.log({ addSubCategoryToFaqs });
@@ -130,10 +159,12 @@ function EditAd() {
               return Yup.object({
                 // Add your object schema here...
               });
-            } else if (typeof value === "number") {
+            }
+            if (typeof value === "number") {
               // If it's a number, apply integer validation
               return Yup.number().integer();
-            } else if (typeof value === "string") {
+            }
+            if (typeof value === "string") {
               // If it's a string, apply string validation
               return Yup.string();
             }
@@ -152,10 +183,12 @@ function EditAd() {
               return Yup.object({
                 // Add your object schema here...
               });
-            } else if (typeof value === "number") {
+            }
+            if (typeof value === "number") {
               // If it's a number, apply integer validation
               return Yup.number().integer();
-            } else if (typeof value === "string") {
+            }
+            if (typeof value === "string") {
               // If it's a string, apply string validation
               return Yup.string();
             }
@@ -299,8 +332,13 @@ function EditAd() {
 
     const isAnyValueNotNull = imagesToUpload.some((value) => value !== null);
 
-    if (!isAnyValueNotNull) {
-      setImagesError(true);
+    if (imagesToUpload.length === 0) {
+      // setImagesError(true);
+      dispatch(setImagesError(true));
+      // console.log("ScrollCustom");
+    } else if (imagesError) {
+      dispatch(setImagesError(false));
+      // setImagesError(false);
     }
 
     if (
@@ -498,15 +536,12 @@ function EditAd() {
     }
   };
 
-  const hasUnsavedChanges = (values) => {
-    return (
-      selectedCountries.length !== "" ||
-      imagesToUpload.length > 0 ||
-      Object.keys(values).some(
-        (field) => values[field] !== localInitialValues[field]
-      )
+  const hasUnsavedChanges = (values) =>
+    selectedCountries.length !== "" ||
+    imagesToUpload.length > 0 ||
+    Object.keys(values).some(
+      (field) => values[field] !== localInitialValues[field]
     );
-  };
 
   console.log("localInitialValues===============", localInitialValues);
 
@@ -557,10 +592,10 @@ function EditAd() {
 
   useEffect(() => {
     if (currentAd?.ad_media[0].media_urls?.images?.length > 0) {
-      setImagesToUpload(currentAd?.ad_media[0]?.media_urls?.images);
+      dispatch(setImagesToUpload(currentAd?.ad_media[0]?.media_urls?.images));
     }
     if (currentAd?.ad_media[0].media_urls?.video?.length > 0) {
-      setVideoToPreview(currentAd?.ad_media[0]?.media_urls?.video);
+      setVideoToUpload(currentAd?.ad_media[0]?.media_urls?.video);
     }
     if (currentAd?.ad_media[0].media_urls?.pdf?.length > 0) {
       setPdfsToUpload(currentAd?.ad_media[0]?.media_urls?.pdf);
@@ -571,11 +606,56 @@ function EditAd() {
     }
   }, [currentAd]);
 
+  useEffect(() => {
+    if ((AdPostErrorAlert, mediaError)) {
+      setTimeout(() => {
+        // setIsAlert(false);
+        dispatch(handleUpdateAdPostErrorAlerting(false));
+        dispatch(setMediaError(null));
+      }, 4000);
+    }
+  }, [AdPostErrorAlert, mediaError]);
+
   return (
     <div style={{ position: "relative" }}>
       <TopBanner />
       <Header />
       <TabNavigation />
+
+      <Alert
+        severity="success"
+        variant="filled"
+        style={{
+          position: "fixed",
+          top: AdPostSuccessAlert ? "80px" : "-80px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          transition: "ease 200ms",
+          opacity: AdPostSuccessAlert ? 1 : 0,
+          // width: "150px",
+        }}
+      >
+        Submitted successfully
+      </Alert>
+      <Alert
+        severity="error"
+        variant="filled"
+        style={{
+          position: "fixed",
+          top: AdPostErrorAlert || mediaError ? "80px" : "-80px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          transition: "ease 200ms",
+          opacity: AdPostErrorAlert || mediaError ? 1 : 0,
+          // width: "150px",
+        }}
+      >
+        {AdPostErrorAlert?.website?.length > 0
+          ? AdPostErrorAlert?.website
+          : mediaError !== null
+          ? mediaError
+          : "Something went wrong"}
+      </Alert>
       {/* <ImagesModal
         showModal={showImagesModal}
         handleClose={() => setShowImagesModal(false)}
@@ -623,6 +703,8 @@ function EditAd() {
           </div>
         </div>
       </div>
+
+      {/* {console.log(imagesToUpload)} */}
 
       <Container fluid style={{ marginTop: "40px", paddingLeft: "150px" }}>
         <Row>
@@ -677,7 +759,7 @@ function EditAd() {
                     }
                     // uploadedImages={imagesToPreview}
                     imagesError={imagesError}
-                    setImagesError={setImagesError}
+                    // setImagesError={setImagesError}
                     // imagesToUpload={imagesToUpload}
                     // setImagesToUpload={setImagesToUpload}
                     // setShowImagesModal={setShowImagesModal}
@@ -686,7 +768,7 @@ function EditAd() {
                     // imagesError={imagesError}
                     // setImagesError={setImagesError}
                     imagesToUpload={imagesToUpload}
-                    setImagesToUpload={setImagesToUpload}
+                    // setImagesToUpload={setImagesToUpload}
                     editAd
                   />
 
@@ -704,7 +786,7 @@ function EditAd() {
 
                   <VideoUploader
                     // setparentVideoUploaded={handleVideoToPreview}
-                    videoToPreview={videoToPreview}
+                    // videoToPreview={videoToPreview}
                     videoToUpload={videoToUpload}
                     setVideoToUpload={setVideoToUpload}
                   />
@@ -774,11 +856,17 @@ function EditAd() {
                   >
                     <Button
                       type="submit"
-                      onClick={handleClickSubmit}
+                      disabled={loading || isMediaUploading}
+                      onClick={() => handleClickSubmit(values)}
                       className="btn btn-success roboto-semi-bold-16px-information btn-lg"
                       style={{ padding: "0 100px" }}
                     >
-                      Save Changes
+                      {loading ? (
+                        // "Loading…"
+                        <Spinner animation="border" size="sm" />
+                      ) : (
+                        "Save Changes"
+                      )}
                     </Button>
                   </Col>
 

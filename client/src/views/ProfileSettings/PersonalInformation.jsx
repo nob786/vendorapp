@@ -23,6 +23,7 @@ import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
 import { handleProfileSettingsCurrentView } from "../redux/TabNavigation/TabNavigationSlice";
+import ProfilePic from "../../components/ProfilePic/ProfilePic";
 
 function PersonalInformation() {
   const { Formik } = formik;
@@ -117,18 +118,7 @@ function PersonalInformation() {
           </div>
         </div>
 
-        <div
-          style={{
-            position: "absolute",
-            right: "100px",
-            top: "-28px",
-            display: "flex",
-          }}
-        >
-          <div style={{ marginTop: "30px" }}>
-            <img src={userIcon} alt="user" />
-          </div>
-        </div>
+        <ProfilePic />
       </div>
 
       {/* <Row > */}

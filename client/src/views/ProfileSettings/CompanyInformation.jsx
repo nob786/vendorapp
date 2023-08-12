@@ -28,6 +28,7 @@ import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
 import { handleProfileSettingsCurrentView } from "../redux/TabNavigation/TabNavigationSlice";
 import { setCompanyInformation } from "../redux/Settings/SettingsSlice";
+import ProfilePic from "../../components/ProfilePic/ProfilePic";
 
 function CompanyInformationSettings() {
   const { Formik } = formik;
@@ -126,17 +127,7 @@ function CompanyInformationSettings() {
   };
 
   const getCompanyInfo = async () => {
-    // console.log(values);
     dispatch(setCompanyInformation({ id: user.userCompanyId }));
-    // try {
-    //   const request = await secure_instance.request({
-    //     url: `/api/companies/${user.userCompanyId}/`,
-    //     method: "Get",
-    //   });
-    //   setCompanyInformation(request.data.data);
-    // } catch (error) {
-    //   handleFailedAlert();
-    // }
   };
 
   const listCountries = async () => {
@@ -154,7 +145,7 @@ function CompanyInformationSettings() {
 
   useEffect(() => {
     console.log("whaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-    getCompanyInfo();
+    // getCompanyInfo();
   }, []);
 
   return (
@@ -170,18 +161,7 @@ function CompanyInformationSettings() {
           </div>
         </div>
 
-        <div
-          style={{
-            position: "absolute",
-            right: "100px",
-            top: "-28px",
-            display: "flex",
-          }}
-        >
-          <div style={{ marginTop: "30px" }}>
-            <img src={userIcon} alt="user" />
-          </div>
-        </div>
+        <ProfilePic />
       </div>
 
       <Col className="justify-content-center" style={{ marginLeft: "54px" }}>

@@ -49,6 +49,25 @@ export const setCompanyInformation = createAsyncThunk(
   }
 );
 
+export const editCompanyInformation = createAsyncThunk(
+  "settings/editCompanyInfo",
+  async ({ data, id }, { rejectWithValue }) => {
+    try {
+      const response = await secure_instance.request({
+        url: `/api/companies/${id}/`,
+        method: "PATCH",
+        data,
+      });
+
+      return response.data; // Assuming your loginAPI returns data with access_token, user_id, and role_id
+    } catch (err) {
+      // Use `err.response.data` as `action.payload` for a `rejected` action,
+      // by explicitly returning it using the `rejectWithValue()` utility
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 // export const getAuthenticatedUser = createAsyncThunk(
 //   "auth/authenticatedUser",
 //   async () => {
@@ -85,6 +104,21 @@ export const settingsSlice = createSlice({
         // console.log(action);
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(editCompanyInformation.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(editCompanyInformation.fulfilled, (state, action) => {
+        state.loading = false;
+        const { data } = action.payload;
+        // console.log("action.payload", action.payload);
+        state.companyInformation = data;
+      })
+      .addCase(editCompanyInformation.rejected, (state, action) => {
+        // console.log(action);
+        state.loading = false;
+        // state.error = action.payload;
       });
     // .addCase(refreshToken.pending, (state) => {
     //   state.loading = true;

@@ -11,6 +11,8 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { Alert } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/Navbar/Navbar";
 import TopBanner from "../../components/TopBanner";
 import postAdBanner1 from "../../assets/images/post-ad-banner-1.svg";
@@ -35,9 +37,9 @@ import {
   handleCreateNewAd,
   handleUpdateAdPostErrorAlerting,
   handleUpdateAdPostSuccessAlerting,
+  setImagesError,
+  setMediaError,
 } from "../redux/Posts/AdsSlice";
-import { Alert } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import UnsavedChangesPrompt from "../../utilities/hooks/UnsavedChanged";
 import { ScrollToError } from "../../utilities/ScrollToError";
 import { ScrollCustom } from "../../utilities/ScrollCustom";
@@ -52,8 +54,8 @@ function PostAd() {
   ] = useState([]);
   // const [uploadedImages, setUploadedImages] = useState(Array(5).fill(null));
   const [imagesToPreview, setImagesToPreview] = useState(Array(5).fill(null));
-  const [imagesToUpload, setImagesToUpload] = useState([]);
-  const [imagesError, setImagesError] = useState(false);
+  // const [imagesToUpload, setImagesToUpload] = useState([]);
+  // const [imagesError, setImagesError] = useState(false);
   const [pdfsToUpload, setPdfsToUpload] = useState([]);
   const [pdfsError, setPdfsError] = useState(false);
   const [videoToPreview, setVideoToPreview] = useState([]);
@@ -70,6 +72,10 @@ function PostAd() {
     (state) => state.Ads.AdPostSuccessAlert
   );
   const AdPostErrorAlert = useSelector((state) => state.Ads.AdPostErrorAlert);
+  const imagesToUpload = useSelector((state) => state.Ads.media_urls.images);
+  const imagesError = useSelector((state) => state.Ads.imagesError);
+  const isMediaUploading = useSelector((state) => state.Ads.isMediaUploading);
+  const mediaError = useSelector((state) => state.Ads.mediaError);
 
   console.log({ relatedSubCategoryId });
 
@@ -178,28 +184,32 @@ function PostAd() {
                     // Define validation for each array element based on its type
                     if (typeof element === "string") {
                       return Yup.string();
-                    } else if (typeof element === "number") {
+                    }
+                    if (typeof element === "number") {
                       return Yup.number().integer();
-                    } else if (typeof element === "object") {
+                    }
+                    if (typeof element === "object") {
                       return Yup.object({
                         // Add your object schema here for array elements that are objects...
                       });
-                    } else {
-                      // Return null or throw an error if none of the types match
-                      throw new Error("Invalid array element");
                     }
+                    // Return null or throw an error if none of the types match
+                    throw new Error("Invalid array element");
                   })
                 )
                 .required("Array must not be empty"); // You can customize this error message
-            } else if (typeof value === "object") {
+            }
+            if (typeof value === "object") {
               // If it's an object, define the object shape
               return Yup.object({
                 // Add your object schema here...
               });
-            } else if (typeof value === "number") {
+            }
+            if (typeof value === "number") {
               // If it's a number, apply integer validation
               return Yup.number().integer();
-            } else if (typeof value === "string") {
+            }
+            if (typeof value === "string") {
               // If it's a string, apply string validation
               return Yup.string();
             }
@@ -337,9 +347,14 @@ function PostAd() {
 
     const isAnyValueNotNull = imagesToUpload.some((value) => value !== null);
 
-    if (!isAnyValueNotNull) {
-      setImagesError(true);
+    if (imagesToUpload.length === 0 && !imagesError) {
+      // setImagesError(true);
+      dispatch(setImagesError(true));
       // console.log("ScrollCustom");
+    }
+    if (imagesError) {
+      dispatch(setImagesError(false));
+      // setImagesError(false);
     }
 
     // only validate country if related sub category is selected
@@ -519,13 +534,14 @@ function PostAd() {
   }, [AdPostSuccessAlert]);
 
   useEffect(() => {
-    if (AdPostErrorAlert) {
+    if ((AdPostErrorAlert, mediaError)) {
       setTimeout(() => {
         // setIsAlert(false);
         dispatch(handleUpdateAdPostErrorAlerting(false));
+        dispatch(setMediaError(null));
       }, 4000);
     }
-  }, [AdPostErrorAlert]);
+  }, [AdPostErrorAlert, mediaError]);
 
   console.log("AdPostErrorAlert", AdPostErrorAlert);
 
@@ -554,16 +570,18 @@ function PostAd() {
         variant="filled"
         style={{
           position: "fixed",
-          top: AdPostErrorAlert ? "80px" : "-80px",
+          top: AdPostErrorAlert || mediaError ? "80px" : "-80px",
           left: "50%",
           transform: "translateX(-50%)",
           transition: "ease 200ms",
-          opacity: AdPostErrorAlert ? 1 : 0,
+          opacity: AdPostErrorAlert || mediaError ? 1 : 0,
           // width: "150px",
         }}
       >
         {AdPostErrorAlert?.website?.length > 0
           ? AdPostErrorAlert?.website
+          : mediaError !== null
+          ? mediaError
           : "Something went wrong"}
       </Alert>
       {/* <ImagesModal
@@ -654,7 +672,7 @@ function PostAd() {
                   setparentImagesUploadedImages={handleImageUpdates}
                   uploadedImages={imagesToPreview}
                   imagesError={imagesError}
-                  setImagesError={setImagesError}
+                  // setImagesError={setImagesError}
                   // imagesToUpload={imagesToUpload}
                   // setImagesToUpload={setImagesToUpload}
                   // setShowImagesModal={setShowImagesModal}
@@ -664,7 +682,7 @@ function PostAd() {
                   // setImagesError={setImagesError}
                   setUploadingData={setUploadingData}
                   imagesToUpload={imagesToUpload}
-                  setImagesToUpload={setImagesToUpload}
+                  // setImagesToUpload={setImagesToUpload}
                 />
 
                 <VideoUploader
@@ -740,7 +758,7 @@ function PostAd() {
                 >
                   <Button
                     type="submit"
-                    disabled={loading || uploadingData}
+                    disabled={loading || isMediaUploading}
                     onClick={() => handleClickSubmit(values)}
                     className="btn btn-success roboto-semi-bold-16px-information btn-lg"
                     style={{ padding: "0 100px" }}

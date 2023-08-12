@@ -2,10 +2,19 @@ import { faAdd, faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { CircularProgress } from "@mui/material";
 import { secure_instance } from "../../axios/axios-config";
+import {
+  setIsMediaUploading,
+  setMediaError,
+} from "../../views/redux/Posts/AdsSlice";
 
-function VideoUploader({ videoToPreview, setVideoToUpload }) {
+function VideoUploader({ setVideoToUpload, videoToUpload }) {
   const [video, setVideo] = useState(null);
+
+  const dispatch = useDispatch();
+  const isMediaUploading = useSelector((state) => state.Ads.isMediaUploading);
 
   const uploadFileToCloud = async (uploadedVideo) => {
     // const videoToUpload = {
@@ -13,6 +22,7 @@ function VideoUploader({ videoToPreview, setVideoToUpload }) {
     //   content_type: uploadedVideo.type,
     //   upload_type: "video",
     // };
+    dispatch(setIsMediaUploading(true));
     const formData = new FormData(); // pass in the form
     formData.append("file", uploadedVideo);
     formData.append("content_type", uploadedVideo.type);
@@ -24,7 +34,10 @@ function VideoUploader({ videoToPreview, setVideoToUpload }) {
         data: formData,
       });
       setVideoToUpload([request.data.data.file_url]);
+      dispatch(setIsMediaUploading(false));
     } catch (e) {
+      dispatch(setMediaError("Video upload failed"));
+      dispatch(setIsMediaUploading(false));
       // --------- WILL ROUTE ON SOME PAGE ON FAILURE ---------
       console.log("error", e);
     }
@@ -53,18 +66,38 @@ function VideoUploader({ videoToPreview, setVideoToUpload }) {
     }
   };
 
-  const removeVideo = () => {
-    setVideo(null);
+  // const removeVideo = () => {
+  //   setVideo(null);
+  // };
+
+  // console.log(videoToPreview);
+
+  const removeVideo = async () => {
+    const urlToDelete = videoToUpload;
+
+    try {
+      const request = await secure_instance.request({
+        url: "/api/ads/delete-url/",
+        method: "Post",
+        data: {
+          url: urlToDelete[0],
+        },
+      });
+      console.log("request", request);
+      // ----------------do this inside redux
+      if (request.status === 200) {
+        setVideo(null);
+      }
+    } catch (err) {}
+
+    setVideoToUpload([]);
   };
 
   useEffect(() => {
-    if (videoToPreview.length > 0) {
-      setVideo(videoToPreview);
+    if (videoToUpload.length > 0) {
+      setVideo(videoToUpload);
     }
-  }, [videoToPreview]);
-
-  console.log("video---->>", video);
-  console.log("videoToPreview---->>", videoToPreview);
+  }, [videoToUpload]);
 
   return (
     <Container fluid style={{ marginTop: "40px" }}>
@@ -97,20 +130,6 @@ function VideoUploader({ videoToPreview, setVideoToUpload }) {
           </li>
         </ul>
 
-        <Button
-          type="button"
-          className="btn btn-success roboto-semi-bold-16px-information"
-          style={{
-            paddingLeft: "2.5rem",
-            paddingRight: "2.5rem",
-            height: "44px",
-            marginBottom: "30px",
-          }}
-          // onClick={handleImagesUpload}
-        >
-          Upload Video
-        </Button>
-
         {video !== null ? (
           <div
             style={{
@@ -119,6 +138,39 @@ function VideoUploader({ videoToPreview, setVideoToUpload }) {
               height: "126px",
             }}
           >
+            {isMediaUploading && (
+              <>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    right: "0",
+                    // left: "20px",
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    width: "160px",
+                    height: "120px",
+                    objectFit: "cover",
+                    // borderRadius: "50%",
+
+                    backgroundColor: "rgba(108, 117, 125, 0.3)",
+                    backdropFilter: "blur(1px)",
+                    zIndex: 2,
+                  }}
+                  className="d-flex justify-content-center align-items-center"
+                />
+
+                <CircularProgress
+                  style={{
+                    position: "absolute",
+                    top: "30px",
+                    left: "60px",
+                    color: "#51f742",
+                  }}
+                />
+              </>
+            )}
+
             <video
               style={{ width: "145px", height: "122px", objectFit: "cover" }}
               src={video.previewURL ?? video}

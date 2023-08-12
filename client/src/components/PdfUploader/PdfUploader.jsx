@@ -2,12 +2,12 @@
 import { faHeart, faPlus } from "@fortawesome/fontawesome-free-solid";
 import { faAdd, faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import InfoIcon from "../../assets/images/gg_info.svg";
 import "../ImageUploader/ImageUploader.css";
 import { secure_instance } from "../../axios/axios-config";
-import { useEffect } from "react";
+import { Document, Page } from "react-pdf";
 
 function PdfUploader({
   setparentImagesUploadedImages,
@@ -16,7 +16,8 @@ function PdfUploader({
   pdfsToUpload,
 }) {
   const [pdfs, setPdfs] = useState([]);
-
+  const [numPages, setNumPages] = useState();
+  const [pdfToPreview, setPdfToPreview] = useState(null);
   // const handleImagesUpload = (event, image) => {
   //   console.log({ pdfs });
   // };
@@ -70,6 +71,18 @@ function PdfUploader({
     setPdfs(updatedImages);
     setparentImagesUploadedImages(updatedImages);
   };
+
+  // eslint-disable-next-line no-shadow
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
+
+  // const PreviewPDF = (pdf) => {
+  //   console.log("pdfpdf", pdf);
+  //   return (
+
+  //   );
+  // };
 
   useEffect(() => {
     if (pdfsToUpload.length > 0) {
@@ -127,6 +140,29 @@ function PdfUploader({
           </span>
         </div>
 
+        {pdfToPreview !== null && (
+          <div
+            style={{
+              position: "fixed",
+              top: "50px",
+              width: "80vw",
+              height: "80vh",
+              zIndex: "10",
+            }}
+          >
+            <object
+              data={pdfToPreview}
+              type="application/pdf"
+              width="100%"
+              height="100%"
+            >
+              <p>
+                Alternative text - include a link{" "}
+                <a href={pdfToPreview}>to the PDF!</a>
+              </p>
+            </object>
+          </div>
+        )}
         <Row className="h-100 col-12 g-0 flex-column-reverse flex-md-row">
           <div className="d-flex" style={{ flexWrap: "wrap" }}>
             {pdfs.map((pdf, index) => (
@@ -140,6 +176,7 @@ function PdfUploader({
                         width: "145px",
                         height: "126px",
                       }}
+                      onClick={() => setPdfToPreview(pdf)}
                     >
                       {/* <img
                       src={image.previewURL}
@@ -155,7 +192,7 @@ function PdfUploader({
                           height: "100%",
                         }}
                       >
-                        PDF Icon
+                        Preview PDF
                       </div>
                       <button
                         type="button"
@@ -186,7 +223,7 @@ function PdfUploader({
               }}
             >
               <label
-                htmlFor={`pdf-input`}
+                htmlFor="pdf-input"
                 className="d-flex align-items-center justify-content-center"
                 style={{
                   width: "141px",
@@ -206,7 +243,7 @@ function PdfUploader({
                 />
               </label>
               <input
-                id={`pdf-input`}
+                id="pdf-input"
                 type="file"
                 accept="application/pdf"
                 onChange={(event) => handleImageUpload(event)}

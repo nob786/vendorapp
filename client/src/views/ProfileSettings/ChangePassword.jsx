@@ -11,6 +11,8 @@ import {
 import * as formik from "formik";
 import * as Yup from "yup";
 import { Alert } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import Header from "../../components/Navbar/Navbar";
 import user from "../../assets/images/profile-settings/user.svg";
 import oldPasswordIcon from "../../assets/images/profile-settings/old-password.svg";
@@ -24,9 +26,8 @@ import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
 import { deleteCookie } from "../../utilities/utils";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { handleProfileSettingsCurrentView } from "../redux/TabNavigation/TabNavigationSlice";
+import ProfilePic from "../../components/ProfilePic/ProfilePic";
 
 function ChangePassword() {
   const { Formik } = formik;
@@ -107,18 +108,7 @@ function ChangePassword() {
           </div>
         </div>
 
-        <div
-          style={{
-            position: "absolute",
-            right: "100px",
-            top: "-28px",
-            display: "flex",
-          }}
-        >
-          <div style={{ marginTop: "30px" }}>
-            <img src={user} alt="user" />
-          </div>
-        </div>
+        <ProfilePic />
       </div>
 
       <Col className="justify-content-center" style={{ marginLeft: "54px" }}>

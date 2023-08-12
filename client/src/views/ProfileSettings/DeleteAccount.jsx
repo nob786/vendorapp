@@ -26,6 +26,7 @@ import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
 import { deleteCookie } from "../../utilities/utils";
 import { handleProfileSettingsCurrentView } from "../redux/TabNavigation/TabNavigationSlice";
+import ProfilePic from "../../components/ProfilePic/ProfilePic";
 
 const reasons = ["I want to", "I am not satisfied"];
 
@@ -103,18 +104,7 @@ function DeleteAccount() {
           </div>
         </div>
 
-        <div
-          style={{
-            position: "absolute",
-            right: "100px",
-            top: "-28px",
-            display: "flex",
-          }}
-        >
-          <div style={{ marginTop: "30px" }}>
-            <img src={userIcon} alt="user" />
-          </div>
-        </div>
+        <ProfilePic />
       </div>
 
       <Col className="justify-content-center" style={{ marginLeft: "54px" }}>

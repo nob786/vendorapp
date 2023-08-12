@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-useless-catch */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { instance, secure_instance } from "../../../axios/axios-config";
@@ -7,9 +8,17 @@ import { getCookie, setCookie } from "../../../utilities/utils";
 const initialState = {
   loading: false,
   error: null,
+  vendorAds: [],
+  media_urls: {
+    images: [],
+    video: [],
+    pdf: [],
+  },
   AdPostSuccessAlert: false,
   AdPostErrorAlert: false,
-  vendorAds: [],
+  imagesError: false,
+  isMediaUploading: false,
+  mediaError: null,
 };
 
 export const handleCreateNewAd = createAsyncThunk(
@@ -42,12 +51,39 @@ export const handleEditAd = createAsyncThunk(
       const response = await secure_instance.request({
         url: `/api/ads/${adID}/`,
         method: "Patch",
-        data: data,
+        data,
       });
       setTimeout(() => {
         navigate("/my-ads");
       }, 1000);
       return response.data; // Assuming your loginAPI returns data with access_token, user_id, and role_id
+    } catch (err) {
+      // Use `err.response.data` as `action.payload` for a `rejected` action,
+      // by explicitly returning it using the `rejectWithValue()` utility
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const uploadImagesToCloud = createAsyncThunk(
+  "AdImage/upload",
+  async (uploadedImage, { rejectWithValue }) => {
+    // const dataToEdit = data;
+    const formData = new FormData(); // pass in the form
+    formData.append("file", uploadedImage);
+    formData.append("content_type", uploadedImage.type);
+
+    try {
+      const response = await secure_instance.request({
+        url: "/api/ads/upload-url/",
+        method: "Post",
+        data: formData,
+      });
+
+      // setImagesToUpload([...imagesToUpload, response.data.data.file_url]);
+
+      return response.data;
+      // setImageUrlToUpload(response.data.data);
     } catch (err) {
       // Use `err.response.data` as `action.payload` for a `rejected` action,
       // by explicitly returning it using the `rejectWithValue()` utility
@@ -90,6 +126,18 @@ export const AdsSlice = createSlice({
     handleUpdateAdPostErrorAlerting: (state, action) => {
       state.AdPostErrorAlert = action.payload;
     },
+    setImagesToUpload: (state, action) => {
+      state.media_urls.images = action.payload;
+    },
+    setImagesError: (state, action) => {
+      state.imagesError = action.payload;
+    },
+    setIsMediaUploading: (state, action) => {
+      state.isMediaUploading = action.payload;
+    },
+    setMediaError: (state, action) => {
+      state.mediaError = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -100,6 +148,7 @@ export const AdsSlice = createSlice({
       .addCase(handleCreateNewAd.fulfilled, (state, action) => {
         state.loading = false;
         state.AdPostSuccessAlert = true;
+        state.media_urls.images = [];
         // navigate("/post-ad");
         console.log("action.payload", action.payload);
       })
@@ -115,12 +164,14 @@ export const AdsSlice = createSlice({
       })
       .addCase(handleEditAd.fulfilled, (state, action) => {
         state.loading = false;
+        state.AdPostSuccessAlert = true;
         console.log("action.payload", action.payload);
       })
       .addCase(handleEditAd.rejected, (state, action) => {
         // console.log(action);
         state.loading = false;
         state.error = action.payload;
+        state.AdPostErrorAlert = action.payload;
       })
       .addCase(listVendorAds.pending, (state) => {
         state.loading = true;
@@ -135,6 +186,25 @@ export const AdsSlice = createSlice({
         // console.log(action);
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(uploadImagesToCloud.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        // state.isMediaUploading = true;
+      })
+      .addCase(uploadImagesToCloud.fulfilled, (state, action) => {
+        const { file_url } = action.payload.data;
+        state.loading = false;
+        state.media_urls.images.push(file_url);
+        state.imagesError = false;
+        // state.isMediaUploading = false;
+        console.log("action.payload", action.payload);
+      })
+      .addCase(uploadImagesToCloud.rejected, (state, action) => {
+        // console.log(action);
+        state.loading = false;
+        state.error = action.payload;
+        // state.isMediaUploading = false;
       });
   },
 });
@@ -144,6 +214,10 @@ export const {
   handleUpdateAds,
   handleUpdateAdPostSuccessAlerting,
   handleUpdateAdPostErrorAlerting,
+  setImagesError,
+  setImagesToUpload,
+  setIsMediaUploading,
+  setMediaError,
 } = AdsSlice.actions;
 
 // Export the reducer and actions

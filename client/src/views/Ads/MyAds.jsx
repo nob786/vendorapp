@@ -13,6 +13,7 @@ import {
 // import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import dayjs from "dayjs";
 import Header from "../../components/Navbar/Navbar";
 import placeholderIcon from "../../assets/images/placeholder.jpg";
 import TimeIcon from "../../assets/images/post-ad/carbon_time.svg";
@@ -160,7 +161,7 @@ function MyAds() {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header closeButton style={{ border: "none" }}></Modal.Header>
+        <Modal.Header closeButton style={{ border: "none" }} />
         <Modal.Body>
           <h4>Are you sure you want to delete this ad?</h4>
         </Modal.Body>
@@ -244,7 +245,7 @@ function MyAds() {
                                     alt="TimeIcon"
                                     className="me-2"
                                   />
-                                  {created_at}
+                                  {dayjs(created_at).format("MMM D[th], YYYY")}
                                 </div>
                               </Card.Title>
                               <Card.Text
