@@ -27,6 +27,7 @@ const initialState = {
     image: null,
     country: null,
   },
+  selectedImage: null,
   loading: false,
   error: null,
 };
@@ -84,9 +85,9 @@ export const settingsSlice = createSlice({
   name: "settings",
   initialState,
   reducers: {
-    // handleResgisterationStatus: (state) => {
-    //   state.isRegistered = false;
-    // }
+    setSelectedImage: (state, action) => {
+      state.selectedImage = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -138,8 +139,7 @@ export const settingsSlice = createSlice({
   },
 });
 
-export const { handleResgisterationStatus, handleLoginStatusFalse } =
-  settingsSlice.actions;
+export const { setSelectedImage } = settingsSlice.actions;
 
 // Export the reducer and actions
 export default settingsSlice.reducer;

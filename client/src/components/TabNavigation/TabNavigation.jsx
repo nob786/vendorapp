@@ -9,7 +9,10 @@ import pieChart from "../../assets/images/pie-chart.svg";
 import plusCircle from "../../assets/images/plus-circle.svg";
 import settings from "../../assets/images/settings.svg";
 import "./TabNavigation.css";
-import { handleClickTab } from "../../views/redux/TabNavigation/TabNavigationSlice";
+import {
+  handleClickTab,
+  handleProfileSettingsCurrentView,
+} from "../../views/redux/TabNavigation/TabNavigationSlice";
 import { setImagesToUpload } from "../../views/redux/Posts/AdsSlice";
 
 const tabs = [
@@ -55,6 +58,9 @@ const TabNavigation = () => {
   const handleClickTabNav = (index, path) => {
     if (path === "/post-ad") {
       dispatch(setImagesToUpload([]));
+    }
+    if (path === "/profile-settings") {
+      dispatch(handleProfileSettingsCurrentView("profileSettings"));
     }
     navigate(path);
     dispatch(handleClickTab(index));

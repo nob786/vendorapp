@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useEffect, useState } from "react";
 import {
   Button,
@@ -121,20 +123,29 @@ function PersonalInformation() {
         <ProfilePic />
       </div>
 
-      {/* <Row > */}
       <Col className="justify-content-center" style={{ marginLeft: "54px" }}>
-        <Button
-          type="submit"
-          disabled={loading}
+        <div
+          className="d-flex mt-3"
+          style={{ cursor: "pointer" }}
           onClick={() =>
             dispatch(handleProfileSettingsCurrentView("profileSettings"))
           }
-          className="btn btn-success roboto-semi-bold-16px-information btn-lg mt-4"
         >
-          Back
-        </Button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 22 22"
+            fill="none"
+          >
+            <path
+              // eslint-disable-next-line max-len
+              d="M21.6666 9.66668H5.43992L12.8933 2.21334L10.9999 0.333344L0.333252 11L10.9999 21.6667L12.8799 19.7867L5.43992 12.3333H21.6666V9.66668Z"
+              fill="#667085"
+            />
+          </svg>
+        </div>
       </Col>
-      {/* </Row> */}
 
       <Alert
         severity="success"
@@ -170,7 +181,7 @@ function PersonalInformation() {
 
       <Container
         fluid
-        style={{ marginTop: "70px", marginBottom: "200px" }}
+        style={{ marginTop: "50px", marginBottom: "200px" }}
         className=""
       >
         <Row className="justify-content-center">

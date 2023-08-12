@@ -4,17 +4,22 @@ import { faCamera } from "@fortawesome/fontawesome-free-solid";
 import { CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import defaultuserIcon from "../../assets/images/profile-settings/user.svg";
-import { editCompanyInformation } from "../../views/redux/Settings/SettingsSlice";
+import {
+  editCompanyInformation,
+  setSelectedImage,
+} from "../../views/redux/Settings/SettingsSlice";
 import { secure_instance } from "../../axios/axios-config";
 
 const ProfilePic = () => {
   const [loadingImage, setLoadingImage] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  // const [selectedImage, setSelectedImage] = useState(null);
 
   const { userImage } = useSelector((state) => state.auth.user);
+  const selectedImage = useSelector((state) => state.settings.selectedImage);
   const companyInformation = useSelector(
     (state) => state.settings.companyInformation
   );
+  console.log("selectedImage", selectedImage);
 
   const dispatch = useDispatch();
 
@@ -35,7 +40,7 @@ const ProfilePic = () => {
     e.preventDefault();
 
     setLoadingImage(true);
-    setSelectedImage(e.target.files[0]);
+    dispatch(setSelectedImage(e.target.files[0]));
 
     const formData = new FormData(); // pass in the form
     formData.append("file", e.target.files[0]);

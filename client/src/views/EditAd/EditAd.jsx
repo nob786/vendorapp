@@ -37,6 +37,7 @@ import {
   handleCreateNewAd,
   handleEditAd,
   handleUpdateAdPostErrorAlerting,
+  handleUpdateAdPostSuccessAlerting,
   setImagesError,
   setImagesToUpload,
   setMediaError,
@@ -605,6 +606,15 @@ function EditAd() {
       setRelatedSubCategoryId(currentAd?.related_sub_categories.id);
     }
   }, [currentAd]);
+
+  useEffect(() => {
+    if (AdPostSuccessAlert) {
+      setTimeout(() => {
+        // setIsAlert(false);
+        dispatch(handleUpdateAdPostSuccessAlerting(false));
+      }, 4000);
+    }
+  }, [AdPostSuccessAlert]);
 
   useEffect(() => {
     if ((AdPostErrorAlert, mediaError)) {
