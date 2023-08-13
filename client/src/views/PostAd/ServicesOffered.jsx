@@ -10,8 +10,16 @@ function ServicesOffered({
   handleRemoveService,
 }) {
   const [currentService, setCurrentService] = useState("");
+  const [serviceError, setServiceError] = useState("");
 
   const handleServiceChange = (e) => {
+    if (e.target.value.length > 40) {
+      setServiceError("Service length should be less than 40");
+      return;
+    }
+    if (e.target.value.length < 40 && serviceError !== "") {
+      setServiceError("");
+    }
     setCurrentService(e.target.value);
   };
 
@@ -34,22 +42,22 @@ function ServicesOffered({
           Add Questions and answers for your potential buyers
         </div> */}
         <Col md={6} lg={4}>
-          <Form.Group className="form-group mb-3" controlId={`form3Example`}>
+          <Form.Group className="form-group mb-3" controlId="form3Example">
             <Form.Control
               style={{ height: "56px" }}
               className="lg-input-small-text"
               type="text"
-              name={`currentService`}
+              name="currentService"
               size="sm"
               placeholder="Type your service"
               value={currentService}
               onChange={handleServiceChange}
               // isValid={touched.FAQ && !errors.FAQ}
-              // isInvalid={touched.FAQ && !!errors.FAQ}
+              isInvalid={serviceError}
             />
-            {/* <Form.Control.Feedback type="invalid">
-              {errors.FAQ}
-            </Form.Control.Feedback> */}
+            <Form.Control.Feedback type="invalid">
+              {serviceError}
+            </Form.Control.Feedback>
           </Form.Group>
         </Col>
         <Col md={12} className="">

@@ -162,15 +162,20 @@ function PostAd() {
   };
   const Schema = Yup.object().shape({
     companyInformation: Yup.object().shape({
-      commercial_name: Yup.string().required("Commercial Name is required"),
+      commercial_name: Yup.string()
+        .min(2, "Too short, minimum 2 characters")
+        .max(60, "Too long, maximum 60 characters")
+        .required("Commercial Name is required"),
       category: Yup.string().required("Category is required"),
       sub_category: Yup.string().required("Sub-category is required"),
       description: Yup.string()
-        .max(2000, "Must be at most 2000 characters")
+        .min(2, "Too short, minimum 5 characters")
+        .max(2000, "Must be at most 6667 characters")
         .matches(
           /^[a-zA-Z0-9.,;:'"/?!@&*()^+\-|\s]+$/,
           'Only letters, digits, ".,;:\'/?!@&*()^+-|" signs, and spaces are allowed'
-        ),
+        )
+        .required("Description is required"),
       // .required("Required"),
       country: Yup.mixed().when({
         is: (value) => value !== undefined, // Apply the validation when the field is present
@@ -178,26 +183,24 @@ function PostAd() {
           Yup.lazy((value) => {
             if (Array.isArray(value)) {
               // If it's an array, apply array validation and validate the array elements
-              return Yup.array()
-                .of(
-                  Yup.lazy((element) => {
-                    // Define validation for each array element based on its type
-                    if (typeof element === "string") {
-                      return Yup.string();
-                    }
-                    if (typeof element === "number") {
-                      return Yup.number().integer();
-                    }
-                    if (typeof element === "object") {
-                      return Yup.object({
-                        // Add your object schema here for array elements that are objects...
-                      });
-                    }
-                    // Return null or throw an error if none of the types match
-                    throw new Error("Invalid array element");
-                  })
-                )
-                .required("Array must not be empty"); // You can customize this error message
+              return Yup.array().of(
+                Yup.lazy((element) => {
+                  // Define validation for each array element based on its type
+                  if (typeof element === "string") {
+                    return Yup.string();
+                  }
+                  if (typeof element === "number") {
+                    return Yup.number().integer();
+                  }
+                  if (typeof element === "object") {
+                    return Yup.object({
+                      // Add your object schema here for array elements that are objects...
+                    });
+                  }
+                  // Return null or throw an error if none of the types match
+                  throw new Error("Invalid array element");
+                })
+              );
             }
             if (typeof value === "object") {
               // If it's an object, define the object shape
@@ -229,6 +232,7 @@ function PostAd() {
         ),
       county: Yup.array().min(1, "country is required"),
       city: Yup.string()
+        .min(3, "Too short, minimum 3 characters")
         .max(25, "Must be at most 25 characters")
         .matches(
           /^[a-zA-Z\s-]+$/,
@@ -236,10 +240,11 @@ function PostAd() {
         )
         .required("Required"),
       street: Yup.string()
-        .max(35, "Must be at most 25 characters")
+        .min(3, "Too short, minimum 3 characters")
+        .max(27, "Must be at most 27 characters")
         .matches(
-          /^[A-Za-z0-9, .]+$/,
-          'Only letters, spaces, and ". ," sign are allowed'
+          /^[A-Za-z0-9\-,.\/\s]+$/,
+          'Only letters, digits, spaces, "-,./" signs are allowed'
         )
         .required("Required"),
       contact_number: Yup.string()
@@ -252,44 +257,44 @@ function PostAd() {
       fullAddress: Yup.string()
         .max(70, "Must be at most 70 characters")
         .matches(
-          /^[a-zA-Z0-9",\-./\s]+$/,
-          'Only letters, ",-./" signs, spaces, and digits are allowed'
+          /^[A-Za-z0-9\s,.\-\/]+$/,
+          'Only letters, digits, spaces, ", .", "-", and "/" characters are allowed'
         )
         .required("Full Address is required"),
     }),
     SocialMedia: Yup.object().shape({
       facebookURL: Yup.string()
-        .max(40, "Must be 40 characters or less")
+        // .max(40, "Must be 40 characters or less")
         .matches(
           /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
           "Invalid characters"
         ),
       instagramURL: Yup.string()
-        .max(40, "Must be 40 characters or less")
+        // .max(40, "Must be 40 characters or less")
         .matches(
           /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
           "Invalid characters"
         ),
       youtubeURL: Yup.string()
-        .max(40, "Must be 40 characters or less")
+        // .max(40, "Must be 40 characters or less")
         .matches(
           /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
           "Invalid characters"
         ),
       tiktokURL: Yup.string()
-        .max(40, "Must be 40 characters or less")
+        // .max(40, "Must be 40 characters or less")
         .matches(
           /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
           "Invalid characters"
         ),
       twitterURL: Yup.string()
-        .max(40, "Must be 40 characters or less")
+        // .max(40, "Must be 40 characters or less")
         .matches(
           /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
           "Invalid characters"
         ),
       otherURL: Yup.string()
-        .max(40, "Must be 40 characters or less")
+        // .max(40, "Must be 40 characters or less")
         .matches(
           /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
           "Invalid characters"
@@ -354,12 +359,12 @@ function PostAd() {
     }
 
     // only validate country if related sub category is selected
-    if (isMultipleCountries && values.companyInformation.country.length === 0) {
-      errors.companyInformation = {
-        ...errors.companyInformation,
-        country: "Please select at least one country.",
-      };
-    }
+    // if (isMultipleCountries && values.companyInformation.country.length === 0) {
+    //   errors.companyInformation = {
+    //     ...errors.companyInformation,
+    //     country: "Please select at least one country.",
+    //   };
+    // }
 
     if (
       !values.contactInformation.country ||
