@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import Select from "react-select";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 import commercialNameIcon from "../../assets/images/post-ad/commercial_name.svg";
 import categoryIcon from "../../assets/images/post-ad/category.svg";
 import subCategoryIcon from "../../assets/images/post-ad/sub-category.svg";
@@ -8,8 +10,6 @@ import descriptionIcon from "../../assets/images/post-ad/description.svg";
 import mapIcon from "../../assets/images/post-ad/map.svg";
 import "./PostAd.css";
 import { secure_instance } from "../../axios/axios-config";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 // const countries = [
 //   "Alba",
@@ -233,7 +233,7 @@ function CompanyInformation({
         <Modal.Header closeButton style={{ border: "none" }} />
         <Modal.Body>
           <h4>{`${relatedSubCategory?.name} exists as a realted sub category`}</h4>
-          <h4>{`Do you want to add it?`}</h4>
+          <h4>Do you want to add it?</h4>
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -241,6 +241,15 @@ function CompanyInformation({
               setRelatedSubCategoryId(null);
               setModalShow(false);
             }}
+            variant="danger"
+            className="btn-md roboto-regular-16px-information text-white"
+            style={{
+              height: "44px",
+              fontWeight: "500",
+              paddingLeft: "32px",
+              paddingRight: "32px",
+            }}
+            // style={{ backgroundColor: "red" }}
           >
             No
           </Button>

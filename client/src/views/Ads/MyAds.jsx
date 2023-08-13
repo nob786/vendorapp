@@ -147,8 +147,13 @@ function MyAds() {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     dispatch(listVendorAds());
   }, []);
+
+  const sortedAdvertisements = [...vendorAds].sort(
+    (a, b) => new Date(b.created_at) - new Date(a.created_at)
+  );
 
   return (
     <>
@@ -166,10 +171,22 @@ function MyAds() {
           <h4>Are you sure you want to delete this ad?</h4>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={() => handleDeleteAd()}>
+          <Button
+            variant="danger"
+            className="btn-md roboto-regular-16px-information text-white"
+            style={{
+              height: "44px",
+              fontWeight: "500",
+              paddingLeft: "32px",
+              paddingRight: "32px",
+            }}
+            onClick={() => handleDeleteAd()}
+          >
             Delete
           </Button>
-          <Button onClick={() => setModalShow(false)}>No</Button>
+          <Button className="btn-success" onClick={() => setModalShow(false)}>
+            No
+          </Button>
         </Modal.Footer>
       </Modal>
 
@@ -188,8 +205,8 @@ function MyAds() {
         className=""
       >
         <Row className="justify-content-center">
-          {vendorAds.length > 0 ? (
-            vendorAds.map((product) => {
+          {sortedAdvertisements.length > 0 ? (
+            sortedAdvertisements.map((product) => {
               const {
                 id,
                 // category,
