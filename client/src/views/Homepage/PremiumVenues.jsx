@@ -3,16 +3,12 @@ import { Button, Card, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import EmblaCarousel from "../../components/Carousel/Carousel";
-import imageByIndex from "../../components/Carousel/ImagesByIndex";
 import { instance } from "../../axios/axios-config";
 import placeholderIcon from "../../assets/images/placeholder.jpg";
 
 function PremiumVenues() {
   const [publicAds, setPublicAds] = useState([]);
   const OPTIONS = { slidesToScroll: "auto", containScroll: "trimSnaps" };
-
-  const SLIDE_COUNT = 25;
-  // const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
 
   const componentToRender = (slide, index) => (
     <div className="embla__slide" key={index}>

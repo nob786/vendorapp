@@ -1,15 +1,6 @@
 import React from "react";
-import {
-  Button,
-  Col,
-  Container,
-  Form,
-  FormControl,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import heroImg from "../../assets/images/harold.jpg";
 import { toggleRegisterView } from "../redux/Register/RegisterSlice";
 import { toggleLoginModal, toggleLoginView } from "../redux/Login/loginSlice";
 import planEventsImg from "../../assets/images/planEventsImg.svg";

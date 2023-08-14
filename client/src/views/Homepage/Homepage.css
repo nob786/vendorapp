@@ -7,13 +7,6 @@
   box-shadow: none !important;
 }
 
-.form-control::-webkit-input-placeholder {
-  /* Chrome, Firefox, Opera, Safari 10.1+ */
-  /* color: red;
-    opacity: 1; */
-  /* Firefox */
-}
-
 .card-title-custom {
   white-space: nowrap;
   width: 22ch;

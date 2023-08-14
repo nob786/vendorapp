@@ -2,7 +2,6 @@ import React from "react";
 import { Button, Container } from "react-bootstrap";
 import EmblaCarousel from "../../components/Carousel/Carousel";
 import imageByIndex from "../../components/Carousel/ImagesByCountry";
-// import imageByIndex from "../../components/Carousel/ImagesByIndex";
 
 const country = ["Greece", "Jamaica", "Mexico", "Italy", "France"];
 
@@ -26,12 +25,21 @@ function VendorsByCountry() {
   return (
     <Container fluid style={{ padding: "100px 0", backgroundColor: "#FFF" }}>
       <Container>
-        <div className="roboto-bold-36px-h1" style={{ marginLeft: "26px" }}>Find Venues in your County</div>
-        <EmblaCarousel slides={SLIDES} options={OPTIONS} componentToRender={componentToRender} />
+        <div className="roboto-bold-36px-h1" style={{ marginLeft: "26px" }}>
+          Find Venues in your County
+        </div>
+        <EmblaCarousel
+          slides={SLIDES}
+          options={OPTIONS}
+          componentToRender={componentToRender}
+        />
         <div className="d-flex justify-content-center mt-5">
-          <Button variant="success" type="submit" className="roboto-semi-bold-16px-information">
+          <Button
+            variant="success"
+            type="submit"
+            className="roboto-semi-bold-16px-information"
+          >
             Find vendors in your county
-
           </Button>
         </div>
       </Container>

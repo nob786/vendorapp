@@ -15,7 +15,6 @@ import useWindowDimensions from "../../utilities/hooks/useWindowDimension";
 
 function HeroSection() {
   const { width } = useWindowDimensions();
-  const navigate = useNavigate();
 
   return (
     <Container fluid style={{ height: "auto", padding: "0" }}>
