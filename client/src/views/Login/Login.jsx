@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
@@ -12,17 +14,10 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/bootstrap.css";
 import * as formik from "formik";
 import * as Yup from "yup";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { Alert } from "@mui/material";
 import Featured from "../../assets/images/Featured.svg";
-import loginImg1 from "../../assets/images/login-img-1.svg";
-import X from "../../assets/images/X.svg";
-import heroImg from "../../assets/images/harold.jpg";
 import arrowBack from "../../assets/images/arrow-back.svg";
 import visibility from "../../assets/images/visibility.svg";
 import visibilityHide from "../../assets/images/visibility-hide.svg";
@@ -43,62 +38,17 @@ import {
   handleRegister,
   handleResgisterationStatus,
 } from "../redux/Auth/authSlice";
-import { instance, secure_instance } from "../../axios/axios-config";
-
-const counties = [
-  "Alba",
-  "Arad",
-  "Arges",
-  "Bacau",
-  "Bihor",
-  "Bistrita-Nasaud",
-  "Botosani",
-  "Braila",
-  "Brasov",
-  "Buzau",
-  "Calarasi",
-  "Caras-Severin",
-  "Cluj",
-  "Constanta",
-  "Covasna",
-  "Dambovita",
-  "Dolj",
-  "Galati",
-  "Giurgiu",
-  "Gorj",
-  "Harghita",
-  "Hunedoara",
-  "Ialomita",
-  "Iasi",
-  "Ilfov",
-  "Maramures",
-  "Mehedinti",
-  "Mures",
-  "Neamt",
-  "Olt",
-  "Prahova",
-  "Salaj",
-  "Satu-Mare",
-  "Sibiu",
-  "Suceava",
-  "Teleorman",
-  "Timis",
-  "Tulcea",
-  "Valcea",
-  "Vaslui",
-  "Vrancea",
-];
+import { instance } from "../../axios/axios-config";
+import DynamicRegisterationView from "./ViewHelper";
 
 function Login() {
   const dispatch = useDispatch();
   const { Formik } = formik;
-  // const navigate = useNavigate();
 
   const step1InitialValues = {
     email: "",
     password: "",
     password_check: "",
-    // phone_number: "",
     contact_person_first_name: "",
     contact_person_last_name: "",
   };
@@ -115,7 +65,6 @@ function Login() {
     bank_iban: "",
     terms_acceptance: false,
     newsletter: false,
-    // ...other field initial values
   };
 
   const loginSchema = Yup.object().shape({
@@ -141,7 +90,6 @@ function Login() {
     company_name: Yup.string()
       .required()
       .max(25, "Company name must be up to 25 characters"),
-    // county: Yup.string().required(),
     address: Yup.string()
       .required("Address is required")
       .matches(
@@ -178,9 +126,6 @@ function Login() {
   const isRegisterView = useSelector((state) => state.register.isRegisterView);
   const activeStep = useSelector((state) => state.stepper.activeStep);
 
-  // console.log("error >>>>>>>>>>>>>>>>>>>>", error);
-
-  // const [phone, setPhone] = useState("");
   const [forgotPassword, setForgotPassword] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [tempCredentials, setTempCredentials] = useState({
@@ -208,7 +153,6 @@ function Login() {
       url: "/api/ads/country/",
       method: "Get",
     });
-    // console.log(request.data);
     setCountries(request.data.data);
   };
 
@@ -270,18 +214,11 @@ function Login() {
     </div>
   );
 
-  const handleStep1Submit = (values, { resetForm }) => {
-    // setEmail(values.email);
-    // setPassword(values.password);
-    // setPasswordCheck(values.password_check);
-    // setContactPerson(values.contact_person);
-    // resetForm();
+  const handleStep1Submit = () => {
     dispatch(handleNextStep());
   };
 
   const handleRegisterationSubmit = (values, { resetForm }) => {
-    // values.phone = `+${phone}`;
-
     const data = {
       user: {
         email: values.email,
@@ -290,7 +227,7 @@ function Login() {
         phone: values.phone_number,
         password: values.password,
         role: "vendor_user",
-        // newsletter: values.newsletter,
+        newsletter: values.newsletter,
         terms_acceptance: values.terms_acceptance,
       },
       name: values.company_name,
@@ -315,16 +252,6 @@ function Login() {
   };
 
   const handleSubmitLogin = (values, { resetForm }) => {
-    // axios
-    //   .post("http://localhost:8000/api/token/?accept=application/json", {
-    //     email: values.email,
-    //     password: values.password,
-    //   })
-    //   .then((response) => {
-    //     // setPost(response.data);
-    //     console.log("response.data----------------------", response.data);
-    //   });
-    console.log("handleSubmitLogin", values);
     dispatch(
       handleLogin({
         email: values.email,
@@ -347,450 +274,10 @@ function Login() {
 
   useEffect(() => {
     if (isLoggedInState) {
-      // handleLoginClick();
       handleClose();
       dispatch(handleLoginStatusFalse());
     }
   }, [isLoggedInState]);
-
-  const dynamicRegisterationView = (handleNextStep) =>
-    activeStep === 0 ? (
-      <Formik
-        validationSchema={step1Schema}
-        // onSubmit={handleNextStep}
-        onSubmit={handleStep1Submit}
-        initialValues={step1InitialValues}
-      >
-        {({ handleSubmit, handleChange, values, touched, errors }) => (
-          <Form noValidate onSubmit={handleSubmit}>
-            <div
-              style={{ maxHeight: "296px", overflowY: "scroll" }}
-              className="Container Flipped"
-            >
-              <Form.Group className="form-group mb-4" controlId="form3Example3">
-                <Form.Control
-                  style={{ height: "56px" }}
-                  className="lg-input-small-text"
-                  name="email"
-                  type="email"
-                  size="lg"
-                  placeholder="Enter Email"
-                  value={values.email}
-                  onChange={handleChange}
-                  isValid={touched.email && !errors.email}
-                  isInvalid={!!errors.email}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.email}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group
-                className="form-group mb-3"
-                controlId="form3Example4"
-                style={{ position: "relative" }}
-              >
-                <Form.Control
-                  style={{ height: "56px" }}
-                  className="hide-validation-icon lg-input-small-text"
-                  name="password"
-                  type={isShowPassword ? "text" : "password"}
-                  size="lg"
-                  placeholder="Enter Password"
-                  value={values.password}
-                  onChange={handleChange}
-                  isValid={touched.password && !errors.password}
-                  isInvalid={!!errors.password}
-                />
-                {getVisibilityIcon()}
-                <Form.Control.Feedback type="invalid">
-                  {errors.password}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group
-                className="form-group mb-3"
-                controlId="form3Example5"
-                style={{ position: "relative" }}
-              >
-                <Form.Control
-                  style={{ height: "56px" }}
-                  className="hide-validation-icon lg-input-small-text"
-                  name="password_check"
-                  type={isShowPassword ? "text" : "password"}
-                  size="lg"
-                  placeholder="Re-enter Password"
-                  value={values.password_check}
-                  onChange={handleChange}
-                  isValid={touched.password_check && !errors.password_check}
-                  isInvalid={!!errors.password_check}
-                />
-                {getVisibilityIcon()}
-                <Form.Control.Feedback type="invalid">
-                  {errors.password_check}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="form-group mb-3" controlId="form3Example6">
-                <Form.Control
-                  style={{ height: "56px" }}
-                  className="lg-input-small-text"
-                  name="phone_number"
-                  type="text"
-                  size="lg"
-                  placeholder="Enter Contact Number"
-                  value={values.phone_number}
-                  onChange={handleChange}
-                  isValid={touched.phone_number && !errors.phone_number}
-                  isInvalid={!!errors.phone_number}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.phone_number}
-                </Form.Control.Feedback>
-                {/* <PhoneInput
-                  country="eg"
-                  enableSearch
-                  value={phone}
-                  style={{ border: "1px solid #797979" }}
-                  // value={values.phone_number}
-                  // onChange={handleChange}
-                  // eslint-disable-next-line no-shadow
-                  onChange={(phone) => setPhone(phone)}
-                /> */}
-              </Form.Group>
-
-              <Form.Group className="form-group mb-3" controlId="form3Example7">
-                <Form.Control
-                  style={{ height: "56px" }}
-                  className="lg-input-small-text"
-                  name="contact_person_first_name"
-                  type="text"
-                  size="lg"
-                  placeholder="Contact Person First Name"
-                  value={values.contact_person_first_name}
-                  onChange={handleChange}
-                  isValid={
-                    touched.contact_person_first_name &&
-                    !errors.contact_person_first_name
-                  }
-                  isInvalid={!!errors.contact_person_first_name}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.contact_person_first_name}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="form-group mb-3" controlId="form3Example7">
-                <Form.Control
-                  style={{ height: "56px" }}
-                  className="lg-input-small-text"
-                  name="contact_person_last_name"
-                  type="text"
-                  size="lg"
-                  placeholder="Contact Person Last Name"
-                  value={values.contact_person_last_name}
-                  onChange={handleChange}
-                  isValid={
-                    touched.contact_person_last_name &&
-                    !errors.contact_person_last_name
-                  }
-                  isInvalid={!!errors.contact_person_last_name}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.contact_person_last_name}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </div>
-
-            <div className="text-center text-lg-start mt-4 pt-2">
-              <Button
-                // type="button"
-                className="btn btn-success btn-lg w-100"
-                style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
-                // onClick={handleNextStep}
-                type="submit"
-              >
-                Next
-              </Button>
-
-              {/* <div className="row" style={{ textAlign: "center" }}>
-                  <p className="small fw-bold mt-3 pt-1 mb-0 ">
-                    Already have an account?
-                    {" "}
-                    <a href="#!" className="link-danger" onClick={handleLoginClick}>Login</a>
-                  </p>
-                </div> */}
-            </div>
-            <div className="row" style={{ textAlign: "center" }}>
-              <p className="roboto-regular-16px-information mt-3 pt-1 mb-0 ">
-                Already have an account?{" "}
-                <a
-                  href="#!"
-                  style={{ color: "#0558FF", textDecoration: "none" }}
-                  onClick={handleLoginClick}
-                >
-                  Login
-                </a>
-              </p>
-            </div>
-          </Form>
-        )}
-      </Formik>
-    ) : (
-      <Formik
-        validationSchema={step2Schema}
-        onSubmit={handleRegisterationSubmit}
-        initialValues={step2InitialValues}
-      >
-        {({ handleSubmit, handleChange, values, touched, errors }) => (
-          <Form noValidate onSubmit={handleSubmit}>
-            <div
-              style={{ maxHeight: "235px", overflowY: "scroll" }}
-              className="Container Flipped"
-            >
-              <Form.Group className="form-group mb-3" controlId="form3Example3">
-                <Form.Control
-                  style={{ height: "56px" }}
-                  className="lg-input-small-text"
-                  type="text"
-                  name="company_name"
-                  size="lg"
-                  placeholder="Enter Company Name"
-                  value={values.company_name || ""}
-                  onChange={handleChange}
-                  isValid={touched.company_name && !errors.company_name}
-                  isInvalid={!!errors.company_name}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.company_name}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="form-group mb-3" controlId="form3Example4">
-                {/* <Form.Select aria-label="Default select example" style={{ height: "56px" }}> */}
-                <Form.Select
-                  aria-label="Default select example"
-                  style={{ height: "56px", border: "1px solid #797979" }}
-                  name="county"
-                  value={values.county || ""}
-                  onChange={handleChange}
-                  // onBlur={handleBlur}
-                  isValid={touched.county && !errors.county}
-                  isInvalid={touched.county && !!errors.county}
-                  className={errors.county ? "border-danger" : ""}
-                >
-                  <option selected value hidden="true">
-                    Select County
-                  </option>
-                  {countryOptions.map((county, index) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <option key={index} value={county.value}>
-                      {county.label}
-                    </option>
-                  ))}
-                </Form.Select>
-                {/* <Form.Control.Feedback type="invalid"> */}
-                <div className="text-danger" style={{ fontSize: "14px" }}>
-                  {errors.county}
-                </div>
-                {/* </Form.Control.Feedback> */}
-              </Form.Group>
-
-              <Form.Group className="form-group mb-3" controlId="form3Example5">
-                <Form.Control
-                  style={{ height: "56px" }}
-                  className="lg-input-small-text"
-                  name="city"
-                  type="text"
-                  size="lg"
-                  placeholder="Enter City/Commune"
-                  value={values.city || ""}
-                  onChange={handleChange}
-                  isValid={touched.city && !errors.city}
-                  isInvalid={!!errors.city}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.city}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="form-group mb-3" controlId="form3Example5">
-                <Form.Control
-                  style={{ height: "56px" }}
-                  className="lg-input-small-text"
-                  name="address"
-                  type="text"
-                  size="lg"
-                  placeholder="Enter Company Address"
-                  value={values.address || ""}
-                  onChange={handleChange}
-                  isValid={touched.address && !errors.address}
-                  isInvalid={!!errors.address}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.address}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="form-group mb-3" controlId="form3Example6">
-                <Form.Control
-                  style={{ height: "56px" }}
-                  className="lg-input-small-text"
-                  name="postal_code"
-                  type="text"
-                  size="lg"
-                  placeholder="Enter Postal Code"
-                  value={values.postal_code || ""}
-                  onChange={handleChange}
-                  isValid={touched.postal_code && !errors.postal_code}
-                  isInvalid={!!errors.postal_code}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.postal_code}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="form-group mb-3" controlId="form3Example7">
-                <Form.Control
-                  style={{ height: "56px" }}
-                  className="lg-input-small-text"
-                  name="fiscal_code"
-                  type="text"
-                  size="lg"
-                  placeholder="Enter Fiscal Code"
-                  value={values.fiscal_code || ""}
-                  onChange={handleChange}
-                  isValid={touched.fiscal_code && !errors.fiscal_code}
-                  isInvalid={!!errors.fiscal_code}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.fiscal_code}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="form-group mb-3" controlId="form3Example8">
-                <Form.Control
-                  style={{ height: "56px" }}
-                  className="lg-input-small-text"
-                  name="firm_number"
-                  type="text"
-                  size="lg"
-                  placeholder="Enter Firm Number"
-                  value={values.firm_number || ""}
-                  onChange={handleChange}
-                  isValid={touched.firm_number && !errors.firm_number}
-                  isInvalid={!!errors.firm_number}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.firm_number}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="form-group mb-3" controlId="form3Example9">
-                <Form.Control
-                  style={{ height: "56px" }}
-                  className="lg-input-small-text"
-                  name="bank_name"
-                  type="text"
-                  size="lg"
-                  placeholder="Enter Bank Name"
-                  value={values.bank_name || ""}
-                  onChange={handleChange}
-                  isValid={touched.bank_name && !errors.bank_name}
-                  isInvalid={!!errors.bank_name}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.bank_name}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group
-                className="form-group mb-3"
-                controlId="form3Example10"
-              >
-                <Form.Control
-                  style={{ height: "56px" }}
-                  className="lg-input-small-text"
-                  name="bank_iban"
-                  type="text"
-                  size="lg"
-                  placeholder="Enter Bank IBAN"
-                  value={values.bank_iban || ""}
-                  onChange={handleChange}
-                  isValid={touched.bank_iban && !errors.bank_iban}
-                  isInvalid={!!errors.bank_iban}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.bank_iban}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </div>
-
-            <div style={{ paddingLeft: "26px" }}>
-              <Form.Group className="position-relative mb-1 mt-3">
-                <Form.Check
-                  type="checkbox"
-                  required
-                  name="terms_acceptance"
-                  label="I agree to the Terms & Conditions"
-                  value={values.terms_acceptance || ""}
-                  // checked={values.terms_acceptance}
-                  onChange={handleChange}
-                  isInvalid={!!errors.terms_acceptance}
-                  feedback={errors.terms_acceptance}
-                  feedbackType="invalid"
-                  id="validationFormik107"
-                />
-              </Form.Group>
-
-              <Form.Group className="position-relative mt-2">
-                <Form.Check
-                  type="checkbox"
-                  required
-                  name="newsletter"
-                  label="Keep me updated with the latest news"
-                  value={values.newsletter || ""}
-                  // checked={values.terms_acceptance}
-                  onChange={handleChange}
-                  isInvalid={!!errors.newsletter}
-                  feedback={errors.newsletter}
-                  feedbackType="invalid"
-                  id="validationFormik107"
-                />
-              </Form.Group>
-
-              <div className="text-center text-lg-start mt-4">
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="btn btn-success roboto-semi-bold-16px-information btn-lg w-100"
-                  style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
-                >
-                  {loading ? (
-                    // "Loading…"
-                    <Spinner animation="border" size="sm" />
-                  ) : (
-                    "Register"
-                  )}
-                </Button>
-              </div>
-              <div className="row" style={{ textAlign: "center" }}>
-                <p className="roboto-regular-16px-information mt-3 pt-1 mb-0 ">
-                  Already have an account?{" "}
-                  <a
-                    href="#!"
-                    style={{ color: "#0558FF", textDecoration: "none" }}
-                    onClick={handleLoginClick}
-                  >
-                    Login
-                  </a>
-                </p>
-              </div>
-            </div>
-          </Form>
-        )}
-      </Formik>
-    );
 
   return (
     <Modal
@@ -868,8 +355,7 @@ function Login() {
 
       <Container fluid style={{ height: "auto", padding: "0" }}>
         <Row className="h-100 col-12 g-0 flex-column-reverse flex-md-row">
-          {/* login view */}
-
+          {/* -----------------------------------------LOGIN----------------------------------------- */}
           {isLoginView ? (
             <Col md={12} lg={6} className="login-modal-form-col">
               <div className="d-flex justify-content-center align-items-center">
@@ -947,14 +433,17 @@ function Login() {
                           Keep me Logged In
                         </Form.Check.Label>
                       </Form.Check>
-                      <a
-                        href="#!"
-                        className="roboto-regular-14px-information"
-                        style={{ color: "#0558FF", textDecoration: "none" }}
-                        onClick={handleClickForgotPassword}
-                      >
-                        Forgot password?
-                      </a>
+                      <div className="row" style={{ textAlign: "center" }}>
+                        <p className="roboto-regular-16px-information mt-2 mb-0 ">
+                          <a
+                            href="#!"
+                            style={{ color: "#0558FF", textDecoration: "none" }}
+                            onClick={handleClickForgotPassword}
+                          >
+                            Forgot password?
+                          </a>
+                        </p>
+                      </div>
                     </div>
 
                     <div className="text-center text-lg-start mt-4 pt-2">
@@ -987,33 +476,6 @@ function Login() {
                           OR
                         </span>
                       </h4>
-
-                      {/* <div className="row">
-                        <div className="col">
-                          <a
-                            className="btn w-100 roboto-semi-bold-16px-information"
-                            href="/users/googleauth"
-                            role="button"
-                            style={{
-                              textTransform: "none",
-                              padding: "10px 16px",
-                              border: "1px solid #cecece",
-                            }}
-                          >
-                            <img
-                              width="20px"
-                              style={{
-                                marginBottom: "3px",
-                                marginRight: "5px",
-                              }}
-                              alt="Google sign-in"
-                              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
-                            />
-                            Login with Google
-                          </a>
-                        </div>
-                      </div> */}
-
                       <div className="row" style={{ textAlign: "center" }}>
                         <p className="roboto-regular-16px-information mt-2 mb-0 ">
                           {" Don't have an account?"}{" "}
@@ -1032,9 +494,8 @@ function Login() {
               </Formik>
             </Col>
           ) : isRegisterView ? (
-            // register view
+            // -----------------------------------------REGISTER-----------------------------------------
             <Col md={12} lg={6} className="login-modal-form-col">
-              {/* <Form> */}
               <div
                 className="d-flex justify-content-center align-items-center roboto-semi-bold-18px-body2"
                 style={{ marginBottom: "8px" }}
@@ -1047,10 +508,24 @@ function Login() {
                   {error.user.email.length > 0 ? error.user.email[0] : "Error"}
                 </Alert>
               )}
-
-              <StepperForm componentToRender={dynamicRegisterationView} />
-
-              {/* </Form> */}
+              <StepperForm
+                componentToRender={() => (
+                  <DynamicRegisterationView
+                    activeStep={activeStep}
+                    step1Schema={step1Schema}
+                    handleStep1Submit={handleStep1Submit}
+                    step1InitialValues={step1InitialValues}
+                    isShowPassword={isShowPassword}
+                    getVisibilityIcon={getVisibilityIcon}
+                    handleLoginClick={handleLoginClick}
+                    step2Schema={step2Schema}
+                    handleRegisterationSubmit={handleRegisterationSubmit}
+                    step2InitialValues={step2InitialValues}
+                    countryOptions={countryOptions}
+                    loading={loading}
+                  />
+                )}
+              />
             </Col>
           ) : forgotPassword ? (
             <ForgotPassword setForgotPassword={setForgotPassword} />
@@ -1063,13 +538,11 @@ function Login() {
             className="login-image-mobile"
             style={{ maxWidth: "500px" }}
           >
-            {/* <img src={heroImg} alt="heroImg" style={{ maxWidth: "100%", objectFit: "cover" }} /> */}
             <CarouselFadeExample />
           </Col>
         </Row>
       </Container>
     </Modal>
-    // </section>
   );
 }
 

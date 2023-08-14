@@ -1,32 +1,18 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
 import React, { useState } from "react";
-import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/bootstrap.css";
 import * as formik from "formik";
 import * as Yup from "yup";
 import Featured from "../../assets/images/Featured.svg";
 import GreenTick from "../../assets/images/green-tick.svg";
-import loginImg1 from "../../assets/images/login-img-1.svg";
-import X from "../../assets/images/X.svg";
-import heroImg from "../../assets/images/harold.jpg";
-import arrowBack from "../../assets/images/arrow-back.svg";
 import "./Login.css";
-import { toggleLoginModal, toggleLoginView } from "../redux/Login/loginSlice";
-import { toggleRegisterView } from "../redux/Register/RegisterSlice";
-import StepperForm from "../../components/Stepper/Stepper";
-import { handlePrevStep } from "../redux/Stepper/StepperSlice";
+import { toggleLoginView } from "../redux/Login/loginSlice";
 
 function ForgotPassword({ setForgotPassword }) {
   const { Formik } = formik;
   const dispatch = useDispatch();
-
-  const isLoginModal = useSelector((state) => state.login.isLoginModal);
-  const isLoginView = useSelector((state) => state.login.isLoginView);
-  const isRegisterView = useSelector((state) => state.register.isRegisterView);
-  const activeStep = useSelector((state) => state.stepper.activeStep);
 
   const [email, setEmail] = useState("");
   const [isResetEmailSent, setIsResetEmailSent] = useState(false);
@@ -35,13 +21,10 @@ function ForgotPassword({ setForgotPassword }) {
     // show login view
     setForgotPassword(false);
     dispatch(toggleLoginView());
-    // hide register view
-    // dispatch(toggleRegisterView());
   };
 
   const handleResetPassword = (values, { resetForm }) => {
     setEmail(values.email);
-    console.log("values", values);
     setIsResetEmailSent(true);
     // handleLoginClick();
   };
@@ -55,7 +38,6 @@ function ForgotPassword({ setForgotPassword }) {
   });
 
   return (
-    // <Modal show={isLoginModal} onHide={handleClose} size="xl" centered="true">
     <Col md={12} lg={6} className="login-modal-form-col">
       {!isResetEmailSent ? (
         <Formik
@@ -66,7 +48,6 @@ function ForgotPassword({ setForgotPassword }) {
         >
           {({ handleSubmit, handleChange, values, touched, errors }) => (
             <Form noValidate onSubmit={handleSubmit}>
-              {/* <div style={{ maxHeight: "296px", overflowY: "scroll" }} className="Container Flipped"> */}
               <div className="d-flex justify-content-center align-items-center">
                 <img src={Featured} alt="Featured" className="mb-3" />
               </div>
@@ -108,7 +89,6 @@ function ForgotPassword({ setForgotPassword }) {
                   type="submit"
                   className="btn btn-success btn-lg w-100"
                   style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
-                  // onClick={handleResetPassword}
                 >
                   Send
                 </Button>
@@ -146,9 +126,6 @@ function ForgotPassword({ setForgotPassword }) {
           >
             We have sent you an email for setting up a new password
           </div>
-          {/* <Form.Group controlId="form3Example3" style={{ marginBottom: "94px" }}>
-              <Form.Control style={{ height: "56px" }} className="lg-input-small-text" type="email" size="lg" value="test@gmail.com" placeholder="Enter Email" />
-            </Form.Group> */}
 
           <Form.Group className="form-group mb-4" controlId="form3Example3">
             <Form.Control
@@ -160,9 +137,6 @@ function ForgotPassword({ setForgotPassword }) {
               placeholder="Enter Email"
               value={email}
               disabled
-              // onChange={handleChange}
-              // isValid={touched.email && !errors.email}
-              // isInvalid={!!errors.email}
             />
           </Form.Group>
           <div className="text-center text-lg-start mt-4 pt-2">
@@ -187,7 +161,6 @@ function ForgotPassword({ setForgotPassword }) {
         </Form>
       )}
     </Col>
-    //  </section>
   );
 }
 
