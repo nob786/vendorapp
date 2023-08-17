@@ -39,12 +39,7 @@ function Header() {
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
 
-  // const dispatch = useDispatch();
-  // const user = useSelector((state) => state.auth.user);
-
   useEffect(() => {
-    // if (!user.accessToken) {
-    // }
     const refreshTokenValue = getCookie("refresh_token");
     if (refreshTokenValue && user.accessToken === null) {
       dispatch(refreshToken());
@@ -61,19 +56,14 @@ function Header() {
     }
   }, [user, user.accessToken]);
 
-  console.log("isLoginView INSIDE NAVBAR COMP", isLoginView);
-
   const handleLoginClick = (e) => {
     e.preventDefault();
     if (isRegisterView) {
       dispatch(toggleRegisterView());
-      console.log("if (isRegisterView)");
     }
     if (!isLoginView) {
       dispatch(toggleLoginView());
-      console.log("if (!isLoginView)");
     }
-    console.log("OUTSIDE BOTH IFS");
     dispatch(toggleLoginModal());
   };
 
@@ -89,11 +79,6 @@ function Header() {
     // dispatch(toggleRegisterModal());
   };
 
-  const handlePostAd = (e) => {
-    e.preventDefault();
-    navigate("/post-ad");
-  };
-
   const handleNavbarToggler = () => {
     setNavbarToggler(!navbarToggler);
   };
@@ -102,13 +87,11 @@ function Header() {
     deleteCookie("refresh_token");
     setTimeout(() => {
       window.location.reload();
-      //   navigate("/");
     }, 500);
   };
 
   const handleBack = () => {
     if (window.location.pathname === "/profile-settings") {
-      // navigate("/profile-settings");
       dispatch(handleProfileSettingsCurrentView("profileSettings"));
       return;
     }
@@ -154,8 +137,7 @@ function Header() {
           Login
         </Button>
       )}
-      {/* <i className="fas fa-bars" style="color:#fff; font-size:28px;" /> */}
-      {/* <FontAwesomeIcon icon={faBars} style={{ color: "#FFF" }} size="2xl" /> */}
+
       <Navbar.Toggle
         aria-controls="navbarSupportedContent"
         className="custom-toggler"

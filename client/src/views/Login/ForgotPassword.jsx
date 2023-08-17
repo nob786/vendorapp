@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
 import React, { useState } from "react";
-import { Button, Col, Form } from "react-bootstrap";
+import { Button, Col, Form, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import * as formik from "formik";
 import * as Yup from "yup";
@@ -9,6 +9,7 @@ import Featured from "../../assets/images/Featured.svg";
 import GreenTick from "../../assets/images/green-tick.svg";
 import "./Login.css";
 import { toggleLoginView } from "../redux/Login/loginSlice";
+import { instance, secure_instance } from "../../axios/axios-config";
 
 function ForgotPassword({ setForgotPassword }) {
   const { Formik } = formik;
@@ -16,6 +17,7 @@ function ForgotPassword({ setForgotPassword }) {
 
   const [email, setEmail] = useState("");
   const [isResetEmailSent, setIsResetEmailSent] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleLoginClick = () => {
     // show login view
@@ -23,9 +25,25 @@ function ForgotPassword({ setForgotPassword }) {
     dispatch(toggleLoginView());
   };
 
-  const handleResetPassword = (values, { resetForm }) => {
-    setEmail(values.email);
-    setIsResetEmailSent(true);
+  const handleResetPassword = async (values, { resetForm }) => {
+    try {
+      setLoading(true);
+      await instance.request({
+        url: "/api/password-reset/",
+        method: "Post",
+        data: {
+          email: values.email,
+        },
+      });
+      setLoading(false);
+      setEmail(values.email);
+      setIsResetEmailSent(true);
+    } catch (e) {
+      setLoading(false);
+      // --------- WILL ROUTE ON SOME PAGE ON FAILURE ---------
+      console.log("error", e);
+    }
+
     // handleLoginClick();
   };
 
@@ -87,10 +105,11 @@ function ForgotPassword({ setForgotPassword }) {
               <div className="text-center text-lg-start mt-4 pt-2">
                 <Button
                   type="submit"
-                  className="btn btn-success btn-lg w-100"
-                  style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
+                  disabled={loading}
+                  className="btn btn-success roboto-semi-bold-16px-information btn-lg w-100"
+                  style={{ padding: "0 100px" }}
                 >
-                  Send
+                  {loading ? <Spinner animation="border" size="sm" /> : "Send"}
                 </Button>
 
                 <div className="row" style={{ textAlign: "center" }}>

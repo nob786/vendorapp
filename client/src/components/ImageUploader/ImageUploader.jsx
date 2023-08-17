@@ -1,9 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { faHeart, faPlus } from "@fortawesome/fontawesome-free-solid";
 import { faAdd, faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import { useDispatch, useSelector } from "react-redux";
 import InfoIcon from "../../assets/images/gg_info.svg";
@@ -15,52 +14,11 @@ import {
 } from "../../views/redux/Posts/AdsSlice";
 import "react-photo-view/dist/react-photo-view.css";
 
-function ImageUploader({
-  // setparentImagesUploadedImages,
-  imagesError,
-  // uploadedImages,
-  // setImagesError,
-  // setShowImagesModal,
-  // imagesToUpload,
-  // setImagesToUpload,
-  // editAd,
-}) {
-  const [mainImage, setMainImage] = useState(null);
+function ImageUploader({ imagesError }) {
   const [images, setImages] = useState([]);
   const imagesToUpload = useSelector((state) => state.Ads.media_urls.images);
 
   const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   if (uploadedImages[0] === null) {
-  //     setMainImage(null);
-  //     return;
-  //   }
-  //   if (mainImage === null) {
-  //     console.count("rendering");
-  //     setMainImage(uploadedImages[0]);
-  //   }
-  // }, [setparentImagesUploadedImages, uploadedImages]);
-
-  // const uploadFileToCloud = async (uploadedImage) => {
-  //   const formData = new FormData(); // pass in the form
-  //   formData.append("file", uploadedImage);
-  //   formData.append("content_type", uploadedImage.type);
-
-  //   try {
-  //     const request = await secure_instance.request({
-  //       url: "/api/ads/upload-url/",
-  //       method: "Post",
-  //       data: formData,
-  //     });
-
-  //     setImagesToUpload([...imagesToUpload, request.data.data.file_url]);
-  //     // setImageUrlToUpload(response.data.data);
-  //   } catch (e) {
-  //     // --------- WILL ROUTE ON SOME PAGE ON FAILURE ---------
-  //     console.log("error", e);
-  //   }
-  // };
 
   const handleImageUpload = (event, index) => {
     event.preventDefault();
@@ -76,13 +34,8 @@ function ImageUploader({
       });
       setImages(updatedImages);
     };
-    console.log("uploadedImage", uploadedImage);
-    // setImagesError(false);
     reader.readAsDataURL(uploadedImage);
     dispatch(uploadImagesToCloud(uploadedImage));
-    // setparentImagesUploadedImages(updatedImages);
-
-    // console.log("updatedImages inside image component", updatedImages);
   };
 
   const removeImage = async (image, index) => {
@@ -96,7 +49,6 @@ function ImageUploader({
           url: urlToDelete,
         },
       });
-      console.log("request", request);
       // ----------------do this inside redux
       if (request.status === 200) {
         const imageIndex = images.indexOf(image);
@@ -132,15 +84,11 @@ function ImageUploader({
     setImages(cloneImages);
   };
 
-  // console.log("imagesToUpload +=================", imagesToUpload);
-
   useEffect(() => {
     setImages(imagesToUpload);
   }, [imagesToUpload]);
 
-  // const imagesToMap = editAd ? imagesToUpload : images;
   const imagesToMap = images;
-  console.log("imagesToMap", imagesToMap);
 
   return (
     <Container fluid style={{ marginTop: "30px" }}>
@@ -181,8 +129,6 @@ function ImageUploader({
             Size of images cannot exceed 5 Mb
           </li>
         </ul>
-
-        {console.log("image-----------", imagesToMap[0])}
 
         {/* render images here */}
         <Row className="h-100 col-12 g-0 flex-column-reverse flex-md-row">

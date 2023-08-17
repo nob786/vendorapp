@@ -1,15 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as formik from "formik";
 import * as Yup from "yup";
-import {
-  Button,
-  Col,
-  Container,
-  Form,
-  Modal,
-  Row,
-  Spinner,
-} from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Alert } from "@mui/material";
@@ -18,10 +10,6 @@ import TopBanner from "../../components/TopBanner";
 import postAdBanner1 from "../../assets/images/post-ad-banner-1.svg";
 import postAdBanner2 from "../../assets/images/post-ad-banner-2.svg";
 import postAdBanner3 from "../../assets/images/post-ad-banner-3.svg";
-// import category from "../../assets/images/post-ad/category.svg";
-// import sub_category from "../../assets/images/post-ad/sub-category.svg";
-// import description from "../../assets/images/post-ad/description.svg";
-// import map from "../../assets/images/post-ad/map.svg";
 import "../PostAd/PostAd.css";
 import ImageUploader from "../../components/ImageUploader/ImageUploader";
 import VideoUploader from "../../components/VideoUploader/VideoUploader";
@@ -31,10 +19,8 @@ import ServicesOffered from "../PostAd/ServicesOffered";
 import CompanyInformation from "../PostAd/CompanyInformation";
 import FAQs from "../PostAd/FAQs";
 import PdfUploader from "../../components/PdfUploader/PdfUploader";
-import ImagesModal from "../../components/ImageUploader/ImagesModal";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import {
-  handleCreateNewAd,
   handleEditAd,
   handleUpdateAdPostErrorAlerting,
   handleUpdateAdPostSuccessAlerting,
@@ -53,14 +39,9 @@ function EditAd() {
     selectedCountriesforContactInformation,
     setSelectedCountriesforContactInformation,
   ] = useState([]);
-  // const [uploadedImages, setUploadedImages] = useState(Array(5).fill(null));
   const [currentAd, setCurrentAd] = useState(null);
-  // const [imagesToPreview, setImagesToPreview] = useState(Array(5).fill(null));
-  // const [imagesToUpload, setImagesToUpload] = useState([]);
-  // const [imagesError, setImagesError] = useState(false);
   const [pdfsToUpload, setPdfsToUpload] = useState([]);
   const [pdfsError, setPdfsError] = useState(false);
-  // const [videoToPreview, setVideoToPreview] = useState([]);
   const [videoToUpload, setVideoToUpload] = useState([]);
   const [showImagesModal, setShowImagesModal] = useState(false);
   const [relatedSubCategoryId, setRelatedSubCategoryId] = useState(null);
@@ -81,20 +62,10 @@ function EditAd() {
   const params = useParams();
   const navigate = useNavigate();
 
-  console.log("currentAd => ", currentAd);
-  console.log("imagesToUpload =======================> ", imagesToUpload);
-  console.log("videoToUpload => ", videoToUpload);
-
   const handleSubmitAllForms = (values) => {
-    // ...(uploadedImages && { imageUploader: { images: uploadedImages } }),
     if (imagesError) {
       return;
     }
-
-    console.log(
-      "values>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<",
-      values
-    );
 
     const addSubCategoryToFaqs = values.FAQ.faqs.map((faq) => ({
       sub_category: parseInt(values.companyInformation.sub_category.id, 10),
@@ -103,8 +74,6 @@ function EditAd() {
       answer_checkbox: faq.answer_checkbox,
       type: faq.type,
     }));
-
-    console.log({ addSubCategoryToFaqs });
 
     const objToSubmit = {
       media_urls: {
@@ -136,21 +105,12 @@ function EditAd() {
       activation_countries: values.companyInformation.country,
       faqs: addSubCategoryToFaqs,
     };
-    // activation_countries: values.companyInformation.country.map(
-    //   (country) => country.id
-    // ),
-
-    console.log(
-      "newObj-------------------------------------------------:",
-      objToSubmit
-    );
     dispatch(handleEditAd({ data: objToSubmit, navigate, adID: currentAd.id }));
-    // console.log("Form 2 data:", formData2);
-    // }
   };
   const Schema = Yup.object().shape({
     companyInformation: Yup.object().shape({
       commercial_name: Yup.string().required("Commercial Name is required"),
+      // MIXED TYPES ARE APPLIED BECAUSE THE FORM GETS AN OBJECT FROM API, WHILE SUBMITTING IT EXPECTS AN INTEGER
       category: Yup.mixed().when({
         is: (value) => value !== undefined, // Apply the validation when the field is present
         then: () =>
@@ -174,7 +134,7 @@ function EditAd() {
             throw new Error("Invalid field type");
           }),
       }),
-      // sub_category: Yup.string().required("Sub-category is required"),
+      // MIXED TYPES ARE APPLIED BECAUSE THE FORM GETS AN OBJECT FROM API, WHILE SUBMITTING IT EXPECTS AN INTEGER
       sub_category: Yup.mixed().when({
         is: (value) => value !== undefined, // Apply the validation when the field is present
         then: () =>
@@ -284,63 +244,16 @@ function EditAd() {
     }),
   });
 
-  console.log(
-    "imagesToUpload imagesToUpload imagesToUpload imagesToUpload",
-    imagesToUpload
-  );
-
-  // const initialValues = {
-  //   companyInformation: {
-  //     // commercial_name: "",
-  //     category: currentAd?.sub_category.category,
-  //     sub_category: currentAd?.sub_category,
-  //     related_sub_categories: currentAd?.related_sub_categories,
-  //     description: "",
-  //     // country: currentAd?.activation_countries[0].id, // Initialize without any selected countries
-  //     country: currentAd?.activation_countries.map((country) => country.id),
-  //   },
-  //   // media_urls: {
-  //   //   images: imagesToUpload,
-  //   //   video: videoToUpload,
-  //   //   pdf: pdfsToUpload,
-  //   // },
-  //   contactInformation: {
-  //     contact_number: currentAd?.number,
-  //     websiteUrl: currentAd?.website,
-  //     country: [],
-  //     city: currentAd?.city,
-  //     street: currentAd?.street,
-  //     fullAddress: currentAd?.full_address,
-  //   },
-  //   SocialMedia: {
-  //     facebookURL: currentAd?.facebook,
-  //     instagramURL: currentAd?.instagram,
-  //     youtubeURL: currentAd?.youtube,
-  //     tiktokURL: currentAd?.tiktok,
-  //     twitterURL: currentAd?.twitter,
-  //   },
-  //   // currentAd?.
-  //   FAQ: {
-  //     faqs: currentAd?.ad_faqs,
-  //   },
-  //   servicesOffered: {
-  //     services: currentAd?.offered_services,
-  //   },
-  // };
-
   const validate = (values) => {
     const errors = {};
 
-    const isAnyValueNotNull = imagesToUpload.some((value) => value !== null);
+    // const isAnyValueNotNull = imagesToUpload.some((value) => value !== null);
 
     if (imagesToUpload.length === 0 && !imagesError) {
-      // setImagesError(true);
       dispatch(setImagesError(true));
-      // console.log("ScrollCustom");
     }
     if (imagesError) {
       dispatch(setImagesError(false));
-      // setImagesError(false);
     }
     if (
       !values.companyInformation.country ||
@@ -367,20 +280,12 @@ function EditAd() {
     return errors;
   };
 
-  const handleImageUpdates = (images) => {
-    // setImagesToPreview(images);
-  };
-
   const handlePdfsUpdates = (images) => {
     setPdfsToUpload(images);
   };
 
-  // const handleVideoToPreview = (videos) => {
-  //   setVideoToPreview(videos);
-  // };
-
   const handleClickSubmit = () => {
-    console.log("submit clickedddddddddddd");
+    // console.log("submit clickedddddddddddd");
   };
 
   const handleAddFAQ = (index, values, setValues) => {
@@ -424,11 +329,6 @@ function EditAd() {
   };
 
   const handleAddServices = (currentService, values, setValues) => {
-    // const currentService = values.servicesOffered.services[index];
-    // currentFAQ.added = true;
-    // const updatedServices = [...values.FAQ.faqs];
-    // updatedServices[index] = currentService;
-    console.log("currentService", currentService);
     setValues({
       ...values,
       servicesOffered: {
@@ -467,10 +367,6 @@ function EditAd() {
     });
   };
 
-  console.log(
-    "selectedCountries----------------------------------",
-    selectedCountries
-  );
   const getAdInfo = async () => {
     try {
       // setLoading(true);
@@ -478,7 +374,6 @@ function EditAd() {
         url: `/api/ads/${params.id}/`,
         method: "Get",
       });
-      console.log("request.data.data", request.data.data);
       setSelectedCountries(
         request.data.data.activation_countries.map((country) => country.id)
       );
@@ -496,11 +391,6 @@ function EditAd() {
             ),
           }),
         },
-        // media_urls: {
-        //   images: imagesToUpload,
-        //   video: videoToUpload,
-        //   pdf: pdfsToUpload,
-        // },
         contactInformation: {
           contact_number: request.data.data?.number,
           websiteUrl: request.data.data?.website,
@@ -528,9 +418,6 @@ function EditAd() {
       });
 
       setCurrentAd(request.data.data);
-      // handleAlert();
-      // setPersonalInfo(request.data.data);
-      // setLoading(false);
     } catch (error) {
       // handleFailedAlert();
       // setLoading(false);
@@ -543,49 +430,6 @@ function EditAd() {
     Object.keys(values).some(
       (field) => values[field] !== localInitialValues[field]
     );
-
-  console.log("localInitialValues===============", localInitialValues);
-
-  // useEffect(() => {
-  //   setLocalInitialValues({
-  //     companyInformation: {
-  //       // commercial_name: "",
-  //       category: currentAd?.sub_category.category,
-  //       sub_category: currentAd?.sub_category,
-  //       related_sub_categories: currentAd?.related_sub_categories,
-  //       description: "",
-  //       // country: currentAd?.activation_countries[0].id, // Initialize without any selected countries
-  //       country: currentAd?.activation_countries.map((country) => country.id),
-  //     },
-  //     // media_urls: {
-  //     //   images: imagesToUpload,
-  //     //   video: videoToUpload,
-  //     //   pdf: pdfsToUpload,
-  //     // },
-  //     contactInformation: {
-  //       contact_number: currentAd?.number,
-  //       websiteUrl: currentAd?.website,
-  //       country: [],
-  //       city: currentAd?.city,
-  //       street: currentAd?.street,
-  //       fullAddress: currentAd?.full_address,
-  //     },
-  //     SocialMedia: {
-  //       facebookURL: currentAd?.facebook,
-  //       instagramURL: currentAd?.instagram,
-  //       youtubeURL: currentAd?.youtube,
-  //       tiktokURL: currentAd?.tiktok,
-  //       twitterURL: currentAd?.twitter,
-  //     },
-  //     // currentAd?.
-  //     FAQ: {
-  //       faqs: currentAd?.ad_faqs,
-  //     },
-  //     servicesOffered: {
-  //       services: currentAd?.offered_services,
-  //     },
-  //   });
-  // }, [currentAd]);
 
   useEffect(() => {
     getAdInfo();
@@ -610,7 +454,6 @@ function EditAd() {
   useEffect(() => {
     if (AdPostSuccessAlert) {
       setTimeout(() => {
-        // setIsAlert(false);
         dispatch(handleUpdateAdPostSuccessAlerting(false));
       }, 4000);
     }
@@ -619,7 +462,6 @@ function EditAd() {
   useEffect(() => {
     if ((AdPostErrorAlert, mediaError)) {
       setTimeout(() => {
-        // setIsAlert(false);
         dispatch(handleUpdateAdPostErrorAlerting(false));
         dispatch(setMediaError(null));
       }, 4000);
@@ -666,17 +508,6 @@ function EditAd() {
           ? mediaError
           : "Something went wrong"}
       </Alert>
-      {/* <ImagesModal
-        showModal={showImagesModal}
-        handleClose={() => setShowImagesModal(false)}
-        setShowImagesModal={setShowImagesModal}
-        setparentImagesUploadedImages={handleImageUpdates}
-        uploadedImages={imagesToPreview}
-        imagesError={imagesError}
-        setImagesError={setImagesError}
-        imagesToUpload={imagesToUpload}
-        setImagesToUpload={setImagesToUpload}
-      /> */}
 
       <div className="ad-banner d-flex align-items-center justify-content-between">
         <div style={{ marginLeft: "100px" }}>
@@ -714,8 +545,6 @@ function EditAd() {
         </div>
       </div>
 
-      {/* {console.log(imagesToUpload)} */}
-
       <Container fluid style={{ marginTop: "40px", paddingLeft: "150px" }}>
         <Row>
           {currentAd !== null && localInitialValues !== null && (
@@ -739,15 +568,6 @@ function EditAd() {
                   <UnsavedChangesPrompt
                     hasUnsavedChanges={() => hasUnsavedChanges(values)}
                   />
-                  {/* <CompanyInformation
-                    values={values.companyInformation}
-                    errors={errors.companyInformation ?? errors}
-                    touched={touched.companyInformation ?? touched}
-                    selectedCountries={selectedCountries}
-                    setSelectedCountries={setSelectedCountries}
-                    handleChange={handleChange}
-                    handleBlur={handleBlur}
-                  /> */}
                   <CompanyInformation
                     values={values.companyInformation}
                     errors={errors.companyInformation ?? errors}
@@ -762,41 +582,13 @@ function EditAd() {
                   />
 
                   <ImageUploader
-                    // parentImages={values.imageUploader.images}
                     setShowImagesModal={setShowImagesModal}
-                    simagesToPreviewetparentImagesUploadedImages={
-                      handleImageUpdates
-                    }
-                    // uploadedImages={imagesToPreview}
                     imagesError={imagesError}
-                    // setImagesError={setImagesError}
-                    // imagesToUpload={imagesToUpload}
-                    // setImagesToUpload={setImagesToUpload}
-                    // setShowImagesModal={setShowImagesModal}
-                    // setparentImagesUploadedImages={handleImageUpdates}
-                    // uploadedImages={imagesToPreview}
-                    // imagesError={imagesError}
-                    // setImagesError={setImagesError}
                     imagesToUpload={imagesToUpload}
-                    // setImagesToUpload={setImagesToUpload}
                     editAd
                   />
 
-                  {/* <ImageUploader
-                    // parentImages={values.imageUploader.images}
-                    setShowImagesModal={setShowImagesModal}
-                    setparentImagesUploadedImages={handleImageUpdates}
-                    uploadedImages={imagesToPreview}
-                    imagesError={imagesError}
-                    setImagesError={setImagesError}
-                    editAd
-                    // imagesToUpload={imagesToUpload}
-                    // setImagesToUpload={setImagesToUpload}
-                  /> */}
-
                   <VideoUploader
-                    // setparentVideoUploaded={handleVideoToPreview}
-                    // videoToPreview={videoToPreview}
                     videoToUpload={videoToUpload}
                     setVideoToUpload={setVideoToUpload}
                   />
@@ -822,8 +614,6 @@ function EditAd() {
 
                   <ServicesOffered
                     values={values}
-                    // errors={errors.FAQ ?? errors}
-                    // touched={touched.FAQ ?? touched}
                     handleChange={handleChange}
                     handleAddServices={(currentService) =>
                       handleAddServices(currentService, values, setValues)
@@ -859,7 +649,6 @@ function EditAd() {
                     }
                   />
                   <div style={{ paddingBottom: "300px" }} />
-                  {/* disabled={!isValid} */}
                   <Col
                     className="d-flex justify-content-end"
                     style={{ marginRight: "150px" }}
@@ -888,7 +677,6 @@ function EditAd() {
         </Row>
       </Container>
     </div>
-    // </div >
   );
 }
 

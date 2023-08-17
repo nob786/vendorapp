@@ -1,8 +1,6 @@
 // eslint-disable-next-line import/no-cycle
 import store from "../app/store";
 import { refreshToken } from "../views/redux/Auth/authSlice";
-// import * as authActions from "../redux/actions/auth.actions";
-
 
 export const addAccessToken = async (config) => {
   const state = store.getState();
@@ -16,7 +14,7 @@ export const addAccessToken = async (config) => {
       ...config,
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        Accept: "application/json"
+        Accept: "application/json",
       },
     };
   }
@@ -26,13 +24,7 @@ export const handleRequestError = (error) => Promise.reject(error);
 
 export const handleResponseOK = (response) => response;
 
-export const handleResponseError = (error) => {
-  // console.log("handleResponseError", error);
-  if (error.response?.status === 401) {
-    // return handleRefreshToken(error.config);
-  }
-  return Promise.reject(error);
-};
+export const handleResponseError = (error) => Promise.reject(error);
 
 export const addInterceptors = (instance) => {
   instance.interceptors.request.use(addAccessToken, handleRequestError);

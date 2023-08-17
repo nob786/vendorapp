@@ -1,15 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as formik from "formik";
 import * as Yup from "yup";
-import {
-  Button,
-  Col,
-  Container,
-  Form,
-  Modal,
-  Row,
-  Spinner,
-} from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -18,10 +10,6 @@ import TopBanner from "../../components/TopBanner";
 import postAdBanner1 from "../../assets/images/post-ad-banner-1.svg";
 import postAdBanner2 from "../../assets/images/post-ad-banner-2.svg";
 import postAdBanner3 from "../../assets/images/post-ad-banner-3.svg";
-// import category from "../../assets/images/post-ad/category.svg";
-// import sub_category from "../../assets/images/post-ad/sub-category.svg";
-// import description from "../../assets/images/post-ad/description.svg";
-// import map from "../../assets/images/post-ad/map.svg";
 import "./PostAd.css";
 import ImageUploader from "../../components/ImageUploader/ImageUploader";
 import VideoUploader from "../../components/VideoUploader/VideoUploader";
@@ -31,7 +19,6 @@ import ServicesOffered from "./ServicesOffered";
 import CompanyInformation from "./CompanyInformation";
 import FAQs from "./FAQs";
 import PdfUploader from "../../components/PdfUploader/PdfUploader";
-import ImagesModal from "../../components/ImageUploader/ImagesModal";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import {
   handleCreateNewAd,
@@ -42,7 +29,6 @@ import {
 } from "../redux/Posts/AdsSlice";
 import UnsavedChangesPrompt from "../../utilities/hooks/UnsavedChanged";
 import { ScrollToError } from "../../utilities/ScrollToError";
-import { ScrollCustom } from "../../utilities/ScrollCustom";
 
 function PostAd() {
   const { Formik } = formik;
@@ -52,15 +38,11 @@ function PostAd() {
     selectedCountriesforContactInformation,
     setSelectedCountriesforContactInformation,
   ] = useState([]);
-  // const [uploadedImages, setUploadedImages] = useState(Array(5).fill(null));
   const [imagesToPreview, setImagesToPreview] = useState(Array(5).fill(null));
-  // const [imagesToUpload, setImagesToUpload] = useState([]);
-  // const [imagesError, setImagesError] = useState(false);
   const [pdfsToUpload, setPdfsToUpload] = useState([]);
   const [pdfsError, setPdfsError] = useState(false);
   const [videoToPreview, setVideoToPreview] = useState([]);
   const [videoToUpload, setVideoToUpload] = useState([]);
-  const [showImagesModal, setShowImagesModal] = useState(false);
   const [uploadingData, setUploadingData] = useState(false);
   const [relatedSubCategoryId, setRelatedSubCategoryId] = useState(null);
   const [isMultipleCountries, setIsMultipleCountries] = useState(false);
@@ -77,26 +59,27 @@ function PostAd() {
   const isMediaUploading = useSelector((state) => state.Ads.isMediaUploading);
   const mediaError = useSelector((state) => state.Ads.mediaError);
 
-  console.log({ relatedSubCategoryId });
-
   const handleSubmitAllForms = (values) => {
-    // ...(uploadedImages && { imageUploader: { images: uploadedImages } }),
-    console.log("inside handleSubmitAllForms");
     if (imagesError) {
       const el = document.querySelector(".images-container");
       (el?.parentElement ?? el)?.scrollIntoView();
       return;
     }
 
-    const addSubCategoryToFaqs = values.FAQ.faqs.map((faq) => {
-      faq,
-        (faq.sub_category = parseInt(
-          values.companyInformation.sub_category,
-          10
-        ));
-    });
-
-    console.log("values ON SUBMITT", values);
+    // const addSubCategoryToFaqs = values.FAQ.faqs.map((faq) => {
+    //   faq,
+    //     (faq.sub_category = parseInt(
+    //       values.companyInformation.sub_category,
+    //       10
+    //     ));
+    // });
+    const addSubCategoryToFaqs = values.FAQ.faqs.map((faq) => ({
+      sub_category: parseInt(values.companyInformation.sub_category, 10),
+      question: faq.question,
+      answer_input: faq.answer_input,
+      answer_checkbox: faq.answer_checkbox,
+      type: faq.type,
+    }));
 
     const objToSubmit = {
       media_urls: {
@@ -130,36 +113,12 @@ function PostAd() {
               parseInt(values.contactInformation.country, 10),
             ],
           }),
-      faqs: values.FAQ.faqs,
+      faqs: addSubCategoryToFaqs,
     };
 
-    // const newObj = {
-    //   ...values,
-    //   // imageUploader: {
-    //   //   images: imagesToUpload,
-    //   // },
-    //   // pdfUploader: {
-    //   //   pdfs: pdfsToUpload,
-    //   // },
-    //   // VideoUploader: {
-    //   //   videos: videoToUpload,
-    //   // },
-    //   media_urls: {
-    //     images: imagesToUpload,
-    //     video: videoToUpload,
-    //     pdf: pdfsToUpload,
-    //   },
-    //   // values.FAQs
-    // };
-    console.log(
-      "newObj-------------------------------------------------:",
-      objToSubmit
-    );
     dispatch(handleCreateNewAd({ data: objToSubmit, navigate }));
-
-    // console.log("Form 2 data:", formData2);
-    // }
   };
+
   const Schema = Yup.object().shape({
     companyInformation: Yup.object().shape({
       commercial_name: Yup.string()
@@ -176,9 +135,9 @@ function PostAd() {
           'Only letters, digits, ".,;:\'/?!@&*()^+-|" signs, and spaces are allowed'
         )
         .required("Description is required"),
-      // .required("Required"),
+      // MIXED TYPES ARE APPLIED BECAUSE THE FORM GETS AN OBJECT FROM API, WHILE SUBMITTING IT EXPECTS AN INTEGER
       country: Yup.mixed().when({
-        is: (value) => value !== undefined, // Apply the validation when the field is present
+        is: (value) => value !== undefined,
         then: () =>
           Yup.lazy((value) => {
             if (Array.isArray(value)) {
@@ -263,42 +222,30 @@ function PostAd() {
         .required("Full Address is required"),
     }),
     SocialMedia: Yup.object().shape({
-      facebookURL: Yup.string()
-        // .max(40, "Must be 40 characters or less")
-        .matches(
-          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
-          "Invalid characters"
-        ),
-      instagramURL: Yup.string()
-        // .max(40, "Must be 40 characters or less")
-        .matches(
-          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
-          "Invalid characters"
-        ),
-      youtubeURL: Yup.string()
-        // .max(40, "Must be 40 characters or less")
-        .matches(
-          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
-          "Invalid characters"
-        ),
-      tiktokURL: Yup.string()
-        // .max(40, "Must be 40 characters or less")
-        .matches(
-          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
-          "Invalid characters"
-        ),
-      twitterURL: Yup.string()
-        // .max(40, "Must be 40 characters or less")
-        .matches(
-          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
-          "Invalid characters"
-        ),
-      otherURL: Yup.string()
-        // .max(40, "Must be 40 characters or less")
-        .matches(
-          /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
-          "Invalid characters"
-        ),
+      facebookURL: Yup.string().matches(
+        /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+        "Invalid characters"
+      ),
+      instagramURL: Yup.string().matches(
+        /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+        "Invalid characters"
+      ),
+      youtubeURL: Yup.string().matches(
+        /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+        "Invalid characters"
+      ),
+      tiktokURL: Yup.string().matches(
+        /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+        "Invalid characters"
+      ),
+      twitterURL: Yup.string().matches(
+        /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+        "Invalid characters"
+      ),
+      otherURL: Yup.string().matches(
+        /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm,
+        "Invalid characters"
+      ),
     }),
   });
 
@@ -334,37 +281,16 @@ function PostAd() {
     },
   };
 
-  // {
-  //   question: "predefined 1",
-  //   answer_input: "",
-  //   type: "text_field",
-  //   added: true,
-  // },
-  // {
-  //   question: "predefined 2",
-  //   answer_input: "",
-  //   type: "text_field",
-  //   added: true,
-  // },
-
   const validate = (values) => {
     const errors = {};
 
-    const isAnyValueNotNull = imagesToUpload.some((value) => value !== null);
+    // const isAnyValueNotNull = imagesToUpload.some((value) => value !== null);
 
     if (imagesToUpload.length === 0 && !imagesError) {
       // setImagesError(true);
       dispatch(setImagesError(true));
       // console.log("ScrollCustom");
     }
-
-    // only validate country if related sub category is selected
-    // if (isMultipleCountries && values.companyInformation.country.length === 0) {
-    //   errors.companyInformation = {
-    //     ...errors.companyInformation,
-    //     country: "Please select at least one country.",
-    //   };
-    // }
 
     if (
       !values.contactInformation.country ||
@@ -375,16 +301,6 @@ function PostAd() {
         country: "Please select at least one country.",
       };
     }
-
-    // Add more validation rules as needed
-
-    // if(errors.companyInformation.country){
-
-    // }
-
-    console.log("errorserrors", errors);
-    // alert(errors.companyInformation.country);
-
     return errors;
   };
 
@@ -396,19 +312,12 @@ function PostAd() {
     setPdfsToUpload(images);
   };
 
-  const handleVideoToPreview = (videos) => {
-    setVideoToPreview(videos);
-  };
-
   const handleClickSubmit = (values) => {
     if (values.companyInformation.country.length === 0) {
       const el = document.querySelector(".border-danger");
       (el?.parentElement ?? el)?.scrollIntoView();
     }
-    console.log("submit clickedddddddddddd", values);
   };
-
-  console.log("imagesToUpload", imagesToUpload);
 
   const handleAddFAQ = (index, values, setValues) => {
     const currentFAQ = values.FAQ.faqs[index];
@@ -451,11 +360,6 @@ function PostAd() {
   };
 
   const handleAddServices = (currentService, values, setValues) => {
-    // const currentService = values.servicesOffered.services[index];
-    // currentFAQ.added = true;
-    // const updatedServices = [...values.FAQ.faqs];
-    // updatedServices[index] = currentService;
-    console.log("currentService", currentService);
     setValues({
       ...values,
       servicesOffered: {
@@ -494,41 +398,14 @@ function PostAd() {
     });
   };
 
-  const hasUnsavedChanges = (values) => {
-    console.log("values", values);
-    // Implement your logic to check for unsaved changes here
-    // For example, you can check if any field's value is different from its initial value
-    // Return true if there are unsaved changes, otherwise false
-    // return Object.keys(values).some(
-    //   (field) => values[field] !== initialValues[field]
-    // );
-    // return (
-    //   selectedCountries.length !== initialValues.activation_countries.length ||
-    //   imagesToUpload.length !== initialValues.imagesToUpload.length ||
-    //   selectedCountries.some((country, index) => country !== initialValues.selectedCountries[index]) ||
-    //   imagesToUpload.some((image, index) => image !== initialValues.imagesToUpload[index]) ||
-    //   Object.keys(values).some((field) => values[field] !== initialValues[field])
-    // );
-
-    // ------------------------------------ USE THIS ONE FOR EDIT AD ------------------------------------
-    // selectedCountries.some((country, index) => country !== initialValues.selectedCountries[index]) ||
-    // imagesToUpload.some(
-    //   (image, index) => image !== initialValues.imagesToUpload[index]
-    // )
-
-    return (
-      selectedCountries.length !== "" ||
-      imagesToUpload.length > 0 ||
-      Object.keys(values).some(
-        (field) => values[field] !== initialValues[field]
-      )
-    );
-  };
+  const hasUnsavedChanges = (values) =>
+    selectedCountries.length !== "" ||
+    imagesToUpload.length > 0 ||
+    Object.keys(values).some((field) => values[field] !== initialValues[field]);
 
   useEffect(() => {
     if (AdPostSuccessAlert) {
       setTimeout(() => {
-        // setIsAlert(false);
         dispatch(handleUpdateAdPostSuccessAlerting(false));
       }, 4000);
     }
@@ -537,14 +414,11 @@ function PostAd() {
   useEffect(() => {
     if ((AdPostErrorAlert, mediaError)) {
       setTimeout(() => {
-        // setIsAlert(false);
         dispatch(handleUpdateAdPostErrorAlerting(false));
         dispatch(setMediaError(null));
       }, 4000);
     }
   }, [AdPostErrorAlert, mediaError]);
-
-  console.log("AdPostErrorAlert", AdPostErrorAlert);
 
   return (
     <div style={{ position: "relative" }}>
@@ -586,17 +460,6 @@ function PostAd() {
           : "Something went wrong"}
       </Alert>
 
-      {/* <ImagesModal
-        showModal={showImagesModal}
-        handleClose={() => setShowImagesModal(false)}
-        setShowImagesModal={setShowImagesModal}
-        setparentImagesUploadedImages={handleImageUpdates}
-        uploadedImages={imagesToPreview}
-        imagesError={imagesError}
-        setImagesError={setImagesError}
-        imagesToUpload={imagesToUpload}
-        setImagesToUpload={setImagesToUpload}
-      /> */}
       <div className="ad-banner d-flex align-items-center justify-content-between">
         <div style={{ marginLeft: "100px" }}>
           <div className="roboto-bold-36px-h1">Post an Ad</div>
@@ -669,26 +532,14 @@ function PostAd() {
                 />
 
                 <ImageUploader
-                  // parentImages={values.imageUploader.images}
-                  // setShowImagesModal={setShowImagesModal}
                   setparentImagesUploadedImages={handleImageUpdates}
                   uploadedImages={imagesToPreview}
                   imagesError={imagesError}
-                  // setImagesError={setImagesError}
-                  // imagesToUpload={imagesToUpload}
-                  // setImagesToUpload={setImagesToUpload}
-                  // setShowImagesModal={setShowImagesModal}
-                  // setparentImagesUploadedImages={handleImageUpdates}
-                  // uploadedImages={imagesToPreview}
-                  // imagesError={imagesError}
-                  // setImagesError={setImagesError}
                   setUploadingData={setUploadingData}
                   imagesToUpload={imagesToUpload}
-                  // setImagesToUpload={setImagesToUpload}
                 />
 
                 <VideoUploader
-                  // setparentVideoUploaded={handleVideoToPreview}
                   videoToPreview={videoToPreview}
                   videoToUpload={videoToUpload}
                   setVideoToUpload={setVideoToUpload}
@@ -715,8 +566,6 @@ function PostAd() {
 
                 <ServicesOffered
                   values={values}
-                  // errors={errors.FAQ ?? errors}
-                  // touched={touched.FAQ ?? touched}
                   handleChange={handleChange}
                   handleAddServices={(currentService) =>
                     handleAddServices(currentService, values, setValues)
@@ -753,7 +602,6 @@ function PostAd() {
                 />
 
                 <div style={{ paddingBottom: "300px" }} />
-                {/* disabled={!isValid} */}
                 <Col
                   className="d-flex justify-content-end"
                   style={{ marginRight: "150px" }}
@@ -781,7 +629,6 @@ function PostAd() {
         </Row>
       </Container>
     </div>
-    // </div >
   );
 }
 
