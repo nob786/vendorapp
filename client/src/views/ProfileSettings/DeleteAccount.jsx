@@ -14,12 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Navbar/Navbar";
-import userIcon from "../../assets/images/profile-settings/user.svg";
 import oldPasswordIcon from "../../assets/images/profile-settings/old-password.svg";
-import confirmPasswordIcon from "../../assets/images/profile-settings/confirm-password.svg";
-import questionIcon from "../../assets/images/profile-settings/question.svg";
-
-// import profile_bg from "../../assets/images/profile-settings/profile-bg.svg";
 import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
@@ -28,23 +23,18 @@ import { deleteCookie } from "../../utilities/utils";
 import { handleProfileSettingsCurrentView } from "../redux/TabNavigation/TabNavigationSlice";
 import ProfilePic from "../../components/ProfilePic/ProfilePic";
 
-const reasons = ["I want to", "I am not satisfied"];
-
 function DeleteAccount() {
   const { Formik } = formik;
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [isFailedAlert, setIsFailedAlert] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isFailedAlertMessage, setIsFailedAlertMessage] = useState(null);
-  const user = useSelector((state) => state.auth.user);
 
   const initialValues = {
     password: "",
     confirm_password: "",
     delete_reason: "",
-    // old_password: "",
   };
 
   const Schema = Yup.object().shape({
@@ -65,7 +55,6 @@ function DeleteAccount() {
   };
 
   const handleDeleteAccount = async (values) => {
-    console.log(values);
     try {
       setLoading(true);
       await secure_instance.request({
@@ -272,30 +261,6 @@ function DeleteAccount() {
                       <Form.Control.Feedback type="invalid">
                         {errors.delete_reason}
                       </Form.Control.Feedback>
-                      {/* <Form.Select
-                        aria-label="Default select example"
-                        style={{ height: "56px" }}
-                        name="reasonToLeave"
-                        value={values.reasonToLeave || ""}
-                        onChange={handleChange}
-                        isInvalid={
-                          touched.reasonToLeave && !!errors.reasonToLeave
-                        }
-                        className={errors.reasonToLeave ? "border-danger" : ""}
-                      >
-                        <option selected value hidden="true">
-                          Select
-                        </option>
-                        {reasons.map((reason, index) => (
-                          <option key={index} value={reason}>
-                            {reason}
-                          </option>
-                        ))}
-                      </Form.Select> */}
-
-                      {/* <Form.Control.Feedback type="invalid">
-                        {errors.confirm_password}
-                      </Form.Control.Feedback> */}
                     </Form.Group>
                   </Col>
 

@@ -445,7 +445,6 @@ function EditAd() {
     if (currentAd?.ad_media[0].media_urls?.pdf?.length > 0) {
       setPdfsToUpload(currentAd?.ad_media[0]?.media_urls?.pdf);
     }
-    console.log("helooooooooooooooooo", currentAd);
     if (currentAd?.related_sub_categories?.id) {
       setRelatedSubCategoryId(currentAd?.related_sub_categories.id);
     }

@@ -22,99 +22,11 @@ import deleteIcon from "../../assets/images/post-ad/delete.svg";
 import editIcon from "../../assets/images/post-ad/edit.svg";
 import gotoIcon from "../../assets/images/post-ad/goto.svg";
 import noAds from "../../assets/images/post-ad/no-ads.svg";
-
-// import bannerBackgroundImg from "../../assets/images/profile-settings/ads-bg.svg";
-// import confirmPasswordIcon from "../../assets/images/profile-settings/confirm-password.svg";
-// import questionIcon from "../../assets/images/profile-settings/question.svg";
-
-// import profile_bg from "../../assets/images/profile-settings/profile-bg.svg";
-// import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
 import "./Ads.css";
 import { handleUpdateAds, listVendorAds } from "../redux/Posts/AdsSlice";
-
-// const AdsList = [
-//   {
-//     id: 1,
-//     category: "Ad Category",
-//     sub_category: "Sub-category",
-//     description: `Boost your business with our top-tier vendor services! Enjoy the flexibility of selling at your
-//       pace, alongside dedicated 24/7 support. Join us today and start turning your passion into profit!`,
-//     created_at: "Jan 12th, 2023",
-//     country: "Pakistan",
-//     // image: image1,
-//   },
-//   {
-//     id: 2,
-//     category: "Ad Category",
-//     sub_category: "Sub-category",
-//     description: `Boost your business with our top-tier vendor services! Enjoy the flexibility of selling at your
-//       pace, alongside dedicated 24/7 support. Join us today and start turning your passion into profit!`,
-//     created_at: "Jan 12th, 2023",
-//     country: "Pakistan",
-//     // image: image1,
-//   },
-// ];
-// const AdsList = [
-//   {
-//     id: 8,
-//     sub_category: {
-//       id: 3,
-//       name: "dogs",
-//       category: 2,
-//     },
-//     related_sub_categories: {
-//       id: 1,
-//       name: "jordans",
-//       category: 1,
-//     },
-//     activation_countries: [
-//       {
-//         id: 1,
-//         name: "Ind",
-//       },
-//     ],
-//     company: {
-//       name: "company1",
-//       postal_code: "postal",
-//       fiscal_code: "fiscal",
-//       address: "address 11",
-//       firm_number: "firm",
-//       bank_name: "bank name",
-//       bank_iban: "iban",
-//       id: 3,
-//     },
-//     ad_media: [
-//       {
-//         media_urls: {
-//           pdf: [],
-//           video: [],
-//           images: [
-//             "https://mehaio-buc.s3.amazonaws.com/uploads/employer/images/1691013632.019656_simple-903gbz5sd55q17nc.jpg?AWSAccessKeyId=AKIAYWNSEZVAODXPVR25&Signature=nNY%2FjukK%2BBmTjb1yqI9Gu20XuSU%3D&content-type=image%2Fjpeg&Expires=1691017232",
-//           ],
-//         },
-//         id: 8,
-//       },
-//     ],
-//     created_at: "2023-08-02T22:05:33.591360Z",
-//     updated_at: "2023-08-02T22:05:33.591591Z",
-//     website: "",
-//     city: "sdsd",
-//     street: "sdasdd",
-//     number: "2312312",
-//     full_address: "cvxcvx",
-//     facebook: "",
-//     instagram: "",
-//     youtube: "",
-//     tiktok: "",
-//     twitter: "",
-//     others: null,
-//     offered_services: ["service 1"],
-//     country: 1,
-//   },
-// ];
 
 function MyAds() {
   const navigate = useNavigate();
@@ -124,7 +36,6 @@ function MyAds() {
   const [currentAdId, setCurrentAdId] = React.useState(null);
 
   const vendorAds = useSelector((state) => state.Ads.vendorAds);
-  console.log("vendorAds---------------", vendorAds);
 
   const handleDeleteAd = async () => {
     try {
@@ -370,20 +281,6 @@ function MyAds() {
                     </Button>
                   </ul>
                 </Col>
-                {/* <Col
-                  className="d-flex"
-                  lg={10}
-                  style={{ marginTop: "80px", marginLeft: "100px" }}
-                >
-                  <Button
-                    type="submit"
-                    onClick={() => navigate("/post-ad")}
-                    className="btn btn-success roboto-semi-bold-16px-information btn-lg"
-                    // style={{ padding: "0 100px" }}
-                  >
-                    Post another Ad
-                  </Button>
-                </Col> */}
               </Col>
 
               <Col lg={6} className="d-flex">
@@ -393,10 +290,6 @@ function MyAds() {
                   style={{ maxWidth: "100%", objectFit: "cover" }}
                 />
               </Col>
-
-              {/* <Col lg={6}>
-                <img src={noAds} />
-              </Col> */}
             </>
           )}
         </Row>

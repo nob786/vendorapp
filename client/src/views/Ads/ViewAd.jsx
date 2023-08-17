@@ -47,69 +47,6 @@ import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { secure_instance } from "../../axios/axios-config";
 import "./Ads.css";
-import CarouselTest from "./carouselTest";
-// import { NextButton, PrevButton } from "../../components/Carousel/Carousel";
-
-const CurrentAd = {
-  id: 1,
-  created_at: "2023-07-28T22:00:15.259177Z",
-  updated_at: "2023-07-28T22:00:15.259487Z",
-  website: "http://www.example.com",
-  city: "string",
-  street: "string",
-  number: "string",
-  full_address: "string",
-  facebook: "http://www.example.com",
-  instagram: "http://www.example.com",
-  youtube: "http://www.example.com",
-  tiktok: "http://www.example.com",
-  twitter: "http://www.example.com",
-  others: "http://www.example.com",
-  offered_services: ["string"],
-  company: 1,
-  sub_category: 1,
-  related_sub_categories: 1,
-  country: 1,
-  activation_countries: [1],
-};
-
-const offeredServices = [
-  "In nulla ut volutpat",
-  "In nulla ut volutpat",
-  "In nulla ut volutpat",
-  "In nulla ut volutpat",
-  "In nulla ut volutpat",
-  "In nulla ut volutpat",
-  "In nulla ut volutpat",
-  "In nulla ut volutpat",
-  "In nulla ut volutpat",
-  "In nulla ut volutpat",
-  "In nulla ut volutpat",
-  "In nulla ut volutpat",
-];
-
-const FAQs = [
-  "Learning New Songs",
-  "MC",
-  "Learning New Songs",
-  "MC",
-  "Learning New Songs",
-  "MC",
-];
-
-// const slides = [
-//   {
-//     image1: one,
-//     image2: two,
-//     image3: three,
-//   },
-//   {
-//     image1: three,
-//     image2: two,
-//     image3: one,
-//   },
-//   // Add more slides as needed...
-// ];
 
 export function PrevButton(props) {
   const { enabled, onClick } = props;
@@ -151,27 +88,15 @@ export function NextButton(props) {
 }
 
 function ViewAd() {
-  // const navigate = useNavigate();
-
   const [currentTab, setCurrentTab] = useState(1);
   const [currentAd, setCurrentAd] = useState(null);
   const params = useParams();
-  const navigate = useNavigate();
-  console.log(params); // 👉️
-  // const { slides, options, componentToRender } = props;
+
   const options = { slidesToScroll: "auto", containScroll: "trimSnaps" };
-
-  // const SLIDE_COUNT = 25;
-  // const slides = Array.from(Array(SLIDE_COUNT).keys());
-
-  // const { width } = useWindowDimensions();
 
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
   const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
-  // const [selectedIndex, setSelectedIndex] = useState(0);
-  // const [scrollSnaps, setScrollSnaps] = useState([]);
-  // const [emblaApi] = useEmblaCarousel(options)
 
   // Original array of image links
   const imageLinks = currentAd?.ad_media[0]?.media_urls.images;
@@ -205,14 +130,6 @@ function ViewAd() {
     () => emblaApi && emblaApi.scrollNext(),
     [emblaApi]
   );
-  // const scrollTo = useCallback(
-  //   (index) => emblaApi && emblaApi.scrollTo(index),
-  //   [emblaApi]
-  // );
-
-  // const onInit = useCallback((emblaApi) => {
-  //   setScrollSnaps(emblaApi.scrollSnapList());
-  // }, []);
 
   const getAdInfo = async () => {
     try {

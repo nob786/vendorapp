@@ -69,25 +69,6 @@ export const refreshToken = createAsyncThunk("auth/refresh", async () => {
     },
   });
   return request.data;
-  // if (
-  //   !request?.data?.is_active &&
-  //   !window.location.href.includes("activation")
-  // ) {
-  //   window.location.href = "/activation";
-  // }
-  // if (
-  //   !request?.data?.subscription_status &&
-  //   !window.location.href.includes("subscription") &&
-  //   !window.location.href.includes("paymentinfo")
-  // ) {
-  //   window.location.href = "/subscription";
-  // }
-  // dispatch({
-  //   type: is_anonymous_refresh
-  //     ? HANDLE_ANON_REFRESH_TOKEN
-  //     : HANDLE_REFRESH_TOKEN,
-  //   payload: request.data,
-  // });
 });
 
 export const getAuthenticatedUser = createAsyncThunk(
@@ -139,14 +120,6 @@ export const authSlice = createSlice({
       .addCase(handleRegister.fulfilled, (state, action) => {
         state.loading = false;
         state.isRegistered = true;
-        // show login view
-        // toggleLoginView());
-        // hide register view
-        // toggleRegisterView());
-        // const { access, user } = action.payload;
-        // state.user.accessToken = access;
-        // state.user.userId = user.id;
-        // state.user.role = user.role;
       })
       .addCase(handleRegister.rejected, (state, action) => {
         state.loading = false;
@@ -154,8 +127,6 @@ export const authSlice = createSlice({
       })
       .addCase(refreshToken.fulfilled, (state, action) => {
         const { access } = action.payload;
-        // state.loading = false;
-        // state.error = action.error.message;
         state.user.accessToken = access;
       })
       .addCase(refreshToken.rejected, (state, action) => {
@@ -177,26 +148,7 @@ export const authSlice = createSlice({
       })
       .addCase(getAuthenticatedUser.rejected, (state, action) => {
         const { access } = action.payload;
-        console.log("getAuthenticatedUser.rejected", action.payload);
-        // state.loading = false;
-        // state.error = action.error.message;
-        // state.user.accessToken = access;
       });
-    // .addCase(refreshToken.pending, (state) => {
-    //   state.loading = true;
-    //   state.error = null;
-    // })
-    // .addCase(refreshToken.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   const { access_token, user_id, role_id } = action.payload;
-    //   state.user.accessToken = access_token;
-    //   state.user.userId = user_id;
-    //   state.user.role = role_id;
-    // })
-    // .addCase(refreshToken.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.error.message;
-    // });
   },
 });
 

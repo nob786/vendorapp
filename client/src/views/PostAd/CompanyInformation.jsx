@@ -11,55 +11,6 @@ import mapIcon from "../../assets/images/post-ad/map.svg";
 import "./PostAd.css";
 import { secure_instance } from "../../axios/axios-config";
 
-// const countries = [
-//   "Alba",
-//   "Arad",
-//   "Arges",
-//   "Bacau",
-//   "Bihor",
-//   "Bistrita-Nasaud",
-//   "Botosani",
-//   "Braila",
-//   "Brasov",
-//   "Buzau",
-//   "Calarasi",
-//   "Caras-Severin",
-//   "Cluj",
-//   "Constanta",
-//   "Covasna",
-//   "Dambovita",
-//   "Dolj",
-//   "Galati",
-//   "Giurgiu",
-//   "Gorj",
-//   "Harghita",
-//   "Hunedoara",
-//   "Ialomita",
-//   "Iasi",
-//   "Ilfov",
-//   "Maramures",
-//   "Mehedinti",
-//   "Mures",
-//   "Neamt",
-//   "Olt",
-//   "Prahova",
-//   "Salaj",
-//   "Satu-Mare",
-//   "Sibiu",
-//   "Suceava",
-//   "Teleorman",
-//   "Timis",
-//   "Tulcea",
-//   "Valcea",
-//   "Vaslui",
-//   "Vrancea",
-// ];
-
-// const categories = [
-//   "venues", "vendors", "for_him", "for_her",
-// ];
-// const subCategories = ["Testing"];
-
 function CompanyInformation({
   values,
   errors,
@@ -80,7 +31,6 @@ function CompanyInformation({
     values?.related_sub_categories
   );
 
-  console.log("relatedSubCategory----------------", relatedSubCategory);
   const [modalShow, setModalShow] = React.useState(false);
   const [isCountriesToEdit, setIsCountriesToEdit] = useState(false);
 
@@ -93,27 +43,16 @@ function CompanyInformation({
   const [countriesList, setCountries] = useState(
     values.country.length > 0 ? values.country : []
   );
-  // const [subCategories, setSubCategories] = useState([]);
 
   const countryOptions = countriesList.map((country) => ({
     value: country.id,
     label: country.name,
   }));
 
-  console.log("countryOptions", countryOptions);
-
-  // const countryOptions = countries.map((country) => ({
-  //   value: country,
-  //   label: country,
-  // }));
-
   const handleCountryChange = (selectedOptions) => {
-    console.log("selectedOptions", selectedOptions);
     const isAllSelected = selectedOptions.find(
       (option) => option.value === 200 && option.label === "All counties"
     );
-
-    console.log("isAllSelected", isAllSelected);
 
     let countryNames;
     if (isAllSelected) {
@@ -121,7 +60,6 @@ function CompanyInformation({
     } else {
       countryNames = selectedOptions.map((option) => option.value);
     }
-    console.log("countryNames", countryNames);
     setSelectedCountries(countryNames);
     handleChange({
       target: {
@@ -139,15 +77,6 @@ function CompanyInformation({
     // console.log(request.data);
     setCategories(request.data.data);
   };
-
-  // const listSubCategories = async () => {
-  //   const request = await secure_instance.request({
-  //     url: "/api/ads/sub_category/",
-  //     method: "Get",
-  //   });
-  //   // console.log(request.data);
-  //   setSubCategories(request.data.data);
-  // };
 
   const fetchSubCategories = async (id) => {
     values.sub_category = "";
@@ -167,28 +96,22 @@ function CompanyInformation({
     });
     setIsCountriesToEdit(false);
     setSelectedCountries([]);
-    console.log("request.data.data", request.data.data.activation_country);
     if (request.data.data.activation_country) {
       setIsMultipleCountries(true);
     } else {
       setIsMultipleCountries(false);
     }
     // EDIT AD DOES NOT REACH HERE---------------------------------------------------
-    console.log("========---------------------");
     const requestRelatedSub = await secure_instance.request({
       url: `/api/ads/sub_category/${id}/public-related/`,
       method: "Get",
     });
-    // console.log("outsideeeeeeeeeeeeeeee", requestRelatedSub.data.data);
     if (
       Object.prototype.hasOwnProperty.call(requestRelatedSub.data.data, "id")
     ) {
       setRelatedSubCategory(requestRelatedSub.data.data);
       setModalShow(true);
-      console.log("first", requestRelatedSub.data.data);
     }
-    // console.log(request.data);
-    // setSubCategories(request.data.data);
   };
 
   const listCountries = async () => {
@@ -196,27 +119,13 @@ function CompanyInformation({
       url: "/api/ads/country/",
       method: "Get",
     });
-    // console.log(request.data);
     setCountries(request.data.data);
   };
 
   useEffect(() => {
     listCategories();
-    // listSubCategories();
     listCountries();
   }, []);
-
-  // console.log("values", values);
-  // console.log("touched", touched);
-  // console.log("errors", errors);
-
-  // const [selectedCountries, setSelectedCountries] = useState([]);
-
-  // console.log({ selectedCountries });
-
-  // const handleChangeCountry = () => {
-
-  // };
 
   return (
     <Container fluid style={{ marginTop: "40px" }}>
@@ -466,51 +375,6 @@ function CompanyInformation({
           </Col>
 
           <Col md={6} lg={4}>
-            {/* <Form.Group className="form-group mb-3" controlId="form3Example7">
-              <Form.Label className="roboto-medium-20px-body1 d-
-                              <img src={subCategoryIcon} alt="categoryIcon" style={{ marginRight: "16px" }} />
-
-                              Country</Form.Label>
-              <Form.Select
-                aria-label="Default select example"
-                style={{ height: "56px" }}
-                name="companyInformation.country"
-                value={values.country || ""}
-                onChange={handleChange}
-                // onBlur={handleBlur}
-                isValid={touched.country && !errors.country}
-                isInvalid={touched.country && !!errors.country}
-                className={errors.country ? "border-danger" : ""}
-              >
-                <option value hidden="true">Select country</option>
-                {countries.map((country, index) => (
-                  <option key={index} value={country}>{country}</option>
-                ))}
-              </Form.Select>
-              <div className="text-danger" style={{ fontSize: "14px" }}>
-                {errors.country}
-              </div>
-            </Form.Group> */}
-            {/* <Form.Group className="form-group mb-3" controlId="form3Example6">
-              <Form.Label className="roboto-medium-20px-body1 d-
-                              <img src={subCategoryIcon} alt="categoryIcon" style={{ marginRight: "16px" }} />
-
-                              Country</Form.Label>
-              <Select
-                options={countries.map((country) => ({ value: country, label: country }))}
-                // defaultValue={[countries[0]].map((country) => ({ value: country, label: country }))}
-                isMulti
-                name="companyInformation.country"
-                // name="companyInformation.country"
-                // options={colourOptions}
-                onChange={console.log}
-                // className="basic-multi-select"
-                className={selectedCountries.length === 0 ? "border-danger" : ""}
-                classNamePrefix="select"
-                required
-              />
-            </Form.Group> */}
-
             {(isMultipleCountries || isCountriesToEdit) && (
               <Form.Group className="form-group mb-3" controlId="form3Example6">
                 <Form.Label
@@ -551,7 +415,6 @@ function CompanyInformation({
               </Form.Group>
             )}
           </Col>
-          {console.log("values.country", values.country)}
         </div>
       </Row>
     </Container>

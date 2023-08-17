@@ -1,82 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
-import Select from "react-select";
+import { Col, Container, Form, Row } from "react-bootstrap";
 import contactIcon from "../../assets/images/post-ad/contact.svg";
-// import videosIcon from "../../assets/images/post-ad/videos.svg";
 import mapIcon from "../../assets/images/post-ad/map.svg";
 import { secure_instance } from "../../axios/axios-config";
-// import descriptionIcon from "../../assets/images/post-ad/images.svg";
 
-const countries = [
-  "Alba",
-  "Arad",
-  "Arges",
-  "Bacau",
-  "Bihor",
-  "Bistrita-Nasaud",
-  "Botosani",
-  "Braila",
-  "Brasov",
-  "Buzau",
-  "Calarasi",
-  "Caras-Severin",
-  "Cluj",
-  "Constanta",
-  "Covasna",
-  "Dambovita",
-  "Dolj",
-  "Galati",
-  "Giurgiu",
-  "Gorj",
-  "Harghita",
-  "Hunedoara",
-  "Ialomita",
-  "Iasi",
-  "Ilfov",
-  "Maramures",
-  "Mehedinti",
-  "Mures",
-  "Neamt",
-  "Olt",
-  "Prahova",
-  "Salaj",
-  "Satu-Mare",
-  "Sibiu",
-  "Suceava",
-  "Teleorman",
-  "Timis",
-  "Tulcea",
-  "Valcea",
-  "Vaslui",
-  "Vrancea",
-];
-
-function ContactInformationForm({
-  values,
-  errors,
-  touched,
-  selectedCountries,
-  setSelectedCountries,
-  handleChange,
-  handleBlur,
-}) {
+function ContactInformationForm({ values, errors, touched, handleChange }) {
   const [countriesList, setCountries] = useState([]);
 
   const countryOptions = countriesList.map((country) => ({
     value: country.id,
     label: country.name,
   }));
-  const handleCountryChange = (selectedOptions) => {
-    const countryNames = selectedOptions.map((option) => option.value);
-    setSelectedCountries(countryNames);
-    // handleChange("companyInformation.country")(countryNames);
-    handleChange({
-      target: {
-        name: "contactInformation.country",
-        value: countryNames,
-      },
-    });
-  };
 
   const listCountries = async () => {
     const request = await secure_instance.request({
@@ -90,9 +24,6 @@ function ContactInformationForm({
   useEffect(() => {
     listCountries();
   }, []);
-  // const handleSubmit = (values) => {
-  //   console.log(values);
-  // };
 
   return (
     <Container fluid style={{ paddingTop: "40px" }}>
@@ -167,28 +98,6 @@ function ContactInformationForm({
       </Row>
       <Row className="mb-3">
         <Col lg={4}>
-          {/* <Form.Group className="mb-4" controlId="form3Example3">
-            <Form.Label className="roboto-medium-20px-body1"
-             style={{ marginBottom: "20px" }}>Country</Form.Label>
-            <Form.Select
-                          <img src={mapIcon} alt="commercialName" style={{ marginRight: "16px" }} />
-
-              aria-label="Default select example"
-              style={{ height: "56px" }}
-              name="county"
-              value={values.country || ""}
-              onChange={handleChange}
-              isValid={touched.country && !errors.country}
-              isInvalid={touched.country && !!errors.country}
-              className={errors.country ? "border-danger" : ""}
-            >
-              <option disabled selected value hidden="true">Select country</option>
-            </Form.Select>
-            <div className="text-danger" style={{ fontSize: "14px" }}>
-              {errors.country}
-            </div>
-          </Form.Group> */}
-
           <Form.Group className="form-group mb-3" controlId="form3Example6">
             <Form.Label
               className="roboto-medium-20px-body1"
@@ -222,22 +131,7 @@ function ContactInformationForm({
                 </option>
               ))}
             </Form.Select>
-            {/* <Select
-              options={countryOptions}
-              isMulti
-              name="contactInformation.country"
-              value={countryOptions.filter((option) =>
-                selectedCountries.includes(option.value)
-              )}
-              onChange={handleCountryChange}
-              onBlur={handleBlur("contactInformation.country")}
-              className={
-                errors?.country
-                  ? "border-danger country-field"
-                  : "country-field border-custom"
-              }
-              classNamePrefix="select"
-            /> */}
+
             {errors?.country && (
               <div className="text-danger">{errors.country}</div>
             )}

@@ -69,17 +69,6 @@ export const editCompanyInformation = createAsyncThunk(
   }
 );
 
-// export const getAuthenticatedUser = createAsyncThunk(
-//   "auth/authenticatedUser",
-//   async () => {
-//     const response = await secure_instance.request({
-//       url: "/api/users/me/",
-//       method: "GET",
-//     });
-//     return response.data;
-//   }
-// );
-
 // Create the loginSlice
 export const settingsSlice = createSlice({
   name: "settings",

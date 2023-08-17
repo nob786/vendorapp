@@ -1,38 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faCamera } from "@fortawesome/fontawesome-free-solid";
-import { Card, Col, Container, Row, Spinner } from "react-bootstrap";
+import { faArrowRight } from "@fortawesome/fontawesome-free-solid";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { faInstagram } from "@fortawesome/free-brands-svg-icons";
-import { CircularProgress } from "@mui/material";
 import Header from "../../components/Navbar/Navbar";
-import defaultuserIcon from "../../assets/images/profile-settings/user.svg";
-
 import personalInfo from "../../assets/images/profile-settings/personal-info.svg";
 import companyInfo from "../../assets/images/profile-settings/company-info.svg";
 import changePass from "../../assets/images/profile-settings/change-pass.svg";
 import deleteIcon from "../../assets/images/profile-settings/delete.svg";
-// import profile_bg from "../../assets/images/profile-settings/profile-bg.svg";
 import "./ProfileSettings.css";
 import Footer from "../../components/Footer/Footer";
 import TabNavigation from "../../components/TabNavigation/TabNavigation";
 import { handleProfileSettingsCurrentView } from "../redux/TabNavigation/TabNavigationSlice";
 import { getAuthenticatedUser } from "../redux/Auth/authSlice";
-import { secure_instance } from "../../axios/axios-config";
-import {
-  editCompanyInformation,
-  setCompanyInformation,
-} from "../redux/Settings/SettingsSlice";
+import { setCompanyInformation } from "../redux/Settings/SettingsSlice";
 import ProfilePic from "../../components/ProfilePic/ProfilePic";
 
 function ProfileSettings() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-
-  // const [currentRowImage, setCurrentRowImage] = useState(null);
-  const [imageUrlToUpload, setImageUrlToUpload] = useState(null);
-
-  console.log({ user });
 
   useEffect(() => {
     if (user.userCompanyId === null) {
