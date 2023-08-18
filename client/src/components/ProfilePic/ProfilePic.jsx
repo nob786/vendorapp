@@ -19,15 +19,33 @@ const ProfilePic = () => {
   const companyInformation = useSelector(
     (state) => state.settings.companyInformation
   );
-  console.log("selectedImage", selectedImage);
 
   const dispatch = useDispatch();
 
+  // const updateNewProfilePic = (imageUrl) => {
+  //   const updateCompanyWithNewProfilePic = {
+  //     ...companyInformation,
+  //     image: imageUrl,
+  //   };
+  //   dispatch(
+  //     editCompanyInformation({
+  //       data: updateCompanyWithNewProfilePic,
+  //       id: companyInformation.id,
+  //     })
+  //   );
+  // };
   const updateNewProfilePic = (imageUrl) => {
+    const updatedUser = {
+      ...companyInformation.user,
+      image: imageUrl,
+    };
+
     const updateCompanyWithNewProfilePic = {
       ...companyInformation,
       image: imageUrl,
+      user: updatedUser,
     };
+
     dispatch(
       editCompanyInformation({
         data: updateCompanyWithNewProfilePic,
