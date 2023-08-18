@@ -54,6 +54,7 @@ function ResetPassword() {
 
   const InitialValues = {
     password: "",
+    confirm_password: "",
   };
 
   const Schema = Yup.object().shape({
@@ -65,6 +66,9 @@ function ResetPassword() {
       )
       .required("Password is required")
       .min(5, "Your password is too short."),
+    confirm_password: Yup.string()
+      .required("Passwords must match")
+      .oneOf([Yup.ref("password")], "Passwords must match"),
   });
 
   const getVisibilityIcon = () => (
@@ -167,6 +171,29 @@ function ResetPassword() {
                 {getVisibilityIcon()}
                 <Form.Control.Feedback type="invalid">
                   {errors.password}
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group
+                className="mb-3"
+                controlId="form3Example4"
+                style={{ position: "relative" }}
+              >
+                <Form.Control
+                  style={{ height: "56px" }}
+                  className="hide-validation-icon lg-input-small-text"
+                  name="confirm_password"
+                  type={isShowPassword ? "text" : "password"}
+                  size="lg"
+                  placeholder="Confirm New Password"
+                  value={values.confirm_password}
+                  onChange={handleChange}
+                  isValid={touched.confirm_password && !errors.confirm_password}
+                  isInvalid={!!errors.confirm_password}
+                />
+                {getVisibilityIcon()}
+                <Form.Control.Feedback type="invalid">
+                  {errors.confirm_password}
                 </Form.Control.Feedback>
               </Form.Group>
 

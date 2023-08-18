@@ -382,11 +382,16 @@ function PostAd() {
   };
 
   const handleAddFAQsFields = (values, setValues) => {
+    const updatedFAQs = values.FAQ.faqs.map((faq) => ({
+      ...faq,
+      added: true,
+    }));
+
     setValues({
       ...values,
       FAQ: {
         faqs: [
-          ...values.FAQ.faqs,
+          ...updatedFAQs,
           {
             question: "",
             answer_input: "",
@@ -396,6 +401,20 @@ function PostAd() {
         ],
       },
     });
+    // setValues({
+    //   ...values,
+    //   FAQ: {
+    //     faqs: [
+    //       ...values.FAQ.faqs,
+    //       {
+    //         question: "",
+    //         answer_input: "",
+    //         type: "text_field",
+    //         added: false,
+    //       },
+    //     ],
+    //   },
+    // });
   };
 
   const hasUnsavedChanges = (values) =>

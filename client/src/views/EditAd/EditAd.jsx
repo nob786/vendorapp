@@ -45,7 +45,7 @@ function EditAd() {
   const [videoToUpload, setVideoToUpload] = useState([]);
   const [showImagesModal, setShowImagesModal] = useState(false);
   const [relatedSubCategoryId, setRelatedSubCategoryId] = useState(null);
-
+  const [isMultipleCountries, setIsMultipleCountries] = useState(false);
   const [localInitialValues, setLocalInitialValues] = useState(null);
 
   const loading = useSelector((state) => state.Ads.loading);
@@ -67,8 +67,12 @@ function EditAd() {
       return;
     }
 
+    const extractSubCatId = values.companyInformation.sub_category.id
+      ? parseInt(values.companyInformation.sub_category.id, 10)
+      : parseInt(values.companyInformation.sub_category, 10);
+
     const addSubCategoryToFaqs = values.FAQ.faqs.map((faq) => ({
-      sub_category: parseInt(values.companyInformation.sub_category.id, 10),
+      sub_category: extractSubCatId,
       question: faq.question,
       answer_input: faq.answer_input,
       answer_checkbox: faq.answer_checkbox,
@@ -96,10 +100,7 @@ function EditAd() {
       twitter: values.SocialMedia.twitterURL,
       // others: values.SocialMedia.othersURL,
       offered_services: values.servicesOffered.services,
-      sub_category: values.companyInformation.sub_category.id
-        ? parseInt(values.companyInformation.sub_category.id, 10)
-        : parseInt(values.companyInformation.sub_category, 10),
-
+      sub_category: extractSubCatId,
       related_sub_categories: relatedSubCategoryId,
       country: parseInt(values.contactInformation.country, 10),
       activation_countries: values.companyInformation.country,
@@ -575,6 +576,8 @@ function EditAd() {
                     setSelectedCountries={setSelectedCountries}
                     relatedSubCategoryId={relatedSubCategoryId}
                     setRelatedSubCategoryId={setRelatedSubCategoryId}
+                    isMultipleCountries={isMultipleCountries}
+                    setIsMultipleCountries={setIsMultipleCountries}
                     handleChange={handleChange}
                     handleBlur={handleBlur}
                     isEditView
